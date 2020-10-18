@@ -4,22 +4,29 @@
 #include "Sprite.h"
 
 
-Sprite *Sprite::createSprite(const glm::vec2 &quadSize, const glm::vec2 &sizeInSpritesheet, Texture *spritesheet, ShaderProgram *program)
+Sprite *Sprite::createSprite(const glm::vec2 &quadSize, const glm::vec2 &posInSpritesheet, const glm::vec2 &sizeInSpritesheet, Texture *spritesheet, ShaderProgram *program)
 {
-	Sprite *quad = new Sprite(quadSize, sizeInSpritesheet, spritesheet, program);
+	Sprite *quad = new Sprite(quadSize, posInSpritesheet, sizeInSpritesheet, spritesheet, program);
 
 	return quad;
 }
 
 
-Sprite::Sprite(const glm::vec2 &quadSize, const glm::vec2 &sizeInSpritesheet, Texture *spritesheet, ShaderProgram *program)
+Sprite::Sprite(const glm::vec2 &quadSize, const glm::vec2 &posInSpritesheet, const glm::vec2 &sizeInSpritesheet, Texture *spritesheet, ShaderProgram *program)
 {
-	float vertices[24] = {0.f, 0.f, 0.f, 0.f, 
+	/*float vertices[24] = {						0.f, 0.f, 0.f, 0.f, 
 												quadSize.x, 0.f, sizeInSpritesheet.x, 0.f, 
 												quadSize.x, quadSize.y, sizeInSpritesheet.x, sizeInSpritesheet.y, 
 												0.f, 0.f, 0.f, 0.f, 
 												quadSize.x, quadSize.y, sizeInSpritesheet.x, sizeInSpritesheet.y, 
-												0.f, quadSize.y, 0.f, sizeInSpritesheet.y};
+												0.f, quadSize.y, 0.f, sizeInSpritesheet.y};*/
+
+	float vertices[24] = {	0.f, 0.f, posInSpritesheet.x, posInSpritesheet.y,
+							quadSize.x, 0.f, (posInSpritesheet.x+sizeInSpritesheet.x), posInSpritesheet.y,
+							quadSize.x, quadSize.y, (posInSpritesheet.x + sizeInSpritesheet.x), (posInSpritesheet.y + sizeInSpritesheet.y),
+							0.f, 0.f, posInSpritesheet.x, posInSpritesheet.y,
+							quadSize.x, quadSize.y, (posInSpritesheet.x + sizeInSpritesheet.x), (posInSpritesheet.y + sizeInSpritesheet.y),
+							0.f, quadSize.y, posInSpritesheet.x, (posInSpritesheet.y + sizeInSpritesheet.y), };
 
 	glGenVertexArrays(1, &vao);
 	glBindVertexArray(vao);
