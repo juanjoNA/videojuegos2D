@@ -39,12 +39,13 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 void Player::update(int deltaTime)
 {
 	sprite->update(deltaTime);
+	glm::ivec2 posMap;
 	if(Game::instance().getSpecialKey(GLUT_KEY_LEFT))
 	{
 		if(sprite->animation() != MOVE_LEFT)
 			sprite->changeAnimation(MOVE_LEFT);
 		posPlayer.x -= 2;
-		if(map->collisionMoveLeft(posPlayer, glm::ivec2(SIZE_X, SIZE_Y)))
+		if(map->collisionMoveLeft(posPlayer, glm::ivec2(SIZE_X, SIZE_Y), &posMap))
 		{
 			posPlayer.x += 2;
 		}
@@ -52,7 +53,7 @@ void Player::update(int deltaTime)
 	if(Game::instance().getSpecialKey(GLUT_KEY_RIGHT))
 	{
 		posPlayer.x += 2;
-		if(map->collisionMoveRight(posPlayer, glm::ivec2(SIZE_X, SIZE_Y)))
+		if(map->collisionMoveRight(posPlayer, glm::ivec2(SIZE_X, SIZE_Y), &posMap))
 		{
 			posPlayer.x -= 2;
 		}

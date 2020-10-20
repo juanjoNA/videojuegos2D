@@ -20,6 +20,12 @@ public:
 	
 	void setTileMap(TileMap *tileMap);
 	void setPosition(const glm::vec2 &pos);
+
+	/*metodes de colisió
+	bool collisionLeft(const glm::ivec2 &pos, const glm::ivec2 &size) const;
+	bool collisionLeft(const glm::ivec2 &pos, const glm::ivec2 &size) const;
+	bool collisionMiddle(const glm::ivec2 &pos, const glm::ivec2 &size) const;
+	*/
 	
 private:
 	bool bJumping;

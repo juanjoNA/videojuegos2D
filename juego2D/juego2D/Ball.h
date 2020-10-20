@@ -23,8 +23,9 @@ public:
 	void setPosition(const glm::vec2 &pos);
 
 private:
-	glm::ivec2 tileMapDispl, posBall;
-	int bounceAngle, startY;
+	glm::ivec2 tileMapDispl, posBall, velocitat;
+	int startY;
+	float bounceAngle;
 	Texture spritesheet;
 	Sprite *sprite;
 	TileMap *map;
