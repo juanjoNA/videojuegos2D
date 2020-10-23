@@ -32,7 +32,7 @@ void Ball::update(int deltaTime)
 	if (map->collisionMoveLeft(posBall, glm::ivec2(SIZE_X, SIZE_Y), &posMap))
 	{
 		glm::ivec2 colVect = posBall - posMap;
-		bounceAngle = atan2(colVect.x, colVect.y);
+		bounceAngle = (float) atan2(colVect.x, colVect.y);
 		float vx = velocitat.x * cos(bounceAngle);
 		float vy = velocitat.y * sin(bounceAngle);
 		velocitat = glm::vec2(velocitat.x * cos(bounceAngle), velocitat.y * sin(bounceAngle));
@@ -40,7 +40,7 @@ void Ball::update(int deltaTime)
 	if (map->collisionMoveRight(posBall, glm::ivec2(SIZE_X, SIZE_Y), &posMap))
 	{
 		glm::ivec2 colVect = posMap - posBall;
-		bounceAngle = atan2(colVect.x, colVect.y);
+		bounceAngle = (float) atan2(colVect.x, colVect.y);
 		float vx = velocitat.x * cos(bounceAngle);
 		float vy = velocitat.y * sin(bounceAngle);
 		velocitat = glm::vec2(vx, vy);
@@ -48,13 +48,13 @@ void Ball::update(int deltaTime)
 	if (map->collisionMoveUp(posBall, glm::ivec2(SIZE_X, SIZE_Y), &posMap))
 	{
 		glm::ivec2 colVect = posMap - posBall;
-		bounceAngle = atan2(colVect.x, colVect.y);
+		bounceAngle = (float) atan2(colVect.x, colVect.y);
 		velocitat = glm::vec2(velocitat.x * cos(bounceAngle), velocitat.y * sin(bounceAngle));
 	}
 	if (map->collisionMoveDown(posBall, glm::ivec2(SIZE_X, SIZE_Y), &posMap))
 	{
 		glm::ivec2 colVect = posMap - posBall;
-		bounceAngle = atan2(colVect.x, colVect.y);
+		bounceAngle = (float) atan2(colVect.x, colVect.y);
 		velocitat = glm::vec2(velocitat.x * cos(bounceAngle), velocitat.y * sin(bounceAngle));
 	}
 	posBall += velocitat;
