@@ -12,51 +12,25 @@
 
 
 
-void Ball::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
+void Ball::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, Player *p)
 {
 	spritesheet.loadFromFile("images/spriteSheet.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(glm::ivec2(SIZE_X, SIZE_Y), glm::vec2(0.6f, 0.8f), glm::vec2(0.1, 0.2), &spritesheet, &shaderProgram);
 	sprite->setNumberAnimations(1);
 
 	tileMapDispl = tileMapPos;
+	player = p;
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posBall.x), float(tileMapDispl.y + posBall.y)));
-	up = false;
-	right = true;
-	velocitat = glm::vec2(4, -2);
+	velocitat = glm::vec2(4, -4);
 }
 
 void Ball::update(int deltaTime)
 {
 	sprite->update(deltaTime);
-	glm::ivec2 posMap;
-	if (map->collisionMoveLeft(posBall, glm::ivec2(SIZE_X, SIZE_Y), &posMap))
-	{
-		glm::ivec2 colVect = posBall - posMap;
-		bounceAngle = (float) atan2(colVect.x, colVect.y);
-		float vx = velocitat.x * cos(bounceAngle);
-		float vy = velocitat.y * sin(bounceAngle);
-		velocitat = glm::vec2(velocitat.x * cos(bounceAngle), velocitat.y * sin(bounceAngle));
-	}
-	if (map->collisionMoveRight(posBall, glm::ivec2(SIZE_X, SIZE_Y), &posMap))
-	{
-		glm::ivec2 colVect = posMap - posBall;
-		bounceAngle = (float) atan2(colVect.x, colVect.y);
-		float vx = velocitat.x * cos(bounceAngle);
-		float vy = velocitat.y * sin(bounceAngle);
-		velocitat = glm::vec2(vx, vy);
-	}
-	if (map->collisionMoveUp(posBall, glm::ivec2(SIZE_X, SIZE_Y), &posMap))
-	{
-		glm::ivec2 colVect = posMap - posBall;
-		bounceAngle = (float) atan2(colVect.x, colVect.y);
-		velocitat = glm::vec2(velocitat.x * cos(bounceAngle), velocitat.y * sin(bounceAngle));
-	}
-	if (map->collisionMoveDown(posBall, glm::ivec2(SIZE_X, SIZE_Y), &posMap))
-	{
-		glm::ivec2 colVect = posMap - posBall;
-		bounceAngle = (float) atan2(colVect.x, colVect.y);
-		velocitat = glm::vec2(velocitat.x * cos(bounceAngle), velocitat.y * sin(bounceAngle));
-	}
+
+	if (CollisionManager::instance().collisionMap(posBall, glm::ivec2(SIZE_X, SIZE_Y), map, velocitat));
+	else if (CollisionManager::instance().collisionPlayer(posBall, oldPosBall, glm::ivec2(SIZE_X, SIZE_Y), player, velocitat));
+	oldPosBall = posBall;
 	posBall += velocitat;
 	/*
 	if (up) posBall.y -= 2;
@@ -102,8 +76,7 @@ void Ball::update(int deltaTime)
 	}
 	}
 	}*/
-
-	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posBall.x), float(tileMapDispl.y + posBall.y)));
+	sprite->setPosition(glm::vec2(posBall.x+SIZE_X, posBall.y + SIZE_Y));
 }
 
 void Ball::render()
@@ -119,5 +92,6 @@ void Ball::setTileMap(TileMap *tileMap)
 void Ball::setPosition(const glm::vec2 &pos)
 {
 	posBall = pos;
+	oldPosBall = posBall;
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posBall.x), float(tileMapDispl.y + posBall.y)));
 }

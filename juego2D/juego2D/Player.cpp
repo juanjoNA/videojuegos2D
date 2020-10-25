@@ -10,7 +10,7 @@
 #define JUMP_HEIGHT 96
 #define FALL_STEP 4
 #define SIZE_X 64
-#define SIZE_Y 16
+#define SIZE_Y 17
 
 
 enum PlayerAnims
@@ -25,12 +25,12 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	sprite = Sprite::createSprite(glm::ivec2(SIZE_X, SIZE_Y), glm::vec2(0.4f,0.9f) , glm::vec2(0.2, 0.1), &spritesheet, &shaderProgram);
 	sprite->setNumberAnimations(1);
 
-		sprite->setAnimationSpeed(1, 20);
-		sprite->addKeyframe(1, glm::vec2(0.4f, 0.7f));
-		sprite->addKeyframe(1, glm::vec2(0.4f, 0.8f));
-		sprite->addKeyframe(1, glm::vec2(0.4f, 0.9f));
+		sprite->setAnimationSpeed(0, 8);
+		sprite->addKeyframe(0, glm::vec2(0.f, 0.8f));
+		sprite->addKeyframe(0, glm::vec2(0.f, 0.9f));
+		sprite->addKeyframe(0, glm::vec2(0.f, 1.f));
 
-	sprite->changeAnimation(1);
+	sprite->changeAnimation(0);
 	tileMapDispl = tileMapPos;
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
 	
@@ -39,41 +39,39 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 void Player::update(int deltaTime)
 {
 	sprite->update(deltaTime);
-	glm::ivec2 posMap;
+	glm::vec2 velocitat(0, 0);
 	if(Game::instance().getSpecialKey(GLUT_KEY_LEFT))
 	{
-		if(sprite->animation() != MOVE_LEFT)
-			sprite->changeAnimation(MOVE_LEFT);
-		posPlayer.x -= 2;
-		if(map->collisionMoveLeft(posPlayer, glm::ivec2(SIZE_X, SIZE_Y), &posMap))
+		
+		if(!map->collisionMoveLeft(posPlayer, oldPosPlayer, glm::ivec2(SIZE_X, SIZE_Y)))
 		{
-			posPlayer.x += 2;
+			velocitat.x -= 2;
 		}
 	}
 	if(Game::instance().getSpecialKey(GLUT_KEY_RIGHT))
 	{
-		posPlayer.x += 2;
-		if(map->collisionMoveRight(posPlayer, glm::ivec2(SIZE_X, SIZE_Y), &posMap))
+		if(!map->collisionMoveRight(posPlayer, oldPosPlayer, glm::ivec2(SIZE_X, SIZE_Y)))
 		{
-			posPlayer.x -= 2;
+			velocitat.x += 2;
 		}
 	}
 	if (Game::instance().getSpecialKey(GLUT_KEY_UP))
 	{
-		posPlayer.y -= 2;
-		/*if (map->collisionMoveLeft(posPlayer, glm::ivec2(SIZE_X, SIZE_Y)))
+		if (!map->collisionMoveLeft(posPlayer, oldPosPlayer, glm::ivec2(SIZE_X, SIZE_Y)))
 		{
-			posPlayer.y -= 2;
-		}*/
+			velocitat.y -= 2;
+		}
 	}
 	if (Game::instance().getSpecialKey(GLUT_KEY_DOWN))
 	{
-		posPlayer.y += 2;
-		/*if (map->collisionMoveDown(posPlayer, glm::ivec2(SIZE_X, SIZE_Y), &posPlayer.y))
+		if (!map->collisionMoveDown(posPlayer, oldPosPlayer, glm::ivec2(SIZE_X, SIZE_Y)))
 		{
-			posPlayer.y += 2;
-		}*/
+			velocitat.y += 2;
+		}
 	}
+	oldPosPlayer = posPlayer;
+	posPlayer += velocitat;
+
 	/*else
 	{
 		if(sprite->animation() == MOVE_LEFT)
@@ -128,6 +126,32 @@ void Player::setPosition(const glm::vec2 &pos)
 {
 	posPlayer = pos;
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
+}
+
+glm::vec2 Player::getSize()
+{
+	return glm::vec2(SIZE_X, SIZE_Y);
+}
+
+bool Player::collision(glm::ivec2 &pos, const glm::ivec2 &size) const
+{
+	int xmin = pos.x;
+	int xmax = pos.x + size.x;
+	int ymin = pos.y;
+	int ymax = pos.y + size.y;
+
+	if (
+		(posPlayer.x + SIZE_X >= xmin) &&
+		(xmax >= posPlayer.x) &&
+		(posPlayer.y + SIZE_Y >= ymin) &&
+		(ymax >= posPlayer.y)
+		)
+	{
+		pos.y = pos.y - (ymax - posPlayer.y);
+		return true;
+	}
+		
+	return false;
 }
 
 

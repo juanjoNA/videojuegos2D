@@ -21,15 +21,18 @@ public:
 	void setTileMap(TileMap *tileMap);
 	void setPosition(const glm::vec2 &pos);
 
-	/*metodes de colisió
-	bool collisionLeft(const glm::ivec2 &pos, const glm::ivec2 &size) const;
-	bool collisionLeft(const glm::ivec2 &pos, const glm::ivec2 &size) const;
+	glm::vec2 getPosition() { return posPlayer; }
+	glm::vec2 getSize();
+
+	//metodes de colisió
+	bool collision(glm::ivec2 &pos, const glm::ivec2 &size) const;
+	/*bool collisionLeft(const glm::ivec2 &pos, const glm::ivec2 &size) const;
 	bool collisionMiddle(const glm::ivec2 &pos, const glm::ivec2 &size) const;
 	*/
 	
 private:
 	bool bJumping;
-	glm::ivec2 tileMapDispl, posPlayer;
+	glm::ivec2 tileMapDispl, posPlayer, oldPosPlayer;
 	int jumpAngle, startY;
 	Texture spritesheet;
 	Sprite *sprite;

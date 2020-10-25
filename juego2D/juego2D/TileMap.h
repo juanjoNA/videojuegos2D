@@ -27,11 +27,13 @@ public:
 	void free();
 	
 	int getTileSize() const { return tileSize; }
+	int *getMap() const { return map; }
+	glm::ivec2 getMapSize() const { return mapSize; }
 
-	bool collisionMoveLeft(const glm::ivec2 &pos, const glm::ivec2 &size, glm::ivec2 *posMap) const;
-	bool collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &size, glm::ivec2 *posMap) const;
-	bool collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, glm::ivec2 *posMap) const;
-	bool collisionMoveUp(const glm::ivec2 &pos, const glm::ivec2 &size, glm::ivec2 *posMap) ;
+	bool collisionMoveLeft(const glm::ivec2 &pos, const glm::ivec2 &oldPos, const glm::ivec2 &size) const;
+	bool collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &oldPos, const glm::ivec2 &size) const;
+	bool collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &oldPos, const glm::ivec2 &size) const;
+	bool collisionMoveUp(const glm::ivec2 &pos, const glm::ivec2 &oldPos, const glm::ivec2 &size) const;
 	
 private:
 	bool loadLevel(const string &levelFile);
