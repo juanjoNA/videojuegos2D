@@ -7,6 +7,7 @@
 #include "TileMap.h"
 #include "Player.h"
 #include "Ball.h"
+#include "Component.h"
 
 
 // Scene contains all the entities of our game.
@@ -26,6 +27,13 @@ public:
 
 private:
 	void initShaders();
+	void createObjects();
+	void createBricks1();
+	void createBricks2();
+	void createBricks3();
+	void createMoney();
+	void createKey();
+	void createAlarm();
 
 private:
 	TileMap *map;
@@ -34,6 +42,7 @@ private:
 	ShaderProgram texProgram;
 	float currentTime;
 	glm::mat4 projection;
+	vector<Component> objects;
 
 };
 

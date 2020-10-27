@@ -5,18 +5,9 @@
 #include "Player.h"
 #include "Game.h"
 
-
-#define JUMP_ANGLE_STEP 4
-#define JUMP_HEIGHT 96
-#define FALL_STEP 4
 #define SIZE_X 64
 #define SIZE_Y 17
 
-
-enum PlayerAnims
-{
-	STAND_LEFT, STAND_RIGHT, MOVE_LEFT, MOVE_RIGHT
-};
 
 
 void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
@@ -26,8 +17,8 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	sprite->setNumberAnimations(1);
 
 		sprite->setAnimationSpeed(0, 8);
-		sprite->addKeyframe(0, glm::vec2(0.f, 0.8f));
 		sprite->addKeyframe(0, glm::vec2(0.f, 0.9f));
+		sprite->addKeyframe(0, glm::vec2(0.f, 0.8f));
 		sprite->addKeyframe(0, glm::vec2(0.f, 1.f));
 
 	sprite->changeAnimation(0);
