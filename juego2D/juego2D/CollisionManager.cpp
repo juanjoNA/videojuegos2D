@@ -5,7 +5,7 @@
 #include "CollisionManager.h"
 #include "TileMap.h"
 
-bool CollisionManager::collisionMap(glm::ivec2 &pos, const glm::ivec2 &size, const TileMap *tileMap, glm::vec2 &velocitat) const
+bool CollisionManager::collisionBallMap(glm::ivec2 &pos, const glm::ivec2 &size, const TileMap *tileMap, glm::vec2 &velocitat) const
 {
 	float xmin = pos.x / float( tileMap->getTileSize() );
 	float ymin = pos.y / float( tileMap->getTileSize() );
@@ -93,7 +93,7 @@ bool CollisionManager::collisionMap(glm::ivec2 &pos, const glm::ivec2 &size, con
 	*/
 }
 
-bool CollisionManager::collisionPlayer(glm::ivec2 &pos, glm::ivec2 &oldPos, const glm::ivec2 &size, Player *player, glm::vec2 &velocitat) const
+bool CollisionManager::collisionBallPlayer(glm::ivec2 &pos, glm::ivec2 &oldPos, const glm::ivec2 &size, Player *player, glm::vec2 &velocitat) const
 {
 	glm::vec2 vecVelocidad = pos - oldPos;
 	int xmin = pos.x;
@@ -109,10 +109,59 @@ bool CollisionManager::collisionPlayer(glm::ivec2 &pos, glm::ivec2 &oldPos, cons
 		(ymax >= player->getPosition().y)
 		)
 	{
-		velocitat.y = -velocitat.y;
-		return true;
+		if (oldPos.y < pos.y) {
+			/*
+			if (xmax <= player->getPosition().x + 4 || (player->getPosition().x + player->getSize().x - 4) <= xmin) {	//Golpea en el lateral izquierdo o derecho
+				velocitat.y = -2.0f;	
+			}
+			
+			else if ((xmax > player->getPosition().x + 4 && xmax < player->getPosition().x + 20) ||
+				((player->getPosition().x + player->getSize().x - 4) < xmin) && ((player->getPosition().x + player->getSize().x - 20) > xmin)
+				) //Golpea un poco a la izquierda o la derecha en la paleta 
+			{
+				velocitat.y = -3.0f; 
+			}
+			else if ( (xmax > player->getPosition().x + ((player->getSize().x) / 2) - 1 && xmax < player->getPosition().x + ((player->getSize().x) / 2) - size.x) ) {
+				velocitat.x = -2.f; //Golpea en el centro por la izquierda
+				velocitat.y = -velocitat.y;
+			}
+			else if ((xmin < player->getPosition().x + ((player->getSize().x) / 2) + 1 && xmax < player->getPosition().x + ((player->getSize().x) / 2) + size.x)) {
+				velocitat.x = 2.f;		//Golpea en el centro por la derecha
+				velocitat.y = -velocitat.y;
+			}
+			else {
+				velocitat.x = -velocitat.x;
+				velocitat.y = -velocitat.y;
+			}*/
+			velocitat.y = -velocitat.y;
+			return true;
+		}
+		else return false;
+		
 	}
 
 	return false;
 	return false;
+}
+
+bool CollisionManager::collisionPlayerMap(glm::ivec2 &pos, const glm::ivec2 & size, TileMap *tileMap, glm::ivec2 direction) const
+{
+	int xmin = pos.x / tileMap->getTileSize();
+	int ymin = pos.y / tileMap->getTileSize();
+	int xmax = (pos.x + size.x) / tileMap->getTileSize();
+	int ymax = (pos.y + size.y) / tileMap->getTileSize();
+	int *map = tileMap->getMap();
+
+	if (direction.x < 0) xmin = (pos.x+direction.x) / tileMap->getTileSize();
+	else if (direction.x > 0) xmax = (pos.x + size.x + direction.x) / tileMap->getTileSize();
+	else if (direction.y < 0) ymin = (pos.y + direction.y) / tileMap->getTileSize();
+	else ymax = (pos.y + size.y + direction.y) / tileMap->getTileSize();
+
+	int topLeft = map[(ymin * tileMap->getMapSize().x) + xmin];
+	int topRight = map[(ymin * tileMap->getMapSize().x) + xmax];
+	int bottomLeft = map[(ymax * tileMap->getMapSize().x) + xmin];
+	int bottomRight = map[(ymax * tileMap->getMapSize().x) + xmax];
+
+	if ((topLeft <= 3) || (topRight <= 3) || (bottomLeft <= 3) || (bottomRight <= 3)) return true;
+	else return false;
 }

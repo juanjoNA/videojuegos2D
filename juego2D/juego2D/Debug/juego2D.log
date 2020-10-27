@@ -1,14 +1,4 @@
 ﻿  Player.cpp
-  CollisionManager.cpp
-  Generando código...
-  Compilando...
-  Ball.cpp
-c:\users\juanjo\desktop\carpetas\universidad\4o\videojuegos\proyecto2d\videojuegos2d\juego2d\juego2d\ball.cpp(32): warning C4390: ';': se encontró una instrucción controlada vacía; ¿es esa la intención?
-  Generando código...
-  Omitiendo... (no se detectaron cambios relevantes)
-  main.cpp
-  Scene.cpp
-  Game.cpp
 SOIL.lib(image_DXT.obj) : warning LNK4099: no se encontró PDB 'vc100.pdb' con 'SOIL.lib(image_DXT.obj)' o en 'C:\Users\Juanjo\Desktop\Carpetas\universidad\4o\Videojuegos\proyecto2D\videojuegos2D\juego2D\Debug\vc100.pdb'; se vinculará el objeto sin tener en cuenta información de depuración
 SOIL.lib(image_helper.obj) : warning LNK4099: no se encontró PDB 'vc100.pdb' con 'SOIL.lib(image_helper.obj)' o en 'C:\Users\Juanjo\Desktop\Carpetas\universidad\4o\Videojuegos\proyecto2D\videojuegos2D\juego2D\Debug\vc100.pdb'; se vinculará el objeto sin tener en cuenta información de depuración
 SOIL.lib(SOIL.obj) : warning LNK4099: no se encontró PDB 'vc100.pdb' con 'SOIL.lib(SOIL.obj)' o en 'C:\Users\Juanjo\Desktop\Carpetas\universidad\4o\Videojuegos\proyecto2D\videojuegos2D\juego2D\Debug\vc100.pdb'; se vinculará el objeto sin tener en cuenta información de depuración

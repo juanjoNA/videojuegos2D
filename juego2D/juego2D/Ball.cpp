@@ -28,8 +28,8 @@ void Ball::update(int deltaTime)
 {
 	sprite->update(deltaTime);
 
-	if (CollisionManager::instance().collisionMap(posBall, glm::ivec2(SIZE_X, SIZE_Y), map, velocitat));
-	else if (CollisionManager::instance().collisionPlayer(posBall, oldPosBall, glm::ivec2(SIZE_X, SIZE_Y), player, velocitat));
+	if (CollisionManager::instance().collisionBallMap(posBall, glm::ivec2(SIZE_X, SIZE_Y), map, velocitat));
+	else if (CollisionManager::instance().collisionBallPlayer(posBall, oldPosBall, glm::ivec2(SIZE_X, SIZE_Y), player, velocitat));
 	oldPosBall = posBall;
 	posBall += velocitat;
 	/*
