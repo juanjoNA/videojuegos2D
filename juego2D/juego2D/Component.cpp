@@ -10,7 +10,7 @@
 
 
 
-void Component::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, glm::ivec2 &size, glm::vec2 &posInSpritesheet, glm::vec2 &sizeInSpritesheet, int resistencia, glm::vec2 keyframes[])
+void Component::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, glm::ivec2 &size, glm::vec2 &posInSpritesheet, glm::vec2 &sizeInSpritesheet, int resistencia, glm::vec2 animations[])
 {
 	spritesheet.loadFromFile("images/spriteSheet.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(size, posInSpritesheet, sizeInSpritesheet, &spritesheet, &shaderProgram);
@@ -18,9 +18,9 @@ void Component::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram,
 
 	if(resistencia > 1) 
 	{
-		sprite->setAnimationSpeed(0, 15);
 		for (int i = 0; i < resistencia; i++) {
-			sprite->addKeyframe(i, keyframes[i]);
+			sprite->setAnimationSpeed(i, 5);
+			sprite->addKeyframe(i, animations[i]);
 		}
 		sprite->changeAnimation(0);
 	}
@@ -45,6 +45,11 @@ void Component::setPosition(const glm::vec2 &pos)
 {
 	posComponent = pos;
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posComponent.x), float(tileMapDispl.y + posComponent.y)));
+}
+
+glm::vec2 Component::getSize()
+{
+	return glm::vec2(SIZE_X, SIZE_Y);
 }
 
 

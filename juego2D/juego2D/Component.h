@@ -20,7 +20,11 @@ public:
 	void render();
 
 	void setPosition(const glm::vec2 &pos);
+
+	glm::vec2 getPosition() { return posComponent; }
+	glm::vec2 getSize();
 	void createSprite();
+	void collision();
 
 private:
 	glm::ivec2 tileMapDispl, posComponent;

@@ -165,3 +165,25 @@ bool CollisionManager::collisionPlayerMap(glm::ivec2 &pos, const glm::ivec2 & si
 	if ((topLeft <= 3) || (topRight <= 3) || (bottomLeft <= 3) || (bottomRight <= 3)) return true;
 	else return false;
 }
+
+/*bool CollisionManager::collisionObjects(glm::ivec2 & pos, glm::ivec2 & oldPos, const glm::ivec2 & size, vector<Component> components, glm::vec2 &velocitat) const
+{
+	for (int i = 0; i < components.size(); i++) {
+		int xmin = pos.x;
+		int xmax = pos.x + size.x;
+		int ymin = pos.y;
+		int ymax = pos.y + size.y;
+
+		if	(
+			((components.at(i).getPosition().x + components.at(i).getSize().x) >= xmin) &&
+			(xmax >= components.at(i).getPosition().x) &&
+			((components.at(i).getPosition().y + components.at(i).getSize().y) >= ymin) &&
+			(ymax >= components.at(i).getPosition().y)
+			) 
+		{
+			components.at(i).collision();
+			
+		}
+	}
+}
+*/

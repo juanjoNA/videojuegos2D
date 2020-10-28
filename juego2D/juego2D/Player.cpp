@@ -13,13 +13,14 @@
 void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 {
 	spritesheet.loadFromFile("images/spriteSheet.png", TEXTURE_PIXEL_FORMAT_RGBA);
-	sprite = Sprite::createSprite(glm::ivec2(SIZE_X, SIZE_Y), glm::vec2(0.4f,0.9f) , glm::vec2(0.2, 0.1), &spritesheet, &shaderProgram);
+	sprite = Sprite::createSprite(glm::ivec2(SIZE_X, SIZE_Y), glm::vec2(0.4f,0.7f) , glm::vec2(0.2, 0.1), &spritesheet, &shaderProgram);
 	sprite->setNumberAnimations(1);
 
 		sprite->setAnimationSpeed(0, 8);
-		sprite->addKeyframe(0, glm::vec2(0.f, 0.9f));
-		sprite->addKeyframe(0, glm::vec2(0.f, 0.8f));
-		sprite->addKeyframe(0, glm::vec2(0.f, 1.f));
+		sprite->addKeyframe(0, glm::vec2(0.f, 0.f));
+		sprite->addKeyframe(0, glm::vec2(0.f, 0.1f));
+		sprite->addKeyframe(0, glm::vec2(0.f, 0.2f));
+		
 
 	sprite->changeAnimation(0);
 	tileMapDispl = tileMapPos;

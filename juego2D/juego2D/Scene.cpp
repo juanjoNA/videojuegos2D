@@ -44,8 +44,8 @@ void Scene::init()
 
 	createObjects();
 	glm::vec2 posicion = glm::vec2(40, 32);
-	for (int i = 0; i < objects.size(); i++) {
-		objects.at(i).setPosition(posicion);
+	for (int i = 0; i < bricks.size(); i++) {
+		bricks.at(i).setPosition(posicion);
 		posicion.x += 32.f;
 	}
 
@@ -58,8 +58,8 @@ void Scene::update(int deltaTime)
 	currentTime += deltaTime;
 	player->update(deltaTime);
 	ball->update(deltaTime);
-	for (int i = 0; i < objects.size(); i++) {
-		objects.at(i).update(deltaTime);
+	for (int i = 0; i < bricks.size(); i++) {
+		bricks.at(i).update(deltaTime);
 	}
 }
 
@@ -76,8 +76,8 @@ void Scene::render()
 	map->render();
 	player->render();
 	ball->render();
-	for (int i = 0; i < objects.size(); i++) {
-		objects.at(i).render();
+	for (int i = 0; i < bricks.size(); i++) {
+		bricks.at(i).render();
 	}
 }
 
@@ -113,7 +113,10 @@ void Scene::initShaders()
 
 void Scene::createObjects()
 {
+	createBricks1();
+	createBricks2();
 	createBricks3();
+	createMoney();
 }
 
 void Scene::createBricks1()
@@ -123,7 +126,7 @@ void Scene::createBricks1()
 	for (int i = 0; i < 3; i++) {
 		Component *brick = new Component();
 		brick->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::ivec2(32,16),posIn, sizeIn, 1, NULL);
-		objects.push_back(*brick);
+		bricks.push_back(*brick);
 		posIn.y += 0.2f;
 	}
 
@@ -131,33 +134,69 @@ void Scene::createBricks1()
 
 void Scene::createBricks2()
 {
-	for (int i = 0; i <= 3; i++) {
+	glm::vec2 posIn = glm::vec2(0.f, 0.6f);
+	glm::vec2 sizeIn(0.2f, 0.2f);
+	for (int i = 0; i < 3; i++) {
+		Component *brick = new Component();
+		glm::vec2 animations[2];
+		for (int j = 0; j < 2; j++) {
+			animations[j] = glm::vec2(0.2f*j, 0.f);
+		}
+		brick->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::ivec2(32, 16), posIn, sizeIn, 2, animations);
 
+		bricks.push_back(*brick);
+		posIn.y += 0.2f;
+		if (posIn.y >= 1.f) {
+			posIn = glm::vec2(0.2f, 0.f);
+		}
 	}
 }
 
 void Scene::createBricks3()
 {
-	glm::vec2 posIn = glm::vec2(0.2f, 0.4f);
+	glm::vec2 posIn = glm::vec2(0.2f, 0.2f);
 	glm::vec2 sizeIn(0.2f, 0.2f);
 	for (int i = 0; i < 2; i++) {
 		Component *brick = new Component();
-		glm::vec2 keyframes[3];
+		glm::vec2 animations[3];
 		for (int j = 0; j < 3; j++) {
-			keyframes[j] = glm::vec2( posIn.x+0.2f*j, posIn.y);
+			animations[j] = glm::vec2(0.2f*j, 0.f);
 		}
-		brick->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::ivec2(32, 16), posIn, sizeIn, 3, keyframes);
+		brick->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::ivec2(32, 16), posIn, sizeIn, 3, animations);
 		
-		objects.push_back(*brick);
+		bricks.push_back(*brick);
 		posIn.y += 0.2f;
 	}
 }
 
 void Scene::createMoney()
 {
-	for (int i = 0; i <= 4; i++) {
+	glm::vec2 posIn = glm::vec2(0.8f, 0.f);
+	glm::vec2 sizeIn(0.2f, 0.2f);
+	for (int i = 0; i <= 3; i++) {
+		Component *coin = new Component();
+		glm::vec2 animations[9];
+		float x = 0.f;
+		float y = 0.f;
+		for (int j = 0; j < 9; j++) {
+			x = 0.05 * (j%4);
+			y = 0.1 * (j / 4);
+			animations[j] = glm::vec2(x, y);
+		}
+		coin->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::ivec2(32, 16), posIn, sizeIn, 1, animations);
 
+		money.push_back(*coin);
+		posIn.y += 0.3f;
 	}
+
+	Component *coin = new Component();
+	glm::vec2 animations[4];
+	for (int j = 0; j < 4; j++) {
+		animations[j] = glm::vec2(0.05 * j, 0.f);
+	}
+	coin->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::ivec2(32, 16), posIn, sizeIn, 1, animations);
+
+	money.push_back(*coin);
 }
 
 void Scene::createKey()

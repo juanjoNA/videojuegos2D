@@ -42,7 +42,7 @@ private:
 	ShaderProgram texProgram;
 	float currentTime;
 	glm::mat4 projection;
-	vector<Component> objects;
+	vector<Component> bricks, money;
 
 };
 
