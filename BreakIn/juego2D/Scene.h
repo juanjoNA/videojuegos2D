@@ -4,12 +4,10 @@
 
 #include <glm/glm.hpp>
 #include "ShaderProgram.h"
-#include "TexturedQuad.h"
-#include "Texture.h"
-#include "Sprite.h"
 #include "TileMap.h"
 #include "Player.h"
 #include "Ball.h"
+#include "Component.h"
 
 
 // Scene contains all the entities of our game.
@@ -29,6 +27,13 @@ public:
 
 private:
 	void initShaders();
+	void createObjects();
+	void createBricks1();
+	void createBricks2();
+	void createBricks3();
+	void createMoney();
+	void createKey();
+	void createAlarm();
 
 private:
 	TileMap *map;
@@ -37,8 +42,9 @@ private:
 	ShaderProgram texProgram;
 	float currentTime;
 	glm::mat4 projection;
+	vector<Component> objects;
+
 };
 
 
 #endif // _SCENE_INCLUDE
-

@@ -5,6 +5,7 @@
 #include "Sprite.h"
 #include "TileMap.h"
 #include "Player.h"
+#include "CollisionManager.h"
 
 
 // Player is basically a Sprite that represents the player. As such it has
@@ -15,7 +16,7 @@ class Ball
 {
 
 public:
-	void init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram);
+	void init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, Player *p);
 	void update(int deltaTime);
 	void render();
 
@@ -23,17 +24,16 @@ public:
 	void setPosition(const glm::vec2 &pos);
 
 private:
-	glm::ivec2 tileMapDispl, posBall;
-	int bounceAngle, startY;
+	glm::ivec2 tileMapDispl, posBall, oldPosBall;
+	glm::vec2 velocitat;
+	int startY;
+	float bounceAngle;
 	Texture spritesheet;
 	Sprite *sprite;
 	TileMap *map;
 	Player *player;
-	bool up, right;
 
 };
 
 
 #endif // _PLAYER_INCLUDE
-
-
