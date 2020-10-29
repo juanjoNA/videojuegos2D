@@ -1,7 +1,7 @@
 #ifndef _GAME_INCLUDE
 #define _GAME_INCLUDE
 
-
+#include "Menu.h"
 #include "Scene.h"
 
 
@@ -29,6 +29,8 @@ public:
 	void init();
 	bool update(int deltaTime);
 	void render();
+
+	void setState(int state);
 	
 	// Input callback methods
 	void keyPressed(int key);
@@ -44,10 +46,13 @@ public:
 
 private:
 	bool bPlay;                       // Continue to play game?
+	int sceneAct;
 	Scene scene;                      // Scene to render
+	Menu menu;
 	bool keys[256], specialKeys[256]; // Store key states so that 
 	                                  // we can have access at any time
-
+	int xPlay;
+	int yPlay;
 };
 
 

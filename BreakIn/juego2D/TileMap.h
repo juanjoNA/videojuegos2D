@@ -1,3 +1,4 @@
+
 #ifndef _TILE_MAP_INCLUDE
 #define _TILE_MAP_INCLUDE
 
@@ -25,7 +26,7 @@ public:
 
 	void render() const;
 	void free();
-	
+
 	int getTileSize() const { return tileSize; }
 	int *getMap() const { return map; }
 	glm::ivec2 getMapSize() const { return mapSize; }
@@ -34,7 +35,7 @@ public:
 	bool collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &oldPos, const glm::ivec2 &size) const;
 	bool collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &oldPos, const glm::ivec2 &size) const;
 	bool collisionMoveUp(const glm::ivec2 &pos, const glm::ivec2 &oldPos, const glm::ivec2 &size) const;
-	
+
 private:
 	bool loadLevel(const string &levelFile);
 	void prepareArrays(const glm::vec2 &minCoords, ShaderProgram &program);
@@ -53,5 +54,3 @@ private:
 
 
 #endif // _TILE_MAP_INCLUDE
-
-

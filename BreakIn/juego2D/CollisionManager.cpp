@@ -58,7 +58,7 @@ bool CollisionManager::collisionBallMap(glm::ivec2 &pos, const glm::ivec2 &size,
 			else if (decimalY > decimalX) velocitat.x = -velocitat.x;
 			else velocitat = -velocitat;
 		}
-		
+
 		return true;
 	}
 	return false;
@@ -100,7 +100,7 @@ bool CollisionManager::collisionBallPlayer(glm::ivec2 &pos, glm::ivec2 &oldPos, 
 	int xmax = pos.x + size.x;
 	int ymin = pos.y;
 	int ymax = pos.y + size.y;
-	
+
 
 	if (
 		((player->getPosition().x + player->getSize().x) >= xmin) &&
@@ -112,14 +112,14 @@ bool CollisionManager::collisionBallPlayer(glm::ivec2 &pos, glm::ivec2 &oldPos, 
 		if (oldPos.y < pos.y) {
 			/*
 			if (xmax <= player->getPosition().x + 4 || (player->getPosition().x + player->getSize().x - 4) <= xmin) {	//Golpea en el lateral izquierdo o derecho
-				velocitat.y = -2.0f;	
+				velocitat.y = -2.0f;
 			}
-			
+
 			else if ((xmax > player->getPosition().x + 4 && xmax < player->getPosition().x + 20) ||
 				((player->getPosition().x + player->getSize().x - 4) < xmin) && ((player->getPosition().x + player->getSize().x - 20) > xmin)
-				) //Golpea un poco a la izquierda o la derecha en la paleta 
+				) //Golpea un poco a la izquierda o la derecha en la paleta
 			{
-				velocitat.y = -3.0f; 
+				velocitat.y = -3.0f;
 			}
 			else if ( (xmax > player->getPosition().x + ((player->getSize().x) / 2) - 1 && xmax < player->getPosition().x + ((player->getSize().x) / 2) - size.x) ) {
 				velocitat.x = -2.f; //Golpea en el centro por la izquierda
@@ -137,7 +137,7 @@ bool CollisionManager::collisionBallPlayer(glm::ivec2 &pos, glm::ivec2 &oldPos, 
 			return true;
 		}
 		else return false;
-		
+
 	}
 
 	return false;
@@ -179,7 +179,7 @@ bool CollisionManager::collisionObjects(glm::ivec2 & pos, glm::ivec2 & oldPos, c
 			(xmax >= elements.at(i).getPosition().x) &&
 			((elements.at(i).getPosition().y + elements.at(i).getSize().y) >= ymin) &&
 			(ymax >= elements.at(i).getPosition().y)
-			) 
+			)
 		{
 			int resistance = elements.at(i).collision();
 			if (resistance == 0) {
