@@ -15,7 +15,7 @@
     <ClInclude Include="Ball.h" />
     <ClInclude Include="CollisionManager.h" />
     <ClInclude Include="Game.h" />
-    <ClInclude Include="Component.h" />
+    <ClInclude Include="Element.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Shader.h" />
@@ -29,7 +29,7 @@
     <ClCompile Include="CollisionManager.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Component.cpp" />
+    <ClCompile Include="Element.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Shader.cpp" />

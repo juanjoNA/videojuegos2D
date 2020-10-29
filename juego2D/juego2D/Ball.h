@@ -5,6 +5,7 @@
 #include "Sprite.h"
 #include "TileMap.h"
 #include "Player.h"
+#include "Element.h"
 #include "CollisionManager.h"
 
 
@@ -17,7 +18,7 @@ class Ball
 
 public:
 	void init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, Player *p);
-	void update(int deltaTime);
+	void update(int deltaTime, vector<class Element>& elements);
 	void render();
 
 	void setTileMap(TileMap *tileMap);

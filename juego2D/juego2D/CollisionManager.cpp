@@ -166,24 +166,29 @@ bool CollisionManager::collisionPlayerMap(glm::ivec2 &pos, const glm::ivec2 & si
 	else return false;
 }
 
-/*bool CollisionManager::collisionObjects(glm::ivec2 & pos, glm::ivec2 & oldPos, const glm::ivec2 & size, vector<Component> components, glm::vec2 &velocitat) const
+bool CollisionManager::collisionObjects(glm::ivec2 & pos, glm::ivec2 & oldPos, const glm::ivec2 & size, vector<class Element>& elements, glm::vec2 &velocitat) const
 {
-	for (int i = 0; i < components.size(); i++) {
+	for (int i = 0; i < elements.size(); i++) {
 		int xmin = pos.x;
 		int xmax = pos.x + size.x;
 		int ymin = pos.y;
 		int ymax = pos.y + size.y;
 
 		if	(
-			((components.at(i).getPosition().x + components.at(i).getSize().x) >= xmin) &&
-			(xmax >= components.at(i).getPosition().x) &&
-			((components.at(i).getPosition().y + components.at(i).getSize().y) >= ymin) &&
-			(ymax >= components.at(i).getPosition().y)
+			((elements.at(i).getPosition().x + elements.at(i).getSize().x) >= xmin) &&
+			(xmax >= elements.at(i).getPosition().x) &&
+			((elements.at(i).getPosition().y + elements.at(i).getSize().y) >= ymin) &&
+			(ymax >= elements.at(i).getPosition().y)
 			) 
 		{
-			components.at(i).collision();
-			
+			int resistance = elements.at(i).collision();
+			if (resistance == 0) {
+				//elements.erase(elements.begin()+i);
+			}
+			velocitat = -velocitat;
+			return true;
 		}
 	}
+
+	return false;
 }
-*/
