@@ -1,8 +1,0 @@
-﻿  Element.cpp
-c:\users\juanjo\desktop\carpetas\universidad\4o\videojuegos\proyecto2d\videojuegos2d\juego2d\juego2d\element.cpp(34): warning C4018: '<': no coinciden signed/unsigned
-SOIL.lib(image_DXT.obj) : warning LNK4099: no se encontró PDB 'vc100.pdb' con 'SOIL.lib(image_DXT.obj)' o en 'C:\Users\Juanjo\Desktop\Carpetas\universidad\4o\Videojuegos\proyecto2D\videojuegos2D\juego2D\Debug\vc100.pdb'; se vinculará el objeto sin tener en cuenta información de depuración
-SOIL.lib(image_helper.obj) : warning LNK4099: no se encontró PDB 'vc100.pdb' con 'SOIL.lib(image_helper.obj)' o en 'C:\Users\Juanjo\Desktop\Carpetas\universidad\4o\Videojuegos\proyecto2D\videojuegos2D\juego2D\Debug\vc100.pdb'; se vinculará el objeto sin tener en cuenta información de depuración
-SOIL.lib(SOIL.obj) : warning LNK4099: no se encontró PDB 'vc100.pdb' con 'SOIL.lib(SOIL.obj)' o en 'C:\Users\Juanjo\Desktop\Carpetas\universidad\4o\Videojuegos\proyecto2D\videojuegos2D\juego2D\Debug\vc100.pdb'; se vinculará el objeto sin tener en cuenta información de depuración
-SOIL.lib(stb_image_aug.obj) : warning LNK4099: no se encontró PDB 'vc100.pdb' con 'SOIL.lib(stb_image_aug.obj)' o en 'C:\Users\Juanjo\Desktop\Carpetas\universidad\4o\Videojuegos\proyecto2D\videojuegos2D\juego2D\Debug\vc100.pdb'; se vinculará el objeto sin tener en cuenta información de depuración
-  juego2D.vcxproj -> C:\Users\Juanjo\Desktop\Carpetas\universidad\4o\Videojuegos\proyecto2D\videojuegos2D\juego2D\Debug\juego2D.exe
-  juego2D.vcxproj -> C:\Users\Juanjo\Desktop\Carpetas\universidad\4o\Videojuegos\proyecto2D\videojuegos2D\juego2D\Debug\juego2D.pdb (Full PDB)
