@@ -46,7 +46,7 @@ private:
 	float timeAnimation;
 	glm::vec2 texCoordDispl;
 	vector<AnimKeyframes> animations;
-
+	bool animate;
 };
 
 

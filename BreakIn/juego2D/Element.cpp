@@ -29,7 +29,7 @@ void Element::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, g
 	}
 	else {
 		if (!animations.empty()) {
-			if(animations.size() > 4) sprite->setAnimationSpeed(0, 30);
+			if(animations.size() > 4) sprite->setAnimationSpeed(0, 1);
 			else sprite->setAnimationSpeed(0, 8);
 			for (int i = 1; i < animations.size(); i++) {
 				sprite->addKeyframe(0, animations[i]);

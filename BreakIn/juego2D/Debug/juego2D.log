@@ -1,2 +1,4 @@
-﻿  juego2D.vcxproj -> C:\Users\Juanjo\Desktop\Carpetas\universidad\4o\Videojuegos\proyecto2D\videojuegos2D\BreakIn\Debug\juego2D.exe
+﻿  Element.cpp
+c:\users\juanjo\desktop\carpetas\universidad\4o\videojuegos\proyecto2d\videojuegos2d\breakin\juego2d\element.cpp(34): warning C4018: '<': no coinciden signed/unsigned
+  juego2D.vcxproj -> C:\Users\Juanjo\Desktop\Carpetas\universidad\4o\Videojuegos\proyecto2D\videojuegos2D\BreakIn\Debug\juego2D.exe
   juego2D.vcxproj -> C:\Users\Juanjo\Desktop\Carpetas\universidad\4o\Videojuegos\proyecto2D\videojuegos2D\BreakIn\Debug\juego2D.pdb (Full PDB)

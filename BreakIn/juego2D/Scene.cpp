@@ -48,7 +48,7 @@ void Scene::init()
 	bricks.at(i).setPosition(posicion);
 	posicion.x += 32.f;
 	}*/
-	glm::vec2 posicion2 = glm::vec2(40, 96);
+	glm::vec2 posicion2 = glm::vec2(40, 256);
 	for (int i = 0; i < money.size(); i++) {
 		money.at(i).setPosition(posicion2);
 		posicion2.x += 64.f;
@@ -84,9 +84,9 @@ void Scene::render()
 	map->render();
 	player->render();
 	ball->render();
-	for (int i = 0; i < bricks.size(); i++) {
+	/*for (int i = 0; i < bricks.size(); i++) {
 		bricks.at(i).render();
-	}
+	}*/
 	for (int i = 0; i < money.size(); i++) {
 		money.at(i).render();
 	}

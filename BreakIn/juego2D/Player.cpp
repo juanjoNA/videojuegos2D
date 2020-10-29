@@ -6,7 +6,7 @@
 #include "Game.h"
 
 #define SIZE_X 64
-#define SIZE_Y 17
+#define SIZE_Y 16
 
 
 
@@ -22,9 +22,9 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 		sprite->addKeyframe(0, glm::vec2(0.f, 0.2f));
 		
 
-	sprite->changeAnimation(0);
+	//sprite->changeAnimation(0);
 	tileMapDispl = tileMapPos;
-	speed = 3;
+	speed = 4;
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
 	
 }
