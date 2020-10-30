@@ -50,9 +50,10 @@ void Player::update(int deltaTime)
 	{
 		if (!CollisionManager::instance().collisionPlayerMap(posPlayer, glm::ivec2(SIZE_X, SIZE_Y), map, glm::ivec2(0, 1)*speed)) direction += glm::ivec2(0, 1);
 	}
+	std::cout << "pos: (" << posPlayer.x << ',' << posPlayer.y << ')' << endl;
 	oldPosPlayer = posPlayer;
 	posPlayer += direction*speed;
-
+	
 	/*else
 	{
 		if(sprite->animation() == MOVE_LEFT)

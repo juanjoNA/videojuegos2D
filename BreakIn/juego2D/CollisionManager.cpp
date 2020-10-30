@@ -115,7 +115,7 @@ bool CollisionManager::collisionBallPlayer(glm::ivec2 &pos, glm::ivec2 &oldPos, 
 
 bool CollisionManager::collisionPlayerMap(glm::ivec2 &pos, const glm::ivec2 & size, TileMap *tileMap, glm::ivec2 direction) const
 {
-	int xmin = pos.x / tileMap->getTileSize();
+	/*int xmin = pos.x / tileMap->getTileSize();
 	int ymin = pos.y / tileMap->getTileSize();
 	int xmax = (pos.x + size.x) / tileMap->getTileSize();
 	int ymax = (pos.y + size.y) / tileMap->getTileSize();
@@ -132,6 +132,11 @@ bool CollisionManager::collisionPlayerMap(glm::ivec2 &pos, const glm::ivec2 & si
 	int bottomRight = map[(ymax * tileMap->getMapSize().x) + xmax];
 
 	if ((topLeft <= 3) || (topRight <= 3) || (bottomLeft <= 3) || (bottomRight <= 3)) return true;
+	else return false;*/
+
+	if (pos.x + direction.x < 16 || (pos.x + size.x + direction.x > 368) ||
+		pos.y + direction.y < 16 || (pos.y + size.y + direction.y > 368))return true;
+	
 	else return false;
 }
 
@@ -151,10 +156,7 @@ bool CollisionManager::collisionObjects(glm::ivec2 & pos, glm::ivec2 & oldPos, c
 			)
 		{
 			int resistance = elements.at(i).collision();
-			if (resistance == 0) {
-				//elements.erase(elements.begin()+i);
-			}
-			velocitat = -velocitat;
+			if(elements.at(i).getType() != 1) velocitat = -velocitat;
 			return true;
 		}
 	}

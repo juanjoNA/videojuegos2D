@@ -15,7 +15,7 @@ class Element
 {
 
 public:
-	void init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, glm::ivec2 &size, glm::vec2 &posInSpritesheet, glm::vec2 &sizeInSpritesheet, int resistance, vector<glm::vec2> &animations);
+	void init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, glm::ivec2 &size, glm::vec2 &posInSpritesheet, glm::vec2 &sizeInSpritesheet, int resistance, vector<glm::vec2> &animations, char type);
 	void update(int deltaTime);
 	void render();
 
@@ -25,12 +25,15 @@ public:
 	glm::vec2 getSize();
 	int collision();
 	bool isFinished();
+	int getResistance();
+	int getType();
 
 private:
 	glm::ivec2 tileMapDispl, posElement;
 	int resistance;
 	Texture spritesheet;
 	Sprite *sprite;
+	int type; //BRICK = 0, MONEY = 1, ALARM = 2, KEY = 3;
 };
 
 

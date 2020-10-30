@@ -10,10 +10,10 @@
 
 
 enum elementType{
-	BRICK, MONEY, KEY
+	BRICK, MONEY, ALARM, KEY
 };
 
-void Element::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, glm::ivec2 &size, glm::vec2 &posInSpritesheet, glm::vec2 &sizeInSpritesheet, int resistencia, vector<glm::vec2> &animations)
+void Element::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, glm::ivec2 &size, glm::vec2 &posInSpritesheet, glm::vec2 &sizeInSpritesheet, int resistencia, vector<glm::vec2> &animations, char letter)
 {
 	spritesheet.loadFromFile("images/spriteSheet.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(size, posInSpritesheet, sizeInSpritesheet, &spritesheet, &shaderProgram, false);
@@ -29,7 +29,7 @@ void Element::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, g
 	}
 	else {
 		if (!animations.empty()) {
-			if(animations.size() > 4) sprite->setAnimationSpeed(0, 20);
+			if(animations.size() > 4) sprite->setAnimationSpeed(0, 25);
 			else sprite->setAnimationSpeed(0, 8);
 			for (int i = 1; i < animations.size(); i++) {
 				sprite->addKeyframe(0, animations[i]);
@@ -37,8 +37,12 @@ void Element::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, g
 		}
 	}
 	resistance = resistencia;
-	
 	tileMapDispl = tileMapPos;
+	if (letter == 'B') type = BRICK;
+	else if (letter == 'M') type = MONEY;
+	else if (letter == 'A') type = ALARM;
+	else letter = KEY;
+
 }
 
 void Element::update(int deltaTime)
@@ -71,9 +75,8 @@ int Element::collision()
 		int animId = sprite->getCurrentAnimation();
 		sprite->changeAnimation(animId + 1);
 	}
-	if(resistance == 0) {
+	if(resistance == 0 && type != BRICK) {
 		sprite->changeAnimation(0);
-		//sprite->free();
 	}
 	
 	return resistance;
@@ -81,6 +84,14 @@ int Element::collision()
 
 bool Element::isFinished() {
 	return sprite->isFinished();
+}
+
+int Element::getResistance() {
+	return resistance;
+}
+
+int Element::getType() {
+	return type;
 }
 
 

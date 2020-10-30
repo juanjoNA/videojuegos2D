@@ -34,7 +34,6 @@ public:
 	
 	void setPosition(const glm::vec2 &pos);
 	int getCurrentAnimation(){ return currentAnimation; }
-
 	bool isFinished();
 
 private:
@@ -44,7 +43,7 @@ private:
 	GLuint vbo;
 	GLint posLocation, texCoordLocation;
 	glm::vec2 position;
-	int currentAnimation, currentKeyframe;
+	int currentAnimation, currentKeyframe, lastKeyframe;
 	float timeAnimation;
 	glm::vec2 texCoordDispl;
 	vector<AnimKeyframes> animations;

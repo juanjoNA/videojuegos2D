@@ -18,7 +18,7 @@ class Ball
 
 public:
 	void init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, Player *p);
-	void update(int deltaTime, vector<class Element>& elements);
+	void update(int deltaTime, vector<class Element>& elements, vector<class Element>& bricks);
 	void render();
 
 	void setTileMap(TileMap *tileMap);
