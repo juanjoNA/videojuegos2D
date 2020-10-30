@@ -13,7 +13,7 @@
 void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 {
 	spritesheet.loadFromFile("images/spriteSheet.png", TEXTURE_PIXEL_FORMAT_RGBA);
-	sprite = Sprite::createSprite(glm::ivec2(SIZE_X, SIZE_Y), glm::vec2(0.4f,0.7f) , glm::vec2(0.2, 0.1), &spritesheet, &shaderProgram);
+	sprite = Sprite::createSprite(glm::ivec2(SIZE_X, SIZE_Y), glm::vec2(0.4f,0.7f) , glm::vec2(0.2, 0.1), &spritesheet, &shaderProgram, true);
 	sprite->setNumberAnimations(1);
 
 		sprite->setAnimationSpeed(0, 8);
@@ -35,20 +35,20 @@ void Player::update(int deltaTime)
 	direction = glm::vec2(0, 0);
 	if(Game::instance().getSpecialKey(GLUT_KEY_LEFT))
 	{
-		if(!CollisionManager::instance().collisionPlayerMap(posPlayer, glm::ivec2(SIZE_X, SIZE_Y), map, glm::ivec2(-1,0)*speed)) direction = glm::ivec2(-1, 0);
+		if(!CollisionManager::instance().collisionPlayerMap(posPlayer, glm::ivec2(SIZE_X, SIZE_Y), map, glm::ivec2(-1,0)*speed)) direction += glm::ivec2(-1, 0);
 	}
 	if(Game::instance().getSpecialKey(GLUT_KEY_RIGHT))
 	{
-		if (!CollisionManager::instance().collisionPlayerMap(posPlayer, glm::ivec2(SIZE_X, SIZE_Y), map, glm::ivec2(1, 0)*speed)) direction = glm::ivec2(1, 0);
+		if (!CollisionManager::instance().collisionPlayerMap(posPlayer, glm::ivec2(SIZE_X, SIZE_Y), map, glm::ivec2(1, 0)*speed)) direction += glm::ivec2(1, 0);
 
 	}
 	if (Game::instance().getSpecialKey(GLUT_KEY_UP))
 	{
-		if (!CollisionManager::instance().collisionPlayerMap(posPlayer, glm::ivec2(SIZE_X, SIZE_Y), map, glm::ivec2(0, -1)*speed)) direction = glm::ivec2(0, -1);
+		if (!CollisionManager::instance().collisionPlayerMap(posPlayer, glm::ivec2(SIZE_X, SIZE_Y), map, glm::ivec2(0, -1)*speed)) direction += glm::ivec2(0, -1);
 	}
 	if (Game::instance().getSpecialKey(GLUT_KEY_DOWN))
 	{
-		if (!CollisionManager::instance().collisionPlayerMap(posPlayer, glm::ivec2(SIZE_X, SIZE_Y), map, glm::ivec2(0, 1)*speed)) direction = glm::ivec2(0, 1);
+		if (!CollisionManager::instance().collisionPlayerMap(posPlayer, glm::ivec2(SIZE_X, SIZE_Y), map, glm::ivec2(0, 1)*speed)) direction += glm::ivec2(0, 1);
 	}
 	oldPosPlayer = posPlayer;
 	posPlayer += direction*speed;

@@ -24,6 +24,7 @@ public:
 	glm::vec2 getPosition() { return posElement; }
 	glm::vec2 getSize();
 	int collision();
+	bool isFinished();
 
 private:
 	glm::ivec2 tileMapDispl, posElement;

@@ -16,7 +16,7 @@ enum elementType{
 void Element::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, glm::ivec2 &size, glm::vec2 &posInSpritesheet, glm::vec2 &sizeInSpritesheet, int resistencia, vector<glm::vec2> &animations)
 {
 	spritesheet.loadFromFile("images/spriteSheet.png", TEXTURE_PIXEL_FORMAT_RGBA);
-	sprite = Sprite::createSprite(size, posInSpritesheet, sizeInSpritesheet, &spritesheet, &shaderProgram);
+	sprite = Sprite::createSprite(size, posInSpritesheet, sizeInSpritesheet, &spritesheet, &shaderProgram, false);
 	sprite->setNumberAnimations(resistencia);
 
 	if(resistencia > 1) 
@@ -29,7 +29,7 @@ void Element::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, g
 	}
 	else {
 		if (!animations.empty()) {
-			if(animations.size() > 4) sprite->setAnimationSpeed(0, 1);
+			if(animations.size() > 4) sprite->setAnimationSpeed(0, 20);
 			else sprite->setAnimationSpeed(0, 8);
 			for (int i = 1; i < animations.size(); i++) {
 				sprite->addKeyframe(0, animations[i]);
@@ -77,6 +77,10 @@ int Element::collision()
 	}
 	
 	return resistance;
+}
+
+bool Element::isFinished() {
+	return sprite->isFinished();
 }
 
 

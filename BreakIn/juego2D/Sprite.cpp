@@ -4,15 +4,14 @@
 #include "Sprite.h"
 
 
-Sprite *Sprite::createSprite(const glm::vec2 &quadSize, const glm::vec2 &posInSpritesheet, const glm::vec2 &sizeInSpritesheet, Texture *spritesheet, ShaderProgram *program)
+Sprite *Sprite::createSprite(const glm::vec2 &quadSize, const glm::vec2 &posInSpritesheet, const glm::vec2 &sizeInSpritesheet, Texture *spritesheet, ShaderProgram *program, bool isRepeatable)
 {
-	Sprite *quad = new Sprite(quadSize, posInSpritesheet, sizeInSpritesheet, spritesheet, program);
-
+	Sprite *quad = new Sprite(quadSize, posInSpritesheet, sizeInSpritesheet, spritesheet, program, isRepeatable);
 	return quad;
 }
 
 
-Sprite::Sprite(const glm::vec2 &quadSize, const glm::vec2 &posInSpritesheet, const glm::vec2 &sizeInSpritesheet, Texture *spritesheet, ShaderProgram *program)
+Sprite::Sprite(const glm::vec2 &quadSize, const glm::vec2 &posInSpritesheet, const glm::vec2 &sizeInSpritesheet, Texture *spritesheet, ShaderProgram *program, bool isRepeatable)
 {
 	/*float vertices[24] = {						0.f, 0.f, 0.f, 0.f, 
 												quadSize.x, 0.f, sizeInSpritesheet.x, 0.f, 
@@ -38,12 +37,14 @@ Sprite::Sprite(const glm::vec2 &quadSize, const glm::vec2 &posInSpritesheet, con
 	texture = spritesheet;
 	shaderProgram = program;
 	currentAnimation = -1;
+	repeat = isRepeatable;
+	finish = false;
 	position = glm::vec2(0.f);
 }
 
 void Sprite::update(int deltaTime)
 {
-	if(currentAnimation >= 0)
+	if(currentAnimation >= 0 && animate && !finish)
 	{
 		timeAnimation += deltaTime;
 		while(timeAnimation > animations[currentAnimation].millisecsPerKeyframe)
@@ -52,6 +53,12 @@ void Sprite::update(int deltaTime)
 			currentKeyframe = (currentKeyframe + 1) % animations[currentAnimation].keyframeDispl.size();
 		}
 		texCoordDispl = animations[currentAnimation].keyframeDispl[currentKeyframe];
+		if (!repeat && currentKeyframe == (animations[currentAnimation].keyframeDispl.size()-1)) {
+			finish = true;
+		}
+	}
+	else {
+		animate = false;
 	}
 }
 
@@ -96,6 +103,7 @@ void Sprite::changeAnimation(int animId)
 {
 	if(animId < int(animations.size()))
 	{
+		animate = true;
 		currentAnimation = animId;
 		currentKeyframe = 0;
 		timeAnimation = 0.f;
@@ -111,6 +119,11 @@ int Sprite::animation() const
 void Sprite::setPosition(const glm::vec2 &pos)
 {
 	position = pos;
+}
+
+bool Sprite::isFinished()
+{
+	return finish && animate;
 }
 
 

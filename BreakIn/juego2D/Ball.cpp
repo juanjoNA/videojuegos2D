@@ -15,7 +15,7 @@
 void Ball::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, Player *p)
 {
 	spritesheet.loadFromFile("images/spriteSheet.png", TEXTURE_PIXEL_FORMAT_RGBA);
-	sprite = Sprite::createSprite(glm::ivec2(SIZE_X, SIZE_Y), glm::vec2(0.6f, 0.8f), glm::vec2(0.1, 0.2), &spritesheet, &shaderProgram);
+	sprite = Sprite::createSprite(glm::ivec2(SIZE_X, SIZE_Y), glm::vec2(0.6f, 0.8f), glm::vec2(0.1, 0.2), &spritesheet, &shaderProgram, false);
 	sprite->setNumberAnimations(1);
 
 	tileMapDispl = tileMapPos;

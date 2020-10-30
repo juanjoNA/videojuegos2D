@@ -64,7 +64,7 @@ void Scene::update(int deltaTime)
 	player->update(deltaTime);
 	ball->update(deltaTime, money);
 	for (int i = 0; i < bricks.size(); i++) {
-		bricks.at(i).update(deltaTime);
+		bricks.at(i).update(deltaTime);		
 	}
 	for (int i = 0; i < money.size(); i++) {
 		money.at(i).update(deltaTime);
@@ -85,10 +85,19 @@ void Scene::render()
 	player->render();
 	ball->render();
 	/*for (int i = 0; i < bricks.size(); i++) {
-		bricks.at(i).render();
+		if (bricks.at(i).isFinished()) {
+			bricks.erase(bricks.begin() + i);
+		}else{
+			bricks.at(i).render();
+		}
 	}*/
 	for (int i = 0; i < money.size(); i++) {
-		money.at(i).render();
+		if (money.at(i).isFinished()) {
+			money.erase(money.begin() + i);
+		}
+		else {
+			money.at(i).render();
+		}
 	}
 }
 

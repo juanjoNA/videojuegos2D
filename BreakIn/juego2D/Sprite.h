@@ -18,9 +18,9 @@ class Sprite
 
 public:
 	// Textured quads can only be created inside an OpenGL context
-	static Sprite *createSprite(const glm::vec2 &quadSize, const glm::vec2 &posInSpritesheet, const glm::vec2 &sizeInSpritesheet, Texture *spritesheet, ShaderProgram *program);
+	static Sprite *createSprite(const glm::vec2 &quadSize, const glm::vec2 &posInSpritesheet, const glm::vec2 &sizeInSpritesheet, Texture *spritesheet, ShaderProgram *program, bool isRepeatable);
 
-	Sprite(const glm::vec2 &quadSize, const glm::vec2 &posInSpritesheet, const glm::vec2 &sizeInSpritesheet, Texture *spritesheet, ShaderProgram *program);
+	Sprite(const glm::vec2 &quadSize, const glm::vec2 &posInSpritesheet, const glm::vec2 &sizeInSpritesheet, Texture *spritesheet, ShaderProgram *program, bool isRepeatable);
 
 	void update(int deltaTime);
 	void render() const;
@@ -35,6 +35,8 @@ public:
 	void setPosition(const glm::vec2 &pos);
 	int getCurrentAnimation(){ return currentAnimation; }
 
+	bool isFinished();
+
 private:
 	Texture *texture;
 	ShaderProgram *shaderProgram;
@@ -46,7 +48,7 @@ private:
 	float timeAnimation;
 	glm::vec2 texCoordDispl;
 	vector<AnimKeyframes> animations;
-	bool animate;
+	bool animate, repeat, finish;
 };
 
 
