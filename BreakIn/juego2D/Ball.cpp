@@ -28,7 +28,7 @@ void Ball::update(int deltaTime, vector<class Element>& elements, vector<class E
 {
 	sprite->update(deltaTime);
 
-	if (CollisionManager::instance().collisionBallMap(posBall, glm::ivec2(SIZE_X, SIZE_Y), map, velocitat));
+	if (CollisionManager::instance().collisionBallMap(posBall, oldPosBall, glm::ivec2(SIZE_X, SIZE_Y), map, velocitat));
 	else if (CollisionManager::instance().collisionObjects(posBall, oldPosBall, glm::ivec2(SIZE_X, SIZE_Y), bricks, velocitat));
 	else if (CollisionManager::instance().collisionObjects(posBall, oldPosBall, glm::ivec2(SIZE_X, SIZE_Y), elements, velocitat));
 	else if (CollisionManager::instance().collisionBallPlayer(posBall, oldPosBall, glm::ivec2(SIZE_X, SIZE_Y), player, velocitat));

@@ -16,7 +16,8 @@ enum elementType{
 void Element::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, glm::ivec2 &size, glm::vec2 &posInSpritesheet, glm::vec2 &sizeInSpritesheet, int resistencia, vector<glm::vec2> &animations, char letter)
 {
 	spritesheet.loadFromFile("images/spriteSheet.png", TEXTURE_PIXEL_FORMAT_RGBA);
-	sprite = Sprite::createSprite(size, posInSpritesheet, sizeInSpritesheet, &spritesheet, &shaderProgram, false);
+	if(letter != 'A') sprite = Sprite::createSprite(size, posInSpritesheet, sizeInSpritesheet, &spritesheet, &shaderProgram, false);
+	else sprite = Sprite::createSprite(size, posInSpritesheet, sizeInSpritesheet, &spritesheet, &shaderProgram, true);
 	sprite->setNumberAnimations(resistencia);
 
 	if(resistencia > 1) 
@@ -30,7 +31,8 @@ void Element::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, g
 	else {
 		if (!animations.empty()) {
 			if(animations.size() > 4) sprite->setAnimationSpeed(0, 25);
-			else sprite->setAnimationSpeed(0, 8);
+			else if(letter != 'A') sprite->setAnimationSpeed(0, 8);
+			else sprite->setAnimationSpeed(0, 10);
 			for (int i = 1; i < animations.size(); i++) {
 				sprite->addKeyframe(0, animations[i]);
 			}
@@ -41,7 +43,7 @@ void Element::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, g
 	if (letter == 'B') type = BRICK;
 	else if (letter == 'M') type = MONEY;
 	else if (letter == 'A') type = ALARM;
-	else letter = KEY;
+	else type = KEY;
 
 }
 

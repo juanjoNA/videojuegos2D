@@ -9,19 +9,13 @@ using namespace irrklang;
 
 ISoundEngine *CollisionSound = createIrrKlangDevice();
 
-bool CollisionManager::collisionBallMap(glm::ivec2 &pos, const glm::ivec2 &size, const TileMap *tileMap, glm::vec2 &velocitat) const
+bool CollisionManager::collisionBallMap(glm::ivec2 &pos, glm::ivec2 &oldPos, const glm::ivec2 &size, const TileMap *tileMap, glm::vec2 &velocitat) const
 {
 	float xmin = pos.x / float( tileMap->getTileSize() );
 	float ymin = pos.y / float( tileMap->getTileSize() );
 	float xmax = (pos.x + size.x) / float( tileMap->getTileSize() );
 	float ymax = (pos.y + size.y) / float( tileMap->getTileSize() );
 	int *map = tileMap->getMap();
-
-	float entera;
-	float decimalX, decimalY; //decimales de los dos ejes
-
-	decimalX = modf(xmin, &entera);
-	decimalY = modf(ymin, &entera);
 
 	int topLeft = map[(int(ymin) * tileMap->getMapSize().x) + int(xmin)];
 	int topRight = map[(int(ymin) * tileMap->getMapSize().x) + int(xmax)];
@@ -31,38 +25,76 @@ bool CollisionManager::collisionBallMap(glm::ivec2 &pos, const glm::ivec2 &size,
 	if ( (topLeft <= 3 && topRight <= 3) || (bottomLeft <= 3 && bottomRight <= 3) )
 	{
 		velocitat.y = -velocitat.y;
+		if ((topLeft <= 3 && bottomLeft <= 3) || (topRight <= 3 && bottomRight <= 3)) velocitat.x = -velocitat.x;
 		CollisionSound->play2D("audio/bounce.wav");
 		return true;
 	}
 	else if ((topLeft <= 3 && bottomLeft <= 3) || (topRight <= 3 && bottomRight <= 3))
 	{
 		velocitat.x = -velocitat.x;
+		if ((topLeft <= 3 && topRight <= 3) || (bottomLeft <= 3 && bottomRight <= 3)) velocitat.y = -velocitat.y;
 		CollisionSound->play2D("audio/bounce.wav");
 		return true;
 	}
 	else if ( (topLeft <= 3)  || (topRight <= 3) || (bottomLeft <= 3) || (bottomRight <= 3) )
 	{
+		glm::ivec2 posCollision, auxPos = pos, auxOldPos = oldPos;
+		float x,y;
+
+		float entera;
+		float decimalX, decimalY; //decimales de los dos ejes
+
+		for (int i = 0; i < 3; i++) {
+			posCollision = (auxPos + auxOldPos) / 2;
+			x = posCollision.x / float(tileMap->getTileSize());
+			y = posCollision.y / float(tileMap->getTileSize());
+			if (map[(int(y) * tileMap->getMapSize().x) + int(x)] <= 3) auxPos = posCollision;
+			else auxOldPos = posCollision;
+		}
+
+
+		decimalX = modf(x, &entera);
+		decimalY = modf(y, &entera);
+
 		if (topLeft <= 3) {
-			if (decimalX > decimalY) velocitat.x = -velocitat.x;
-			else if (decimalY > decimalX) velocitat.y = -velocitat.y;
-			else velocitat = -velocitat;
+			if (oldPos.y < pos.y) velocitat.x = -velocitat.x;
+			else if(bottomRight <= 3) velocitat = -velocitat;
+			else {
+				if (decimalX > decimalY) velocitat.x = -velocitat.x;
+				else if (decimalY > decimalX)  velocitat.y = -velocitat.y;
+				else velocitat = -velocitat;
+			}
 		}
 		else if (topRight <= 3) {
-			if(decimalX == 0) velocitat.x = -velocitat.x;
-			else if (decimalX > decimalY) velocitat.x = -velocitat.x;
-			else if (decimalY > decimalX) velocitat.y = -velocitat.y;
-			else velocitat = -velocitat;
+			if (oldPos.y < pos.y) velocitat.x = -velocitat.x;
+			else if (bottomLeft <= 3) velocitat = -velocitat;
+			else {
+				decimalY = 1 - decimalY;
+				if (decimalX == 0) velocitat.x = -velocitat.x;
+				else if (decimalX > decimalY) velocitat.y = -velocitat.y;
+				else if (decimalY > decimalX)  velocitat.x = -velocitat.x;
+				else velocitat = -velocitat;
+			}
 		}
 		else if (bottomLeft <= 3) {
-			if (decimalY == 0) velocitat.y = -velocitat.y;
-			else if(decimalX > decimalY) velocitat.x = -velocitat.x;
-			else if(decimalY > decimalX) velocitat.y = -velocitat.y;
-			else velocitat = -velocitat;
+			if (oldPos.y > pos.y) velocitat.x = -velocitat.x;
+			else if (topRight <= 3) velocitat = -velocitat;
+			else {
+				decimalY = 1 - decimalY;
+				if (decimalX > decimalY) velocitat.y = -velocitat.y;
+				else if (decimalY > decimalX)  velocitat.x = -velocitat.x;
+				else velocitat = -velocitat;
+			}
 		}
 		else {
-			if (decimalX > decimalY) velocitat.y = -velocitat.y;
-			else if (decimalY > decimalX) velocitat.x = -velocitat.x;
-			else velocitat = -velocitat;
+			if (oldPos.y > pos.y) velocitat.x = -velocitat.x;
+			else if (topRight <= 3) velocitat = -velocitat;
+			else {
+				decimalY = 1 - decimalY;
+				if (decimalX > decimalY) velocitat.y = -velocitat.y;
+				else if (decimalY > decimalX)  velocitat.x = -velocitat.x;
+				else velocitat = -velocitat;
+			}
 		}
 		CollisionSound->play2D("audio/bounce.wav");
 		return true;

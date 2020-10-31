@@ -8,6 +8,7 @@
 #include "Player.h"
 #include "Ball.h"
 #include "Element.h"
+#include "Police.h"
 
 
 // Scene contains all the entities of our game.
@@ -42,7 +43,9 @@ private:
 	ShaderProgram texProgram;
 	float currentTime;
 	glm::mat4 projection;
-	vector<Element> bricks, money;
+	vector<Element> bricks, money, objectsInGame, objVector;
+	Element *key, *alarm;
+	Police *police;
 
 };
 
