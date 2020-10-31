@@ -20,7 +20,6 @@ public:
 	void init();
 	void update();
 	void render();
-	void mouseClick(int x, int y);
 
 private:
 	void initShaders();

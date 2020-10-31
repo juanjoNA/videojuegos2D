@@ -1,9 +1,12 @@
 #include <iostream>
 #include <cmath>
 #include <glm/gtc/matrix_transform.hpp>
+#include <GL/glew.h>
+#include <GL/glut.h>
 #include "Scene.h"
 #include "Game.h"
 
+#define TIME_PER_FRAME 1000.f / 60.f // Approx. 60 fps
 
 #define SCREEN_X 16
 #define SCREEN_Y 16
@@ -31,6 +34,13 @@ void Scene::init()
 {
 	initShaders();
 	map = TileMap::createTileMap("levels/level01.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+	subnivel = 0;
+
+	tapadorTexture.loadFromFile("images/tapador.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	tapadorArriba = Sprite::createSprite(glm::ivec2(384.0f, 16.0f), glm::vec2(0.0f, 0.0f), glm::vec2(1.0f, 1.0f), &tapadorTexture, &texProgram, false);
+	tapadorArriba->setPosition(glm::vec2(SCREEN_X, 0.0f));
+	tapadorAbajo = Sprite::createSprite(glm::ivec2(384.0f, 16.0f), glm::vec2(0.0f, 0.0f), glm::vec2(1.0f, 1.0f), &tapadorTexture, &texProgram, false);
+	tapadorAbajo->setPosition(glm::vec2(SCREEN_X, 464.0f));
 
 	player = new Player();
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
@@ -39,7 +49,7 @@ void Scene::init()
 
 	ball = new Ball();
 	ball->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, player);
-	ball->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize() - 100));
+	ball->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize() + 10, INIT_PLAYER_Y_TILES * map->getTileSize() - 100));
 	ball->setTileMap(map);
 
 	createObjects();
@@ -63,6 +73,40 @@ void Scene::update(int deltaTime)
 	currentTime += deltaTime;
 	player->update(deltaTime);
 	ball->update(deltaTime, money, bricks);
+	ballPos = ball->position();
+	cout << ballPos.y << endl;
+	if (Game::instance().getSpecialKey(GLUT_KEY_F1)) {
+		subnivel = 0;
+		//ballPos = ball->position();
+		//ball->setPosition(glm::vec2(ballPos.x, 64.0f));
+		/*duration = 2.0;
+		timeFin = currentTime + duration;
+		nSteps = duration / TIME_PER_FRAME;
+		translationDone = 0.0;
+		translation = -464.0 * nSteps;
+		isTransitioning = true;
+	}
+
+	if (currentTime <= timeFin) {
+		translationDone += translation;
+	}
+	else {
+		isTransitioning = false;
+	}*/
+	}
+
+	else if (Game::instance().getSpecialKey(GLUT_KEY_F2)) {
+		subnivel = 1;
+		//ballPos = ball->position();
+		//ball->setPosition(glm::vec2(ballPos.x, 464.0f + 64.0f));
+	}
+
+	else if (Game::instance().getSpecialKey(GLUT_KEY_F3)) {
+		subnivel = 2;
+		//ballPos = ball->position();
+		//ball->setPosition(glm::vec2(ballPos.x, 928.0f + 64.0f));
+	}
+
 	for (int i = 0; i < bricks.size(); i++) {
 		bricks.at(i).update(deltaTime);		
 	}
@@ -78,12 +122,24 @@ void Scene::render()
 	texProgram.use();
 	texProgram.setUniformMatrix4f("projection", projection);
 	texProgram.setUniform4f("color", 1.0f, 1.0f, 1.0f, 1.0f);
-	modelview = glm::mat4(1.0f);
+	switch (subnivel) {
+		case 0:
+			modelview = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
+			break;
+		case 1:
+			modelview = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, -464.0f, 0.0f));
+			break;
+		case 2:
+			modelview = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, -928.0f, 0.0f));
+			break;
+	}
 	texProgram.setUniformMatrix4f("modelview", modelview);
 	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
 	map->render();
 	player->render();
 	ball->render();
+	tapadorAbajo->render();
+	tapadorArriba->render();
 
 	for (int i = 0; i < bricks.size(); i++) {
 		if (bricks.at(i).getResistance() == 0) {

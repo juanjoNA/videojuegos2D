@@ -1,4 +1,11 @@
-﻿  CollisionManager.cpp
-c:\users\imunozbu\documents\vj\videojuegos2d\breakin\juego2d\collisionmanager.cpp(152): warning C4018: '<': signed/unsigned mismatch
+﻿  Scene.cpp
+c:\users\imunozbu\documents\vj\videojuegos2d\breakin\juego2d\scene.cpp(57): warning C4018: '<': signed/unsigned mismatch
+c:\users\imunozbu\documents\vj\videojuegos2d\breakin\juego2d\scene.cpp(62): warning C4018: '<': signed/unsigned mismatch
+c:\users\imunozbu\documents\vj\videojuegos2d\breakin\juego2d\scene.cpp(108): warning C4018: '<': signed/unsigned mismatch
+c:\users\imunozbu\documents\vj\videojuegos2d\breakin\juego2d\scene.cpp(111): warning C4018: '<': signed/unsigned mismatch
+c:\users\imunozbu\documents\vj\videojuegos2d\breakin\juego2d\scene.cpp(142): warning C4018: '<': signed/unsigned mismatch
+c:\users\imunozbu\documents\vj\videojuegos2d\breakin\juego2d\scene.cpp(150): warning C4018: '<': signed/unsigned mismatch
+c:\users\imunozbu\documents\vj\videojuegos2d\breakin\juego2d\scene.cpp(259): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\imunozbu\documents\vj\videojuegos2d\breakin\juego2d\scene.cpp(260): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
   juego2D.vcxproj -> C:\Users\imunozbu\Documents\vj\videojuegos2D\BreakIn\Debug\juego2D.exe
   juego2D.vcxproj -> C:\Users\imunozbu\Documents\vj\videojuegos2D\BreakIn\Debug\juego2D.pdb (Full PDB)

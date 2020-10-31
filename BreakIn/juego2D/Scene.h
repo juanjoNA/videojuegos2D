@@ -39,11 +39,16 @@ private:
 	TileMap *map;
 	Player *player;
 	Ball *ball;
+	Texture tapadorTexture;
+	Sprite *tapadorArriba;
+	Sprite *tapadorAbajo;
+	glm::ivec2 ballPos;
 	ShaderProgram texProgram;
 	float currentTime;
 	glm::mat4 projection;
 	vector<Element> bricks, money;
-
+	float translation;
+	int subnivel;
 };
 
 
