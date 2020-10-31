@@ -1,4 +1,4 @@
 ﻿  CollisionManager.cpp
-c:\users\juanjo\desktop\carpetas\universidad\4o\videojuegos\proyecto2d\videojuegos2d\breakin\juego2d\collisionmanager.cpp(145): warning C4018: '<': no coinciden signed/unsigned
-  juego2D.vcxproj -> C:\Users\Juanjo\Desktop\Carpetas\universidad\4o\Videojuegos\proyecto2D\videojuegos2D\BreakIn\Debug\juego2D.exe
-  juego2D.vcxproj -> C:\Users\Juanjo\Desktop\Carpetas\universidad\4o\Videojuegos\proyecto2D\videojuegos2D\BreakIn\Debug\juego2D.pdb (Full PDB)
+c:\users\imunozbu\documents\vj\videojuegos2d\breakin\juego2d\collisionmanager.cpp(152): warning C4018: '<': signed/unsigned mismatch
+  juego2D.vcxproj -> C:\Users\imunozbu\Documents\vj\videojuegos2D\BreakIn\Debug\juego2D.exe
+  juego2D.vcxproj -> C:\Users\imunozbu\Documents\vj\videojuegos2D\BreakIn\Debug\juego2D.pdb (Full PDB)

@@ -6,7 +6,7 @@
 #include <irrKlang.h>
 using namespace irrklang;
 
-ISoundEngine *SoundEngine = createIrrKlangDevice();
+ISoundEngine *GameSound = createIrrKlangDevice();
 
 
 void Game::init()
@@ -20,12 +20,11 @@ void Game::setState(int state) {
 	sceneAct = state;
 	if (sceneAct == MENU) {
 		menu.init();
-		SoundEngine->play2D("audio/breakout.mp3", true);
+		GameSound->play2D("audio/breakout.mp3", true);
 	}
 	else if (sceneAct == GAME) {
 		scene.init();
-		SoundEngine->stopAllSounds();
-		SoundEngine->play2D("audio/level1.mp3", true);
+		GameSound->stopAllSounds();
 	}
 	//Inicializar puntuación, vidas, sonido, ...
 }

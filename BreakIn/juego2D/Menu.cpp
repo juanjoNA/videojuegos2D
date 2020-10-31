@@ -9,7 +9,7 @@
 #include <irrKlang.h>
 using namespace irrklang;
 
-ISoundEngine *SoundEngine2 = createIrrKlangDevice();
+ISoundEngine *MenuSound = createIrrKlangDevice();
 
 #define SCREEN_X 16
 #define SCREEN_Y 16
@@ -84,14 +84,12 @@ void Menu::update() {
 	if (Game::instance().getSpecialKey(GLUT_KEY_UP) && !bUpPressed && !bPassword && !bControls && !bCredits) {
 		--index;
 		bUpPressed = true;
-		//SoundEngine->play2D("audio/selection.mp3");
 	}
 	else if (!Game::instance().getSpecialKey(GLUT_KEY_UP)) bUpPressed = false;
 
 	if (Game::instance().getSpecialKey(GLUT_KEY_DOWN) && !bDownPressed && !bControls && !bPassword && !bCredits) {
 		++index;
 		bDownPressed = true;
-		//SoundEngine->play2D("audio/selection.mp3");
 	}
 	else if (!Game::instance().getSpecialKey(GLUT_KEY_DOWN)) bDownPressed = false;
 
@@ -99,7 +97,7 @@ void Menu::update() {
 	index = index % numOptions;
 
 	if (Game::instance().getKey(13) && !bEnterPressed) { //enter key
-		SoundEngine2->play2D("audio/selection.mp3");
+		MenuSound->play2D("audio/selection.mp3");
 		Sleep(350);
 		bEnterPressed = true;
 		if (bControls) //At instructions screen

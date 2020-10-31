@@ -4,6 +4,10 @@
 #include <GL/glut.h>
 #include "CollisionManager.h"
 #include "TileMap.h"
+#include <irrKlang.h>
+using namespace irrklang;
+
+ISoundEngine *CollisionSound = createIrrKlangDevice();
 
 bool CollisionManager::collisionBallMap(glm::ivec2 &pos, const glm::ivec2 &size, const TileMap *tileMap, glm::vec2 &velocitat) const
 {
@@ -27,11 +31,13 @@ bool CollisionManager::collisionBallMap(glm::ivec2 &pos, const glm::ivec2 &size,
 	if ( (topLeft <= 3 && topRight <= 3) || (bottomLeft <= 3 && bottomRight <= 3) )
 	{
 		velocitat.y = -velocitat.y;
+		CollisionSound->play2D("audio/bounce.wav");
 		return true;
 	}
 	else if ((topLeft <= 3 && bottomLeft <= 3) || (topRight <= 3 && bottomRight <= 3))
 	{
 		velocitat.x = -velocitat.x;
+		CollisionSound->play2D("audio/bounce.wav");
 		return true;
 	}
 	else if ( (topLeft <= 3)  || (topRight <= 3) || (bottomLeft <= 3) || (bottomRight <= 3) )
@@ -58,7 +64,7 @@ bool CollisionManager::collisionBallMap(glm::ivec2 &pos, const glm::ivec2 &size,
 			else if (decimalY > decimalX) velocitat.x = -velocitat.x;
 			else velocitat = -velocitat;
 		}
-
+		CollisionSound->play2D("audio/bounce.wav");
 		return true;
 	}
 	return false;
@@ -106,6 +112,7 @@ bool CollisionManager::collisionBallPlayer(glm::ivec2 &pos, glm::ivec2 &oldPos, 
 			else {
 				velocitat.x = -5.f;
 			}
+			CollisionSound->play2D("audio/bounce.wav");
 			return true;
 		}
 		else return false;
@@ -147,7 +154,6 @@ bool CollisionManager::collisionObjects(glm::ivec2 & pos, glm::ivec2 & oldPos, c
 		int xmax = pos.x + size.x;
 		int ymin = pos.y;
 		int ymax = pos.y + size.y;
-
 		if	(
 			((elements.at(i).getPosition().x + elements.at(i).getSize().x) >= xmin) &&
 			(xmax >= elements.at(i).getPosition().x) &&
@@ -157,6 +163,26 @@ bool CollisionManager::collisionObjects(glm::ivec2 & pos, glm::ivec2 & oldPos, c
 		{
 			int resistance = elements.at(i).collision();
 			if(elements.at(i).getType() != 1) velocitat = -velocitat;
+			int type = elements.at(i).getType();
+			if (type == 0 && elements.at(i).getResistance() == 0) {
+				//Brick
+				CollisionSound->play2D("audio/brickBreak.wav");
+			}
+			else if (type == 0) {
+				CollisionSound->play2D("audio/brick.mp3");
+			}
+			else if (type == 1) {
+				//Money
+				CollisionSound->play2D("audio/coin.wav");
+			}
+			else if (type == 2) {
+				//Alarm
+				CollisionSound->play2D("audio/alarm.mp3");
+			}
+			else {
+				//Key
+				CollisionSound->play2D("audio/key.mp3");
+			}
 			return true;
 		}
 	}
