@@ -52,8 +52,13 @@ void Scene::init()
 	ball->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize() + 10, INIT_PLAYER_Y_TILES * map->getTileSize() - 100));
 	ball->setTileMap(map);
 
-	createObjects();
-	glm::vec2 posicion = glm::vec2(40, 32);
+	police = new Police;
+	police->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+	police->setPosition(glm::vec2(20 * map->getTileSize(), 20 * map->getTileSize() - 100));
+	police->setTileMap(map);
+
+	//createObjects();
+	/*glm::vec2 posicion = glm::vec2(40, 32);
 	for (int i = 0; i < bricks.size(); i++) {
 		bricks.at(i).setPosition(posicion);
 		posicion.x += 32.f;
@@ -62,23 +67,40 @@ void Scene::init()
 	for (int i = 0; i < money.size(); i++) {
 		money.at(i).setPosition(posicion2);
 		posicion2.x += 64.f;
-	}
+	}*/
 
 	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
 	currentTime = 0.0f;
+
+	// Select which font you want to use
+	 if (!text.init("fonts/OpenSans-Regular.ttf"))
+		//if(!text.init("fonts/OpenSans-Bold.ttf"))
+		//if(!text.init("fonts/DroidSerif.ttf"))
+		cout << "Could not load font!!!" << endl;
 }
 
 void Scene::update(int deltaTime)
 {
 	currentTime += deltaTime;
 	player->update(deltaTime);
-	ball->update(deltaTime, money, bricks);
+	police->update(deltaTime, player);
+	ball->update(deltaTime, money, bricks, subnivel);
 	ballPos = ball->position();
-	cout << ballPos.y << endl;
-	if (Game::instance().getSpecialKey(GLUT_KEY_F1)) {
-		subnivel = 0;
-		//ballPos = ball->position();
-		//ball->setPosition(glm::vec2(ballPos.x, 64.0f));
+	// Bajar nivel?
+	if (ballPos.x > 144 && ballPos.x < 272 && ballPos.y >= 464 && yAnterior < ballPos.y && subnivel != 2) {
+		switch (subnivel) {
+		case 0:
+			map = TileMap::createTileMap("levels/level01.txt", glm::vec2(SCREEN_X, SCREEN_Y - 464), texProgram);
+			subnivel = 1;
+			ball->setPosition(glm::vec2(ballPos.x, 16.0f));
+			break;
+		case 1:
+			map = TileMap::createTileMap("levels/level01.txt", glm::vec2(SCREEN_X, SCREEN_Y - 928), texProgram);
+			subnivel = 2;
+			ball->setPosition(glm::vec2(ballPos.x, 16.0f));
+			break;
+		}
+		yAnterior = 0.0f;
 		/*duration = 2.0;
 		timeFin = currentTime + duration;
 		nSteps = duration / TIME_PER_FRAME;
@@ -94,25 +116,33 @@ void Scene::update(int deltaTime)
 		isTransitioning = false;
 	}*/
 	}
-
-	else if (Game::instance().getSpecialKey(GLUT_KEY_F2)) {
-		subnivel = 1;
-		//ballPos = ball->position();
-		//ball->setPosition(glm::vec2(ballPos.x, 464.0f + 64.0f));
+	// Subir nivel?
+	else if (ballPos.x > 144 && ballPos.x < 272 && ballPos.y <= 16 && yAnterior > ballPos.y && subnivel != 0) {
+		switch (subnivel) {
+		case 1:
+			map = TileMap::createTileMap("levels/level01.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+			subnivel = 0;
+			ball->setPosition(glm::vec2(ballPos.x, 464.0f));
+			break;
+		case 2:
+			map = TileMap::createTileMap("levels/level01.txt", glm::vec2(SCREEN_X, SCREEN_Y - 464), texProgram);
+			subnivel = 1;
+			ball->setPosition(glm::vec2(ballPos.x, 464.0f));
+			break;
+		}
+		yAnterior = 480.0f;
+	}
+	else {
+		yAnterior = ballPos.y;
 	}
 
-	else if (Game::instance().getSpecialKey(GLUT_KEY_F3)) {
-		subnivel = 2;
-		//ballPos = ball->position();
-		//ball->setPosition(glm::vec2(ballPos.x, 928.0f + 64.0f));
-	}
-
-	for (int i = 0; i < bricks.size(); i++) {
+	/*for (int i = 0; i < bricks.size(); i++) {
 		bricks.at(i).update(deltaTime);		
 	}
 	for (int i = 0; i < money.size(); i++) {
 		money.at(i).update(deltaTime);
-	}
+	}*/
+	//key->update(deltaTime);
 }
 
 void Scene::render()
@@ -122,17 +152,7 @@ void Scene::render()
 	texProgram.use();
 	texProgram.setUniformMatrix4f("projection", projection);
 	texProgram.setUniform4f("color", 1.0f, 1.0f, 1.0f, 1.0f);
-	switch (subnivel) {
-		case 0:
-			modelview = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
-			break;
-		case 1:
-			modelview = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, -464.0f, 0.0f));
-			break;
-		case 2:
-			modelview = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, -928.0f, 0.0f));
-			break;
-	}
+	modelview = glm::mat4(1.0f);
 	texProgram.setUniformMatrix4f("modelview", modelview);
 	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
 	map->render();
@@ -141,7 +161,7 @@ void Scene::render()
 	tapadorAbajo->render();
 	tapadorArriba->render();
 
-	for (int i = 0; i < bricks.size(); i++) {
+	/*for (int i = 0; i < bricks.size(); i++) {
 		if (bricks.at(i).getResistance() == 0) {
 			bricks.erase(bricks.begin() + i);
 		}
@@ -156,7 +176,9 @@ void Scene::render()
 		else {
 			money.at(i).render();
 		}
-	}
+	}*/
+	//key->render();
+	text.render("Videogames!!!", glm::vec2(10, SCREEN_HEIGHT - 20), 32, glm::vec4(1, 1, 1, 1));
 }
 
 void Scene::initShaders()
@@ -195,6 +217,8 @@ void Scene::createObjects()
 	createBricks2();
 	createBricks3();
 	createMoney();
+	createKey();
+	createAlarm();
 }
 
 void Scene::createBricks1()
@@ -205,7 +229,7 @@ void Scene::createBricks1()
 	for (int i = 0; i < 3; i++) {
 		Element *brick = new Element();
 		brick->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::ivec2(32, 16), posIn, sizeIn, 1, animations, 'B');
-		bricks.push_back(*brick);
+		objVector.push_back(*brick);
 		posIn.y += 0.2f;
 	}
 
@@ -223,7 +247,7 @@ void Scene::createBricks2()
 		}
 		brick->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::ivec2(32, 16), posIn, sizeIn, 2, animations, 'B');
 
-		bricks.push_back(*brick);
+		objVector.push_back(*brick);
 		posIn.y += 0.2f;
 		if (posIn.y >= 1.f) {
 			posIn = glm::vec2(0.2f, 0.f);
@@ -243,7 +267,7 @@ void Scene::createBricks3()
 		}
 		brick->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::ivec2(32, 16), posIn, sizeIn, 3, animations, 'B');
 
-		bricks.push_back(*brick);
+		objVector.push_back(*brick);
 		posIn.y += 0.2f;
 	}
 }
@@ -264,7 +288,7 @@ void Scene::createMoney()
 		}
 		coin->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::ivec2(32, 32), posIn, sizeIn, 1, animations, 'M');
 
-		money.push_back(*coin);
+		objVector.push_back(*coin);
 		posIn.y += 0.3f;
 	}
 
@@ -275,15 +299,33 @@ void Scene::createMoney()
 	}
 	coin->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::ivec2(32, 32), posIn, sizeIn, 1, animations, 'M');
 
-	money.push_back(*coin);
+	objVector.push_back(*coin);
 }
 
 void Scene::createKey()
 {
+	glm::vec2 posIn = glm::vec2(0.4f, 0.6f);
+	glm::vec2 sizeIn(0.05f, 0.1f);
+	key = new Element();
+	vector<glm::vec2> animations;
+	for (int j = 0; j < 4; j++) {
+		animations.push_back(glm::vec2(0.05 * j, 0.f));
+	}
+	key->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::ivec2(32, 32), posIn, sizeIn, 1, animations, 'K');
+	objVector.push_back(*key);
 }
 
 void Scene::createAlarm()
 {
+	glm::vec2 posIn = glm::vec2(0.6f, 0.6f);
+	glm::vec2 sizeIn(0.05f, 0.1f);
+	alarm = new Element();
+	vector<glm::vec2> animations;
+	for (int j = 0; j < 4; j++) {
+		animations.push_back(glm::vec2(0.05 * j, 0.f));
+	}
+	alarm->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::ivec2(32, 32), posIn, sizeIn, 1, animations, 'A');
+	objVector.push_back(*alarm);
 }
 
 

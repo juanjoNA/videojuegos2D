@@ -63,6 +63,12 @@
     <ClInclude Include="Element.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
+    <ClInclude Include="Text.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="Police.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game.cpp">
@@ -107,5 +113,31 @@
     <ClCompile Include="Element.cpp">
       <Filter>Archivos de código fuente</Filter>
     </ClCompile>
+    <ClCompile Include="Text.cpp">
+      <Filter>Archivos de código fuente</Filter>
+    </ClCompile>
+    <ClCompile Include="Police.cpp">
+      <Filter>Archivos de código fuente</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="audio\alarm.mp3" />
+    <Media Include="audio\bleep.mp3" />
+    <Media Include="audio\brickBreak.wav">
+      <Filter>Archivos de recursos</Filter>
+    </Media>
+    <Media Include="audio\breakout.mp3" />
+    <Media Include="audio\bounce.wav">
+      <Filter>Archivos de recursos</Filter>
+    </Media>
+    <Media Include="audio\brick.mp3" />
+    <Media Include="audio\coin.wav">
+      <Filter>Archivos de recursos</Filter>
+    </Media>
+    <Media Include="audio\coinBag.mp3" />
+    <Media Include="audio\gameOver.mp3" />
+    <Media Include="audio\key.mp3" />
+    <Media Include="audio\level1.mp3" />
+    <Media Include="audio\selection.mp3" />
   </ItemGroup>
 </Project>
