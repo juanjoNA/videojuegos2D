@@ -32,7 +32,7 @@ private:
 	glm::ivec2 tileMapDispl, posElement;
 	int resistance;
 	Texture spritesheet;
-	Sprite *sprite;
+	Sprite sprite;
 	int type; //BRICK = 0, MONEY = 1, ALARM = 2, KEY = 3;
 };
 

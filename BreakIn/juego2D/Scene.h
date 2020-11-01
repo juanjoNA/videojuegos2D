@@ -28,7 +28,8 @@ public:
 
 private:
 	void initShaders();
-	void createObjects();
+	void storeObjects();
+	bool loadObjects(const string &loadObjectsLevel);
 	void createBricks1();
 	void createBricks2();
 	void createBricks3();
@@ -43,7 +44,7 @@ private:
 	ShaderProgram texProgram;
 	float currentTime;
 	glm::mat4 projection;
-	vector<Element> bricks, money, objectsInGame, objVector;
+	vector<Element> objectsInGame, objVector;
 	Element *key, *alarm;
 	Police *police;
 

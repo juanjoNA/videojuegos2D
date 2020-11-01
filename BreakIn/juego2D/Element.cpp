@@ -16,25 +16,25 @@ enum elementType{
 void Element::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, glm::ivec2 &size, glm::vec2 &posInSpritesheet, glm::vec2 &sizeInSpritesheet, int resistencia, vector<glm::vec2> &animations, char letter)
 {
 	spritesheet.loadFromFile("images/spriteSheet.png", TEXTURE_PIXEL_FORMAT_RGBA);
-	if(letter != 'A') sprite = Sprite::createSprite(size, posInSpritesheet, sizeInSpritesheet, &spritesheet, &shaderProgram, false);
-	else sprite = Sprite::createSprite(size, posInSpritesheet, sizeInSpritesheet, &spritesheet, &shaderProgram, true);
-	sprite->setNumberAnimations(resistencia);
+	if(letter != 'A') sprite = Sprite(size, posInSpritesheet, sizeInSpritesheet, &spritesheet, &shaderProgram, false);
+	else sprite = Sprite(size, posInSpritesheet, sizeInSpritesheet, &spritesheet, &shaderProgram, true);
+	sprite.setNumberAnimations(resistencia);
 
 	if(resistencia > 1) 
 	{
 		for (int i = 0; i < resistencia; i++) {
-			sprite->setAnimationSpeed(i, 5);
-			sprite->addKeyframe(i, animations[i]);
+			sprite.setAnimationSpeed(i, 5);
+			sprite.addKeyframe(i, animations[i]);
 		}
-		sprite->changeAnimation(0);
+		sprite.changeAnimation(0);
 	}
 	else {
 		if (!animations.empty()) {
-			if(animations.size() > 4) sprite->setAnimationSpeed(0, 25);
-			else if(letter != 'A') sprite->setAnimationSpeed(0, 8);
-			else sprite->setAnimationSpeed(0, 10);
+			if(animations.size() > 4) sprite.setAnimationSpeed(0, 25);
+			else if(letter != 'A') sprite.setAnimationSpeed(0, 8);
+			else sprite.setAnimationSpeed(0, 10);
 			for (int i = 1; i < animations.size(); i++) {
-				sprite->addKeyframe(0, animations[i]);
+				sprite.addKeyframe(0, animations[i]);
 			}
 		}
 	}
@@ -49,20 +49,20 @@ void Element::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, g
 
 void Element::update(int deltaTime)
 {
-	sprite->update(deltaTime);
+	sprite.update(deltaTime);
 	
 }
 
 void Element::render()
 {
-	sprite->render();
+	sprite.render();
 }
 
 
 void Element::setPosition(const glm::vec2 &pos)
 {
 	posElement = pos;
-	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posElement.x), float(tileMapDispl.y + posElement.y)));
+	sprite.setPosition(glm::vec2(float(tileMapDispl.x + posElement.x), float(tileMapDispl.y + posElement.y)));
 }
 
 glm::vec2 Element::getSize()
@@ -74,18 +74,18 @@ int Element::collision()
 {
 	resistance--;
 	if (resistance > 0) {
-		int animId = sprite->getCurrentAnimation();
-		sprite->changeAnimation(animId + 1);
+		int animId = sprite.getCurrentAnimation();
+		sprite.changeAnimation(animId + 1);
 	}
 	if(resistance == 0 && type != BRICK) {
-		sprite->changeAnimation(0);
+		sprite.changeAnimation(0);
 	}
 	
 	return resistance;
 }
 
 bool Element::isFinished() {
-	return sprite->isFinished();
+	return sprite.isFinished();
 }
 
 int Element::getResistance() {

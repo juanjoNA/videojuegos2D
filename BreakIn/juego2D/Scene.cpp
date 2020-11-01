@@ -1,5 +1,7 @@
 #include <iostream>
 #include <cmath>
+#include <fstream>
+#include <sstream>
 #include <glm/gtc/matrix_transform.hpp>
 #include "Scene.h"
 #include "Game.h"
@@ -30,7 +32,7 @@ Scene::~Scene()
 void Scene::init()
 {
 	initShaders();
-	map = TileMap::createTileMap("levels/level02.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+	map = TileMap::createTileMap("levels/level01.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 
 	player = new Player();
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
@@ -47,7 +49,8 @@ void Scene::init()
 	police->setPosition(glm::vec2(20 * map->getTileSize(), 20 * map->getTileSize() - 100));
 	police->setTileMap(map);
 
-	//createObjects();
+	storeObjects();
+	loadObjects("levels/OP_level01.txt");
 	/*glm::vec2 posicion = glm::vec2(40, 32);
 	for (int i = 0; i < bricks.size(); i++) {
 		bricks.at(i).setPosition(posicion);
@@ -68,14 +71,11 @@ void Scene::update(int deltaTime)
 {
 	currentTime += deltaTime;
 	player->update(deltaTime);
-	ball->update(deltaTime, money, bricks);
+	//ball->update(deltaTime, objectsInGame);
 	police->update(deltaTime, player);
-	/*for (int i = 0; i < bricks.size(); i++) {
-		bricks.at(i).update(deltaTime);		
+	for (int i = 0; i < objectsInGame.size(); i++) {
+		objectsInGame.at(i).update(deltaTime);
 	}
-	for (int i = 0; i < money.size(); i++) {
-		money.at(i).update(deltaTime);
-	}*/
 	//key->update(deltaTime);
 }
 
@@ -91,26 +91,25 @@ void Scene::render()
 	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
 	map->render();
 	player->render();
-	ball->render();
+	//ball->render();
 	police->render();
-	/*
-	for (int i = 0; i < bricks.size(); i++) {
-		if (bricks.at(i).getResistance() == 0) {
-			bricks.erase(bricks.begin() + i);
+	for (int i = 0; i < objectsInGame.size(); i++) {
+		if (objectsInGame.at(i).getType() != 0) {
+			if (objectsInGame.at(i).isFinished()) {
+				objectsInGame.erase(objectsInGame.begin() + i);
+			}
+			else {
+				objectsInGame.at(i).render();
+			}
+		}
+		else if (objectsInGame.at(i).getResistance() == 0) {
+			
+				objectsInGame.erase(objectsInGame.begin() + i);
 		}
 		else {
-			bricks.at(i).render();
+			objectsInGame.at(i).render();
 		}
 	}
-	for (int i = 0; i < money.size(); i++) {
-		if (money.at(i).isFinished()) {
-			money.erase(money.begin() + i);
-		}
-		else {
-			money.at(i).render();
-		}
-	}*/
-	//key->render();
 }
 
 void Scene::initShaders()
@@ -143,14 +142,14 @@ void Scene::initShaders()
 	fShader.free();
 }
 
-void Scene::createObjects()
+void Scene::storeObjects()
 {
 	createBricks1();
 	createBricks2();
 	createBricks3();
 	createMoney();
-	createKey();
 	createAlarm();
+	createKey();
 }
 
 void Scene::createBricks1()
@@ -258,6 +257,47 @@ void Scene::createAlarm()
 	}
 	alarm->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::ivec2(32, 32), posIn, sizeIn, 1, animations, 'A');
 	objVector.push_back(*alarm);
+}
+
+bool Scene::loadObjects(const string &loadObjectsFile) {
+	
+	ifstream fin;
+	string line, tilesheetFile;
+	stringstream sstream;
+	int size, posObj;
+	glm::ivec2 mapSize;
+
+	fin.open(loadObjectsFile.c_str());
+	if (!fin.is_open())
+		return false;
+	getline(fin, line);
+	if (line.compare(0, 14, "OBJECTPOSITION") != 0)
+		return false;
+	getline(fin, line);
+	sstream.str(line);
+	sstream >> mapSize.x >> mapSize.y;
+	getline(fin, line);
+	sstream.str(line);
+	sstream >> size;
+
+	int tileSize = map->getTileSize();
+	for (int j = 0; j<mapSize.y; j++)
+	{
+		for (int i = 0; i<mapSize.x; i++)
+		{
+			fin >> posObj;
+			if (posObj >= 0) {
+				Element e = objVector.at(posObj);
+				e.setPosition(glm::vec2(i*tileSize, j*tileSize));
+				objectsInGame.push_back(e);
+				fin >> posObj;
+				i++;
+			}
+		}
+	}
+	fin.close();
+
+	return true;
 }
 
 
