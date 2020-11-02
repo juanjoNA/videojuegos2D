@@ -2,7 +2,6 @@
 #include <GL/glut.h>
 #include "Game.h"
 #include "Menu.h"
-#include "Controls.h"
 #include <iostream>
 
 

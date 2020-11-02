@@ -11,10 +11,10 @@ ISoundEngine *CollisionSound = createIrrKlangDevice();
 
 bool CollisionManager::collisionBallMap(glm::ivec2 &pos, glm::ivec2 &oldPos, const glm::ivec2 &size, const TileMap *tileMap, glm::vec2 &velocitat) const
 {
-	float xmin = pos.x / float( tileMap->getTileSize() );
-	float ymin = pos.y / float( tileMap->getTileSize() );
-	float xmax = (pos.x + size.x) / float( tileMap->getTileSize() );
-	float ymax = (pos.y + size.y) / float( tileMap->getTileSize() );
+	float xmin = pos.x / float(tileMap->getTileSize());
+	float ymin = pos.y / float(tileMap->getTileSize());
+	float xmax = (pos.x + size.x) / float(tileMap->getTileSize());
+	float ymax = (pos.y + size.y) / float(tileMap->getTileSize());
 	int *map = tileMap->getMap();
 
 	int topLeft = map[(int(ymin) * tileMap->getMapSize().x) + int(xmin)];
@@ -22,7 +22,7 @@ bool CollisionManager::collisionBallMap(glm::ivec2 &pos, glm::ivec2 &oldPos, con
 	int bottomLeft = map[(int(ymax) * tileMap->getMapSize().x) + int(xmin)];
 	int bottomRight = map[(int(ymax) * tileMap->getMapSize().x) + int(xmax)];
 
-	if ( (topLeft <= 3 && topRight <= 3) || (bottomLeft <= 3 && bottomRight <= 3) )
+	if ((topLeft <= 3 && topRight <= 3) || (bottomLeft <= 3 && bottomRight <= 3))
 	{
 		velocitat.y = -velocitat.y;
 		if ((topLeft <= 3 && bottomLeft <= 3) || (topRight <= 3 && bottomRight <= 3)) velocitat.x = -velocitat.x;
@@ -36,7 +36,7 @@ bool CollisionManager::collisionBallMap(glm::ivec2 &pos, glm::ivec2 &oldPos, con
 		CollisionSound->play2D("audio/bounce.wav");
 		return true;
 	}
-	else if ( (topLeft <= 3)  || (topRight <= 3) || (bottomLeft <= 3) || (bottomRight <= 3) )
+	else if ((topLeft <= 3) || (topRight <= 3) || (bottomLeft <= 3) || (bottomRight <= 3))
 	{
 		glm::ivec2 posCollision, auxPos = pos, auxOldPos = oldPos;
 		float x,y;
@@ -65,6 +65,14 @@ bool CollisionManager::collisionBallMap(glm::ivec2 &pos, glm::ivec2 &oldPos, con
 				else velocitat = -velocitat;
 			}
 		}
+			if (oldPos.y < pos.y) velocitat.x = -velocitat.x;
+			else if (bottomRight <= 3) velocitat = -velocitat;
+			else {
+				if (decimalX > decimalY) velocitat.x = -velocitat.x;
+				else if (decimalY > decimalX)  velocitat.y = -velocitat.y;
+				else velocitat = -velocitat;
+			}
+		}
 		else if (topRight <= 3) {
 			if (oldPos.y < pos.y) velocitat.x = -velocitat.x;
 			else if (bottomLeft <= 3) velocitat = -velocitat;
@@ -77,14 +85,10 @@ bool CollisionManager::collisionBallMap(glm::ivec2 &pos, glm::ivec2 &oldPos, con
 			}
 		}
 		else if (bottomLeft <= 3) {
-			if (oldPos.y > pos.y) velocitat.x = -velocitat.x;
-			else if (topRight <= 3) velocitat = -velocitat;
-			else {
-				decimalY = 1 - decimalY;
-				if (decimalX > decimalY) velocitat.y = -velocitat.y;
-				else if (decimalY > decimalX)  velocitat.x = -velocitat.x;
-				else velocitat = -velocitat;
-			}
+			if (decimalY == 0) velocitat.y = -velocitat.y;
+			else if(decimalX > decimalY) velocitat.x = -velocitat.x;
+			else if(decimalY > decimalX) velocitat.y = -velocitat.y;
+			else velocitat = -velocitat;
 		}
 		else {
 			if (oldPos.y > pos.y) velocitat.x = -velocitat.x;
@@ -104,12 +108,12 @@ bool CollisionManager::collisionBallMap(glm::ivec2 &pos, glm::ivec2 &oldPos, con
 
 bool CollisionManager::collisionBallPlayer(glm::ivec2 &pos, glm::ivec2 &oldPos, const glm::ivec2 &size, Player *player, glm::vec2 &velocitat) const
 {
-	
+
 	int xmin = pos.x;
 	int xmax = pos.x + size.x;
 	int ymin = pos.y;
 	int ymax = pos.y + size.y;
-	glm::vec2 center = glm::vec2((xmax+xmin)/2, (ymax+ymin)/2);
+	glm::vec2 center = glm::vec2((xmax + xmin) / 2, (ymax + ymin) / 2);
 
 	if (
 		((player->getPosition().x + player->getSize().x) >= xmin) &&
@@ -119,9 +123,9 @@ bool CollisionManager::collisionBallPlayer(glm::ivec2 &pos, glm::ivec2 &oldPos, 
 		)
 	{
 		if (oldPos.y < pos.y) {
-			
+
 			velocitat.y = -velocitat.y;
-			float percentatgeCollision = ( (player->getPosition().x + player->getSize().x) - center.x ) / player->getSize().x;
+			float percentatgeCollision = ((player->getPosition().x + player->getSize().x) - center.x) / player->getSize().x;
 
 			if (percentatgeCollision <= 0.2f) {
 				velocitat.x = 5.f;
@@ -159,23 +163,20 @@ bool CollisionManager::collisionPlayerMap(glm::ivec2 &pos, const glm::ivec2 & si
 	int xmax = (pos.x + size.x) / tileMap->getTileSize();
 	int ymax = (pos.y + size.y) / tileMap->getTileSize();
 	int *map = tileMap->getMap();
-
 	if (direction.x < 0) xmin = (pos.x+direction.x) / tileMap->getTileSize();
 	else if (direction.x > 0) xmax = (pos.x + size.x + direction.x) / tileMap->getTileSize();
 	else if (direction.y < 0) ymin = (pos.y + direction.y) / tileMap->getTileSize();
 	else ymax = (pos.y + size.y + direction.y) / tileMap->getTileSize();
-
 	int topLeft = map[(ymin * tileMap->getMapSize().x) + xmin];
 	int topRight = map[(ymin * tileMap->getMapSize().x) + xmax];
 	int bottomLeft = map[(ymax * tileMap->getMapSize().x) + xmin];
 	int bottomRight = map[(ymax * tileMap->getMapSize().x) + xmax];
-
 	if ((topLeft <= 3) || (topRight <= 3) || (bottomLeft <= 3) || (bottomRight <= 3)) return true;
 	else return false;*/
 
 	if (pos.x + direction.x < 16 || (pos.x + size.x + direction.x > 368) ||
 		pos.y + direction.y < 16 || (pos.y + size.y + direction.y > 368))return true;
-	
+
 	else return false;
 }
 
@@ -186,7 +187,7 @@ bool CollisionManager::collisionObjects(glm::ivec2 & pos, glm::ivec2 & oldPos, c
 		int xmax = pos.x + size.x;
 		int ymin = pos.y;
 		int ymax = pos.y + size.y;
-		if	(
+		if (
 			((elements.at(i).getPosition().x + elements.at(i).getSize().x) >= xmin) &&
 			(xmax >= elements.at(i).getPosition().x) &&
 			((elements.at(i).getPosition().y + elements.at(i).getSize().y) >= ymin) &&
@@ -194,7 +195,7 @@ bool CollisionManager::collisionObjects(glm::ivec2 & pos, glm::ivec2 & oldPos, c
 			)
 		{
 			int resistance = elements.at(i).collision();
-			if(elements.at(i).getType() != 1) velocitat = -velocitat;
+			if (elements.at(i).getType() != 1) velocitat = -velocitat;
 			int type = elements.at(i).getType();
 			if (type == 0 && elements.at(i).getResistance() == 0) {
 				//Brick

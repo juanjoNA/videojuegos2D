@@ -52,7 +52,7 @@ void Player::update(int deltaTime)
 	}
 	oldPosPlayer = posPlayer;
 	posPlayer += direction*speed;
-	
+		
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
 }
 
@@ -94,10 +94,6 @@ bool Player::collision(glm::ivec2 &pos, const glm::ivec2 &size) const
 		pos.y = pos.y - (ymax - posPlayer.y);
 		return true;
 	}
-		
+
 	return false;
 }
-
-
-
-

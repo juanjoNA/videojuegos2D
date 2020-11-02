@@ -9,7 +9,7 @@
 #define SIZE_Y 16
 
 
-enum elementType{
+enum elementType {
 	BRICK, MONEY, ALARM, KEY
 };
 
@@ -20,7 +20,7 @@ void Element::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, g
 	else sprite = Sprite(size, posInSpritesheet, sizeInSpritesheet, &spritesheet, &shaderProgram, true);
 	sprite.setNumberAnimations(resistencia);
 
-	if(resistencia > 1) 
+	if (resistencia > 1)
 	{
 		for (int i = 0; i < resistencia; i++) {
 			sprite.setAnimationSpeed(i, 5);
@@ -80,7 +80,7 @@ int Element::collision()
 	if(resistance == 0 && type != BRICK) {
 		sprite.changeAnimation(0);
 	}
-	
+
 	return resistance;
 }
 
@@ -95,9 +95,3 @@ int Element::getResistance() {
 int Element::getType() {
 	return type;
 }
-
-
-
-
-
-

@@ -24,59 +24,27 @@ void Ball::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, Play
 	velocitat = glm::vec2(4, -4);
 }
 
-void Ball::update(int deltaTime, vector<class Element>& objInGame)
+void Ball::update(int deltaTime, vector<class Element>& objInGame, int level)
 {
+	int trans;
 	sprite->update(deltaTime);
-
-	if (CollisionManager::instance().collisionBallMap(posBall, oldPosBall, glm::ivec2(SIZE_X, SIZE_Y), map, velocitat));
+	switch (level) {
+	case 0: 
+		trans = 0;
+		break;
+	case 1: 
+		trans = 464;
+		break;
+	case 2:
+		trans = 928;
+		break;
+	}
+	if (CollisionManager::instance().collisionBallMap(glm::ivec2(posBall.x, posBall.y + trans), oldPosBall, glm::ivec2(SIZE_X, SIZE_Y), map, velocitat));
 	else if (CollisionManager::instance().collisionObjects(posBall, oldPosBall, glm::ivec2(SIZE_X, SIZE_Y), objInGame, velocitat));
 	else if (CollisionManager::instance().collisionBallPlayer(posBall, oldPosBall, glm::ivec2(SIZE_X, SIZE_Y), player, velocitat));
 	oldPosBall = posBall;
 	posBall += velocitat;
-	/*
-	if (up) posBall.y -= 2;
-	else posBall.y += 2;
-
-	if (right) posBall.x += 2;
-	else posBall.x -= 2;
-	*/
 	
-	/*else
-	{
-	if(sprite->animation() == MOVE_LEFT)
-	sprite->changeAnimation(STAND_LEFT);
-	else if(sprite->animation() == MOVE_RIGHT)
-	sprite->changeAnimation(STAND_RIGHT);
-	}
-
-	if(bJumping)
-	{
-	jumpAngle += JUMP_ANGLE_STEP;
-	if(jumpAngle == 180)
-	{
-	bJumping = false;
-	posBall.y = startY;
-	}
-	else
-	{
-	posBall.y = int(startY - 96 * sin(3.14159f * jumpAngle / 180.f));
-	if(jumpAngle > 90)
-	bJumping = !map->collisionMoveDown(posBall, glm::ivec2(SIZE_X, SIZE_Y), &posBall.y);
-	}
-	}
-	else
-	{
-	posBall.y += FALL_STEP;
-	if(map->collisionMoveDown(posBall, glm::ivec2(SIZE_X, SIZE_Y), &posBall.y))
-	{
-	if(Game::instance().getSpecialKey(GLUT_KEY_UP))
-	{
-	bJumping = true;
-	jumpAngle = 0;
-	startY = posBall.y;
-	}
-	}
-	}*/
 	sprite->setPosition(glm::vec2(posBall.x+SIZE_X, posBall.y + SIZE_Y));
 }
 
@@ -95,4 +63,8 @@ void Ball::setPosition(const glm::vec2 &pos)
 	posBall = pos;
 	oldPosBall = posBall;
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posBall.x), float(tileMapDispl.y + posBall.y)));
+}
+
+ glm::ivec2 Ball::position() {
+	 return posBall;
 }

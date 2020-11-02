@@ -13,17 +13,17 @@ void Game::init()
 {
 	bPlay = true;
 	glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
+	menu.init();
+	scene.init();
 	setState(MENU);
 }
 
 void Game::setState(int state) {
 	sceneAct = state;
 	if (sceneAct == MENU) {
-		menu.init();
 		GameSound->play2D("audio/breakout.mp3", true);
 	}
 	else if (sceneAct == GAME) {
-		scene.init();
 		GameSound->stopAllSounds();
 	}
 	//Inicializar puntuación, vidas, sonido, ...

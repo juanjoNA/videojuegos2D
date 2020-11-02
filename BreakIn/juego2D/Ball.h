@@ -18,11 +18,12 @@ class Ball
 
 public:
 	void init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, Player *p);
-	void update(int deltaTime, vector<class Element>& objInGame);
+	void update(int deltaTime, vector<class Element>& objInGame, int level);
 	void render();
 
 	void setTileMap(TileMap *tileMap);
 	void setPosition(const glm::vec2 &pos);
+	glm::ivec2 position();
 
 private:
 	glm::ivec2 tileMapDispl, posBall, oldPosBall;

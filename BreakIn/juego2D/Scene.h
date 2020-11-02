@@ -9,6 +9,10 @@
 #include "Ball.h"
 #include "Element.h"
 #include "Police.h"
+#include "Text.h"
+
+#define CAMERA_WIDTH 640
+#define CAMERA_HEIGHT 480
 
 
 // Scene contains all the entities of our game.
@@ -41,13 +45,20 @@ private:
 	TileMap *map;
 	Player *player;
 	Ball *ball;
-	ShaderProgram texProgram;
-	float currentTime;
+	Texture tapadorTexture;
+	Sprite *tapadorArriba;
+	Sprite *tapadorAbajo;
+	Text text;
+	glm::ivec2 ballPos;
+	ShaderProgram simpleProgram, texProgram;
 	glm::mat4 projection;
 	vector<Element> objectsInGame, objVector;
 	Element *key, *alarm;
 	Police *police;
-
+	float translation;
+	int subnivel;
+	float currentTime;
+	float yAnterior = 0;
 };
 
 

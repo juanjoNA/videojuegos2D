@@ -3,9 +3,12 @@
 #include <fstream>
 #include <sstream>
 #include <glm/gtc/matrix_transform.hpp>
+#include <GL/glew.h>
+#include <GL/glut.h>
 #include "Scene.h"
 #include "Game.h"
 
+#define TIME_PER_FRAME 1000.f / 60.f // Approx. 60 fps
 
 #define SCREEN_X 16
 #define SCREEN_Y 16
@@ -33,6 +36,13 @@ void Scene::init()
 {
 	initShaders();
 	map = TileMap::createTileMap("levels/level01.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+	subnivel = 0;
+
+	tapadorTexture.loadFromFile("images/tapador.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	tapadorArriba = Sprite::createSprite(glm::ivec2(384.0f, 16.0f), glm::vec2(0.0f, 0.0f), glm::vec2(1.0f, 1.0f), &tapadorTexture, &texProgram, false);
+	tapadorArriba->setPosition(glm::vec2(SCREEN_X, 0.0f));
+	tapadorAbajo = Sprite::createSprite(glm::ivec2(384.0f, 16.0f), glm::vec2(0.0f, 0.0f), glm::vec2(1.0f, 1.0f), &tapadorTexture, &texProgram, false);
+	tapadorAbajo->setPosition(glm::vec2(SCREEN_X, 464.0f));
 
 	player = new Player();
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
@@ -41,7 +51,7 @@ void Scene::init()
 
 	ball = new Ball();
 	ball->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, player);
-	ball->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize() - 100));
+	ball->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize() + 10, INIT_PLAYER_Y_TILES * map->getTileSize() - 100));
 	ball->setTileMap(map);
 
 	police = new Police;
@@ -61,22 +71,79 @@ void Scene::init()
 		money.at(i).setPosition(posicion2);
 		posicion2.x += 64.f;
 	}*/
-	//key->setPosition(glm::vec2(128, 92));
 
 	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
 	currentTime = 0.0f;
+
+	// Select which font you want to use
+	 if (!text.init("fonts/OpenSans-Regular.ttf"))
+		//if(!text.init("fonts/OpenSans-Bold.ttf"))
+		//if(!text.init("fonts/DroidSerif.ttf"))
+		cout << "Could not load font!!!" << endl;
 }
 
 void Scene::update(int deltaTime)
 {
 	currentTime += deltaTime;
 	player->update(deltaTime);
-	//ball->update(deltaTime, objectsInGame);
+	ball->update(deltaTime, objectsInGame, subnivel);
 	police->update(deltaTime, player);
 	for (int i = 0; i < objectsInGame.size(); i++) {
 		objectsInGame.at(i).update(deltaTime);
 	}
-	//key->update(deltaTime);
+	police->update(deltaTime, player);
+	ballPos = ball->position();
+	// Bajar nivel?
+	if (ballPos.x > 144 && ballPos.x < 272 && ballPos.y >= 464 && yAnterior < ballPos.y && subnivel != 2) {
+		switch (subnivel) {
+		case 0:
+			map = TileMap::createTileMap("levels/level01.txt", glm::vec2(SCREEN_X, SCREEN_Y - 464), texProgram);
+			subnivel = 1;
+			ball->setPosition(glm::vec2(ballPos.x, 16.0f));
+			break;
+		case 1:
+			map = TileMap::createTileMap("levels/level01.txt", glm::vec2(SCREEN_X, SCREEN_Y - 928), texProgram);
+			subnivel = 2;
+			ball->setPosition(glm::vec2(ballPos.x, 16.0f));
+			break;
+		}
+		yAnterior = 0.0f;
+		/*duration = 2.0;
+		timeFin = currentTime + duration;
+		nSteps = duration / TIME_PER_FRAME;
+		translationDone = 0.0;
+		translation = -464.0 * nSteps;
+		isTransitioning = true;
+	}
+
+	if (currentTime <= timeFin) {
+		translationDone += translation;
+	}
+	else {
+		isTransitioning = false;
+	}*/
+	}
+	// Subir nivel?
+	else if (ballPos.x > 144 && ballPos.x < 272 && ballPos.y <= 16 && yAnterior > ballPos.y && subnivel != 0) {
+		switch (subnivel) {
+		case 1:
+			map = TileMap::createTileMap("levels/level01.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+			subnivel = 0;
+			ball->setPosition(glm::vec2(ballPos.x, 464.0f));
+			break;
+		case 2:
+			map = TileMap::createTileMap("levels/level01.txt", glm::vec2(SCREEN_X, SCREEN_Y - 464), texProgram);
+			subnivel = 1;
+			ball->setPosition(glm::vec2(ballPos.x, 464.0f));
+			break;
+		}
+		yAnterior = 480.0f;
+	}
+	else {
+		yAnterior = ballPos.y;
+	}
+
+	
 }
 
 void Scene::render()
@@ -91,7 +158,7 @@ void Scene::render()
 	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
 	map->render();
 	player->render();
-	//ball->render();
+	ball->render();
 	police->render();
 	for (int i = 0; i < objectsInGame.size(); i++) {
 		if (objectsInGame.at(i).getType() != 0) {
@@ -110,6 +177,8 @@ void Scene::render()
 			objectsInGame.at(i).render();
 		}
 	}
+	//key->render();
+	text.render("Videogames!!!", glm::vec2(10, SCREEN_HEIGHT - 20), 32, glm::vec4(1, 1, 1, 1));
 }
 
 void Scene::initShaders()
