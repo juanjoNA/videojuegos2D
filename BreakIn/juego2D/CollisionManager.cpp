@@ -4,6 +4,7 @@
 #include <GL/glut.h>
 #include "CollisionManager.h"
 #include "TileMap.h"
+#include "Misil.h"
 #include <irrKlang.h>
 using namespace irrklang;
 
@@ -65,14 +66,6 @@ bool CollisionManager::collisionBallMap(glm::ivec2 &pos, glm::ivec2 &oldPos, con
 				else velocitat = -velocitat;
 			}
 		}
-			if (oldPos.y < pos.y) velocitat.x = -velocitat.x;
-			else if (bottomRight <= 3) velocitat = -velocitat;
-			else {
-				if (decimalX > decimalY) velocitat.x = -velocitat.x;
-				else if (decimalY > decimalX)  velocitat.y = -velocitat.y;
-				else velocitat = -velocitat;
-			}
-		}
 		else if (topRight <= 3) {
 			if (oldPos.y < pos.y) velocitat.x = -velocitat.x;
 			else if (bottomLeft <= 3) velocitat = -velocitat;
@@ -108,7 +101,6 @@ bool CollisionManager::collisionBallMap(glm::ivec2 &pos, glm::ivec2 &oldPos, con
 
 bool CollisionManager::collisionBallPlayer(glm::ivec2 &pos, glm::ivec2 &oldPos, const glm::ivec2 &size, Player *player, glm::vec2 &velocitat) const
 {
-
 	int xmin = pos.x;
 	int xmax = pos.x + size.x;
 	int ymin = pos.y;
@@ -174,29 +166,60 @@ bool CollisionManager::collisionPlayerMap(glm::ivec2 &pos, const glm::ivec2 & si
 	if ((topLeft <= 3) || (topRight <= 3) || (bottomLeft <= 3) || (bottomRight <= 3)) return true;
 	else return false;*/
 
-	if (pos.x + direction.x < 16 || (pos.x + size.x + direction.x > 368) ||
-		pos.y + direction.y < 16 || (pos.y + size.y + direction.y > 368))return true;
-
-	else return false;
+	if ((pos.x + direction.x < 16) || (pos.x + size.x + direction.x > 432) &&
+		(pos.y + direction.y < 16) || (pos.y + size.y + direction.y > 432)) {
+		return true;
+	}else return false;
 }
 
-bool CollisionManager::collisionObjects(glm::ivec2 & pos, glm::ivec2 & oldPos, const glm::ivec2 & size, vector<class Element>& elements, glm::vec2 &velocitat) const
+bool CollisionManager::collisionObjects(glm::ivec2 &pos, glm::ivec2 &oldPos, const glm::ivec2 &size, vector<class Element>& elements, glm::vec2 &velocitat) const
 {
 	for (int i = 0; i < elements.size(); i++) {
 		int xmin = pos.x;
 		int xmax = pos.x + size.x;
 		int ymin = pos.y;
 		int ymax = pos.y + size.y;
+		int posX = elements.at(i).getPosition().x;
+		int posY = elements.at(i).getPosition().y;
+		int sizeX = elements.at(i).getSize().x;
+		int sizeY = elements.at(i).getSize().y;
 		if (
-			((elements.at(i).getPosition().x + elements.at(i).getSize().x) >= xmin) &&
-			(xmax >= elements.at(i).getPosition().x) &&
-			((elements.at(i).getPosition().y + elements.at(i).getSize().y) >= ymin) &&
-			(ymax >= elements.at(i).getPosition().y)
+			((posX + sizeX) >= xmin) &&
+			(xmax >= posX) &&
+			((posY + sizeY) >= ymin) &&
+			(ymax >= posY)
 			)
 		{
 			int resistance = elements.at(i).collision();
-			if (elements.at(i).getType() != 1) velocitat = -velocitat;
 			int type = elements.at(i).getType();
+			glm::vec2 c = glm::vec2((pos.x + pos.x + size.x) / 2, (pos.y + pos.y + size.y) / 2);
+
+			if (c.x >= posX && c.x <= posX + sizeX) velocitat.y = -velocitat.y;			//GOLPEA POR ARRIBA O POR ABAJO
+			else if(c.y >= posY && c.y <= posY + sizeY) velocitat.x = -velocitat.x;		//GOLPEA POR UN LATERAL
+			else {
+				float difX, difY;
+				if (c.x < posX) {
+					difX = posX - c.x;
+					if (c.y < posY) difY = posY - c.y;		//CUADRANTE SUPERIOR IZQUIERDO
+					else difY = c.y - posY+sizeY;			//CUADRANTE INFERIOR IZQUIERDO
+				}
+				else {
+					difX = posX+sizeX - c.x;
+					if (c.y < posY) difY = posY - c.y;		//CUADRANTE SUPERIOR DERECHO
+					else difY = c.y - posY+sizeY;					//CUADRANTE INFERIOR DERECHO
+				}
+
+				if (difX < difY) velocitat.y = -velocitat.y;
+				else if (difX > difY) velocitat.x = -velocitat.x;
+				else velocitat = -velocitat;
+			}
+			
+			
+			
+			
+			
+			
+			
 			if (type == 0 && elements.at(i).getResistance() == 0) {
 				//Brick
 				CollisionSound->play2D("audio/brickBreak.wav");
@@ -221,4 +244,23 @@ bool CollisionManager::collisionObjects(glm::ivec2 & pos, glm::ivec2 & oldPos, c
 	}
 
 	return false;
+}
+
+int CollisionManager::collisionMisil(glm::ivec2 &posMisil, const glm::ivec2 &sizeMisil, Player *player) const
+{
+	int xmin = posMisil.x;
+	int xmax = posMisil.x + sizeMisil.x;
+	int ymin = posMisil.y;
+	int ymax = posMisil.y + sizeMisil.y;
+
+	if (
+		((player->getPosition().x + player->getSize().x) >= xmin) &&
+		(xmax >= player->getPosition().x) &&
+		((player->getPosition().y + player->getSize().y) >= ymin) &&
+		(ymax >= player->getPosition().y)
+		) {
+		return 1;
+	}
+	else if (ymax == 432) return 2;
+	else return 0;
 }

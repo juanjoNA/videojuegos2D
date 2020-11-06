@@ -22,9 +22,10 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 		sprite->addKeyframe(0, glm::vec2(0.f, 0.2f));
 		
 
-	//sprite->changeAnimation(0);
+	sprite->changeAnimation(0);
 	tileMapDispl = tileMapPos;
 	speed = 4;
+	start = false;
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
 	
 }
@@ -40,14 +41,15 @@ void Player::update(int deltaTime)
 	if(Game::instance().getSpecialKey(GLUT_KEY_RIGHT))
 	{
 		if (!CollisionManager::instance().collisionPlayerMap(posPlayer, glm::ivec2(SIZE_X, SIZE_Y), map, glm::ivec2(1, 0)*speed)) direction += glm::ivec2(1, 0);
-
 	}
 	if (Game::instance().getSpecialKey(GLUT_KEY_UP))
 	{
+		if (!start) start = true;
 		if (!CollisionManager::instance().collisionPlayerMap(posPlayer, glm::ivec2(SIZE_X, SIZE_Y), map, glm::ivec2(0, -1)*speed)) direction += glm::ivec2(0, -1);
 	}
 	if (Game::instance().getSpecialKey(GLUT_KEY_DOWN))
 	{
+		if (!start) start = true;
 		if (!CollisionManager::instance().collisionPlayerMap(posPlayer, glm::ivec2(SIZE_X, SIZE_Y), map, glm::ivec2(0, 1)*speed)) direction += glm::ivec2(0, 1);
 	}
 	oldPosPlayer = posPlayer;

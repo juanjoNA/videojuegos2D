@@ -13,8 +13,8 @@
 #define SCREEN_X 16
 #define SCREEN_Y 16
 
-#define INIT_PLAYER_X_TILES 4
-#define INIT_PLAYER_Y_TILES 15
+#define INIT_PLAYER_X_TILES 10
+#define INIT_PLAYER_Y_TILES 25
 
 
 Scene::Scene()
@@ -51,7 +51,7 @@ void Scene::init()
 
 	ball = new Ball();
 	ball->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, player);
-	ball->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize() + 10, INIT_PLAYER_Y_TILES * map->getTileSize() - 100));
+	ball->setPosition(glm::vec2(player->getPosition().x + (player->getSize().x)/2, player->getPosition().y-player->getSize().y));
 	ball->setTileMap(map);
 
 	police = new Police;
@@ -61,16 +61,11 @@ void Scene::init()
 
 	storeObjects();
 	loadObjects("levels/OP_level01.txt");
-	/*glm::vec2 posicion = glm::vec2(40, 32);
-	for (int i = 0; i < bricks.size(); i++) {
-		bricks.at(i).setPosition(posicion);
-		posicion.x += 32.f;
-	}
-	glm::vec2 posicion2 = glm::vec2(18, 256);
-	for (int i = 0; i < money.size(); i++) {
-		money.at(i).setPosition(posicion2);
-		posicion2.x += 64.f;
-	}*/
+
+	money = 0;
+	lives = 4;
+	points = 0;
+	level = 1;
 
 	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
 	currentTime = 0.0f;
@@ -93,6 +88,8 @@ void Scene::update(int deltaTime)
 	}
 	police->update(deltaTime, player);
 	ballPos = ball->position();
+	cout << "points = " << points << endl;
+	cout << "money = " << money << endl << endl;
 	// Bajar nivel?
 	if (ballPos.x > 144 && ballPos.x < 272 && ballPos.y >= 464 && yAnterior < ballPos.y && subnivel != 2) {
 		switch (subnivel) {
@@ -159,10 +156,18 @@ void Scene::render()
 	map->render();
 	player->render();
 	ball->render();
-	police->render();
+	//police->render();
 	for (int i = 0; i < objectsInGame.size(); i++) {
 		if (objectsInGame.at(i).getType() != 0) {
 			if (objectsInGame.at(i).isFinished()) {
+				if (objectsInGame.at(i).getType() == 1) {
+					money += objectsInGame.at(i).getValue();
+				}
+				else if(objectsInGame.at(i).getType() == 2){
+					points += 50;
+				}
+
+				//objectsInGame.at(i).free();
 				objectsInGame.erase(objectsInGame.begin() + i);
 			}
 			else {
@@ -170,8 +175,9 @@ void Scene::render()
 			}
 		}
 		else if (objectsInGame.at(i).getResistance() == 0) {
-			
-				objectsInGame.erase(objectsInGame.begin() + i);
+			points += 50;
+			//objectsInGame.at(i).free();
+			objectsInGame.erase(objectsInGame.begin() + i);
 		}
 		else {
 			objectsInGame.at(i).render();
@@ -276,6 +282,7 @@ void Scene::createMoney()
 {
 	glm::vec2 posIn = glm::vec2(0.8f, 0.f);
 	glm::vec2 sizeIn(0.05f, 0.1f);
+	int value;
 	for (int i = 0; i < 3; i++) {
 		Element *coin = new Element();
 		vector<glm::vec2> animations;
@@ -286,7 +293,10 @@ void Scene::createMoney()
 			y = 0.1 * (j / 4);
 			animations.push_back(glm::vec2(x, y));
 		}
-		coin->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::ivec2(32, 32), posIn, sizeIn, 1, animations, 'M');
+		if (i == 0) value = 5;
+		else if (i == 1) value = 10;
+		else value = 50;
+		coin->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::ivec2(32, 32), posIn, sizeIn, 1, animations, 'M', value);
 
 		objVector.push_back(*coin);
 		posIn.y += 0.3f;
@@ -297,7 +307,7 @@ void Scene::createMoney()
 	for (int j = 0; j < 4; j++) {
 		animations.push_back(glm::vec2(0.05 * j, 0.f));
 	}
-	coin->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::ivec2(32, 32), posIn, sizeIn, 1, animations, 'M');
+	coin->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::ivec2(32, 32), posIn, sizeIn, 1, animations, 'M', 500);
 
 	objVector.push_back(*coin);
 }

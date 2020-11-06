@@ -78,7 +78,6 @@ bool TileMap::loadLevel(const string &levelFile)
 	tileTexSize = glm::vec2(1.f / tilesheetSize.x, 1.f / tilesheetSize.y);
 
 	map = new int[mapSize.x * mapSize.y];
-	int sum = 0;
 	for (int j = 0; j<mapSize.y; j++)
 	{
 		for (int i = 0; i<mapSize.x; i++)
@@ -86,7 +85,6 @@ bool TileMap::loadLevel(const string &levelFile)
 			fin >> tile;
 			map[j*mapSize.x + i] = tile;
 		}
-		sum = 0;
 	}
 	fin.close();
 

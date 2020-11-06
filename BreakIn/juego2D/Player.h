@@ -29,11 +29,12 @@ public:
 	/*bool collisionLeft(const glm::ivec2 &pos, const glm::ivec2 &size) const;
 	bool collisionMiddle(const glm::ivec2 &pos, const glm::ivec2 &size) const;
 	*/
+	bool isStarted() { return start; };
 
 private:
-	bool bJumping;
 	glm::ivec2 tileMapDispl, posPlayer, oldPosPlayer, direction;
-	int jumpAngle, startY, speed;
+	int speed;
+	bool start;
 	Texture spritesheet;
 	Sprite *sprite;
 	TileMap *map;

@@ -24,11 +24,14 @@ public:
 	void setTileMap(TileMap *tileMap);
 	void setPosition(const glm::vec2 &pos);
 	glm::ivec2 position();
+	void begin();
+	void finish();
 
 private:
 	glm::ivec2 tileMapDispl, posBall, oldPosBall;
 	glm::vec2 velocitat;
 	int startY;
+	bool start;
 	float bounceAngle;
 	Texture spritesheet;
 	Sprite *sprite;

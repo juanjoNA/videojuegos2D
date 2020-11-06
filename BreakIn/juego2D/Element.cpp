@@ -47,10 +47,16 @@ void Element::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, g
 
 }
 
+void Element::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, glm::ivec2 &size, glm::vec2 &posInSpritesheet, glm::vec2 &sizeInSpritesheet, int resistencia, vector<glm::vec2> &animations, char letter, int val)
+{
+	init(tileMapPos, shaderProgram, size, posInSpritesheet, sizeInSpritesheet, resistencia, animations, letter);
+	value = val;
+}
+
 void Element::update(int deltaTime)
 {
 	sprite.update(deltaTime);
-	
+
 }
 
 void Element::render()
@@ -77,8 +83,11 @@ int Element::collision()
 		int animId = sprite.getCurrentAnimation();
 		sprite.changeAnimation(animId + 1);
 	}
-	if(resistance == 0 && type != BRICK) {
+	else if(resistance == 0 && type != BRICK) {
 		sprite.changeAnimation(0);
+	}
+	else {
+
 	}
 
 	return resistance;
@@ -94,4 +103,8 @@ int Element::getResistance() {
 
 int Element::getType() {
 	return type;
+}
+
+void Element::free() {
+	sprite.free();
 }

@@ -59,6 +59,7 @@ private:
 	int subnivel;
 	float currentTime;
 	float yAnterior = 0;
+	int money, lives, points, level;
 };
 
 

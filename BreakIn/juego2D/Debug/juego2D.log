@@ -1,5 +1,8 @@
-﻿  TileMap.cpp
-  TexturedQuad.cpp
-  Texture.cpp
-  Text.cpp
-  Sprite.cpp
+﻿  CollisionManager.cpp
+c:\users\juanjo\desktop\carpetas\universidad\4o\videojuegos\proyecto2d\videojuegos2d\breakin\juego2d\collisionmanager.cpp(177): warning C4018: '<': no coinciden signed/unsigned
+c:\users\juanjo\desktop\carpetas\universidad\4o\videojuegos\proyecto2d\videojuegos2d\breakin\juego2d\collisionmanager.cpp(182): warning C4244: 'inicializando': conversión de 'float' a 'int'; posible pérdida de datos
+c:\users\juanjo\desktop\carpetas\universidad\4o\videojuegos\proyecto2d\videojuegos2d\breakin\juego2d\collisionmanager.cpp(183): warning C4244: 'inicializando': conversión de 'float' a 'int'; posible pérdida de datos
+c:\users\juanjo\desktop\carpetas\universidad\4o\videojuegos\proyecto2d\videojuegos2d\breakin\juego2d\collisionmanager.cpp(184): warning C4244: 'inicializando': conversión de 'float' a 'int'; posible pérdida de datos
+c:\users\juanjo\desktop\carpetas\universidad\4o\videojuegos\proyecto2d\videojuegos2d\breakin\juego2d\collisionmanager.cpp(185): warning C4244: 'inicializando': conversión de 'float' a 'int'; posible pérdida de datos
+  juego2D.vcxproj -> C:\Users\Juanjo\Desktop\Carpetas\universidad\4o\Videojuegos\proyecto2D\videojuegos2D\BreakIn\Debug\juego2D.exe
+  juego2D.vcxproj -> C:\Users\Juanjo\Desktop\Carpetas\universidad\4o\Videojuegos\proyecto2D\videojuegos2D\BreakIn\Debug\juego2D.pdb (Full PDB)
