@@ -88,15 +88,16 @@ void Scene::update(int deltaTime)
 	}
 	police->update(deltaTime, player);
 	ballPos = ball->position();
-	cout << "points = " << points << endl;
-	cout << "money = " << money << endl << endl;
+	//cout << "points = " << points << endl;
+	//cout << "money = " << money << endl << endl;
+	cout << "posBall = " << ballPos.x << ' , ' << ballPos.y << endl << endl;
 	// Bajar nivel?
 	if (ballPos.x > 144 && ballPos.x < 272 && ballPos.y >= 464 && yAnterior < ballPos.y && subnivel != 2) {
 		switch (subnivel) {
 		case 0:
 			map = TileMap::createTileMap("levels/level01.txt", glm::vec2(SCREEN_X, SCREEN_Y - 464), texProgram);
 			subnivel = 1;
-			ball->setPosition(glm::vec2(ballPos.x, 16.0f));
+			//ball->setPosition(glm::vec2(ballPos.x, 16.0f));
 			break;
 		case 1:
 			map = TileMap::createTileMap("levels/level01.txt", glm::vec2(SCREEN_X, SCREEN_Y - 928), texProgram);

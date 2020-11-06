@@ -206,7 +206,7 @@ bool CollisionManager::collisionObjects(glm::ivec2 &pos, glm::ivec2 &oldPos, con
 				else {
 					difX = posX+sizeX - c.x;
 					if (c.y < posY) difY = posY - c.y;		//CUADRANTE SUPERIOR DERECHO
-					else difY = c.y - posY+sizeY;					//CUADRANTE INFERIOR DERECHO
+					else difY = c.y - posY+sizeY;			//CUADRANTE INFERIOR DERECHO
 				}
 
 				if (difX < difY) velocitat.y = -velocitat.y;
