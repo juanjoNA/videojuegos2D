@@ -60,7 +60,7 @@ void Scene::init()
 	police->setTileMap(map);
 
 	storeObjects();
-	loadObjects("levels/OP_level01.txt");
+	//loadObjects("levels/OP_level01.txt");
 
 	money = 0;
 	lives = 4;
@@ -90,14 +90,14 @@ void Scene::update(int deltaTime)
 	ballPos = ball->position();
 	//cout << "points = " << points << endl;
 	//cout << "money = " << money << endl << endl;
-	cout << "posBall = " << ballPos.x << ' , ' << ballPos.y << endl << endl;
+	cout << "posBall = (" << ballPos.x << " , " << ballPos.y << endl << endl;
 	// Bajar nivel?
 	if (ballPos.x > 144 && ballPos.x < 272 && ballPos.y >= 464 && yAnterior < ballPos.y && subnivel != 2) {
 		switch (subnivel) {
 		case 0:
 			map = TileMap::createTileMap("levels/level01.txt", glm::vec2(SCREEN_X, SCREEN_Y - 464), texProgram);
 			subnivel = 1;
-			//ball->setPosition(glm::vec2(ballPos.x, 16.0f));
+			ball->setPosition(glm::vec2(ballPos.x, 16.0f));
 			break;
 		case 1:
 			map = TileMap::createTileMap("levels/level01.txt", glm::vec2(SCREEN_X, SCREEN_Y - 928), texProgram);
@@ -158,7 +158,7 @@ void Scene::render()
 	player->render();
 	ball->render();
 	//police->render();
-	for (int i = 0; i < objectsInGame.size(); i++) {
+	/*for (int i = 0; i < objectsInGame.size(); i++) {
 		if (objectsInGame.at(i).getType() != 0) {
 			if (objectsInGame.at(i).isFinished()) {
 				if (objectsInGame.at(i).getType() == 1) {
@@ -183,8 +183,7 @@ void Scene::render()
 		else {
 			objectsInGame.at(i).render();
 		}
-	}
-	//key->render();
+	}*/
 	text.render("Videogames!!!", glm::vec2(10, SCREEN_HEIGHT - 20), 32, glm::vec4(1, 1, 1, 1));
 }
 

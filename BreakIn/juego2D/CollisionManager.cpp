@@ -39,60 +39,62 @@ bool CollisionManager::collisionBallMap(glm::ivec2 &pos, glm::ivec2 &oldPos, con
 	}
 	else if ((topLeft <= 3) || (topRight <= 3) || (bottomLeft <= 3) || (bottomRight <= 3))
 	{
-		glm::ivec2 posCollision, auxPos = pos, auxOldPos = oldPos;
-		float x,y;
 
-		float entera;
-		float decimalX, decimalY; //decimales de los dos ejes
+		float difX, difY; //decimales de los dos ejes
 
-		for (int i = 0; i < 3; i++) {
-			posCollision = (auxPos + auxOldPos) / 2;
-			x = posCollision.x / float(tileMap->getTileSize());
-			y = posCollision.y / float(tileMap->getTileSize());
-			if (map[(int(y) * tileMap->getMapSize().x) + int(x)] <= 3) auxPos = posCollision;
-			else auxOldPos = posCollision;
-		}
-
-
-		decimalX = modf(x, &entera);
-		decimalY = modf(y, &entera);
-
+		//calculo el centro de la pelota
+		glm::vec2 c = glm::vec2((pos.x + pos.x + size.x) / 2, (pos.y + pos.y + size.y) / 2); 
+		
 		if (topLeft <= 3) {
 			if (oldPos.y < pos.y) velocitat.x = -velocitat.x;
-			else if(bottomRight <= 3) velocitat = -velocitat;
+			else if (oldPos.x < pos.x) velocitat.y = -velocitat.y;
+			else if (bottomRight <= 3) velocitat = -velocitat;
 			else {
-				if (decimalX > decimalY) velocitat.x = -velocitat.x;
-				else if (decimalY > decimalX)  velocitat.y = -velocitat.y;
+				difX = c.x - (int(xmin) * tileMap->getTileSize() + tileMap->getTileSize());
+				difY = c.y - (int(ymin) * tileMap->getTileSize() + tileMap->getTileSize());
+				if (difX > difY) velocitat.x = -velocitat.x;
+				else if (difY > difX)  velocitat.y = -velocitat.y;
 				else velocitat = -velocitat;
 			}
 		}
 		else if (topRight <= 3) {
 			if (oldPos.y < pos.y) velocitat.x = -velocitat.x;
+			else if (oldPos.x > pos.x) velocitat.y = -velocitat.y;
 			else if (bottomLeft <= 3) velocitat = -velocitat;
 			else {
-				decimalY = 1 - decimalY;
-				if (decimalX == 0) velocitat.x = -velocitat.x;
-				else if (decimalX > decimalY) velocitat.y = -velocitat.y;
-				else if (decimalY > decimalX)  velocitat.x = -velocitat.x;
+				difX = (int(xmax) * tileMap->getTileSize()) - c.x;
+				difY = c.y - (int(ymin) * tileMap->getTileSize() + tileMap->getTileSize());
+				if (difY == 0) velocitat.x = -velocitat.x;
+				else if (difX > difY) velocitat.x = -velocitat.x;
+				else if (difY > difX)  velocitat.y = -velocitat.y;
 				else velocitat = -velocitat;
 			}
 		}
 		else if (bottomLeft <= 3) {
-			if (decimalY == 0) velocitat.y = -velocitat.y;
-			else if(decimalX > decimalY) velocitat.x = -velocitat.x;
-			else if(decimalY > decimalX) velocitat.y = -velocitat.y;
-			else velocitat = -velocitat;
-		}
-		else {
 			if (oldPos.y > pos.y) velocitat.x = -velocitat.x;
+			else if (oldPos.x < pos.x) velocitat.y = -velocitat.y;
 			else if (topRight <= 3) velocitat = -velocitat;
 			else {
-				decimalY = 1 - decimalY;
-				if (decimalX > decimalY) velocitat.y = -velocitat.y;
-				else if (decimalY > decimalX)  velocitat.x = -velocitat.x;
+				difX = c.x - (int(xmin) * tileMap->getTileSize() + tileMap->getTileSize());
+				difY = (int(ymax) * tileMap->getTileSize()) - c.y;
+				if (difX > difY) velocitat.x = -velocitat.x;
+				else if (difY > difX)  velocitat.y = -velocitat.y;
 				else velocitat = -velocitat;
 			}
 		}
+		else {
+			if (oldPos.y > pos.y) velocitat.x = -velocitat.x;
+			else if (oldPos.x > pos.x) velocitat.y = -velocitat.y;
+			else if (topRight <= 3) velocitat = -velocitat;
+			else {
+				difX = (int(xmax) * tileMap->getTileSize()) - c.x;
+				difY = (int(ymax) * tileMap->getTileSize()) - c.y;
+				if (difX > difY) velocitat.x = -velocitat.x;
+				else if (difY > difX)  velocitat.y = -velocitat.y;
+				else velocitat = -velocitat; 
+			}
+		}
+
 		CollisionSound->play2D("audio/bounce.wav");
 		return true;
 	}

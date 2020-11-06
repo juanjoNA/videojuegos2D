@@ -40,7 +40,7 @@ void Ball::update(int deltaTime, vector<class Element>& objInGame, int level)
 			trans = 928;
 			break;
 		}
-		if (CollisionManager::instance().collisionBallMap(glm::ivec2(posBall.x, posBall.y + trans), oldPosBall, glm::ivec2(SIZE_X, SIZE_Y), map, velocitat));
+		if (CollisionManager::instance().collisionBallMap(glm::ivec2(posBall.x, posBall.y + trans), glm::ivec2(oldPosBall.x, oldPosBall.y + trans), glm::ivec2(SIZE_X, SIZE_Y), map, velocitat));
 		else if (CollisionManager::instance().collisionObjects(posBall, oldPosBall, glm::ivec2(SIZE_X, SIZE_Y), objInGame, velocitat));
 		else if (CollisionManager::instance().collisionBallPlayer(posBall, oldPosBall, glm::ivec2(SIZE_X, SIZE_Y), player, velocitat));
 		oldPosBall = posBall;
