@@ -34,6 +34,7 @@ private:
 
 	ShaderProgram texProgram;
 	glm::mat4 projection;
+	Texture titlesTexture;
 	TexturedQuad* mainTextureQuad; //GUI Background
 	TexturedQuad* controlsTextureQuad; //GUI Background
 	TexturedQuad* creditsTextureQuad; //GUI Background

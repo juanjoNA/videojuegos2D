@@ -40,14 +40,21 @@ private:
 	void createMoney();
 	void createKey();
 	void createAlarm();
+	void setGameTextPosition(int subnivel);
 
 private:
-	TileMap *map;
+	TileMap *map, *map1, *map2, *map3;
 	Player *player;
 	Ball *ball;
 	Texture tapadorTexture;
+	Texture titlesTexture;
 	Sprite *tapadorArriba;
 	Sprite *tapadorAbajo;
+	Sprite *moneyTitle;
+	Sprite *levelTitle;
+	Sprite *pointsTitle;
+	Sprite *roomTitle;
+	Sprite *livesTitle;
 	Text text;
 	glm::ivec2 ballPos;
 	glm::ivec2 playerPos;

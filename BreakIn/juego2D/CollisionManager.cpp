@@ -152,8 +152,6 @@ bool CollisionManager::collisionBallPlayer(glm::ivec2 &pos, glm::ivec2 &oldPos, 
 
 bool CollisionManager::collisionPlayerMap(glm::ivec2 &pos, int subnivel, const glm::ivec2 & size, TileMap *tileMap, glm::ivec2 direction) const
 {
-	cout << (pos.x + size.x + direction.x) << endl;
-	cout << (pos.y + direction.y) << endl;
 	if (subnivel == 3) {
 		if ((pos.x + direction.x < 16) || (pos.x + size.x + direction.x > 368) ||
 			(pos.y + direction.y < 16) || (pos.y + size.y + direction.y > 432)) {
