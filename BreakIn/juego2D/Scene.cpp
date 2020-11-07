@@ -36,7 +36,7 @@ void Scene::init()
 {
 	initShaders();
 	map = TileMap::createTileMap("levels/level01.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
-	subnivel = 0;
+	subnivel = 3;
 
 	tapadorTexture.loadFromFile("images/tapador.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	tapadorArriba = Sprite::createSprite(glm::ivec2(384.0f, 16.0f), glm::vec2(0.0f, 0.0f), glm::vec2(1.0f, 1.0f), &tapadorTexture, &texProgram, false);
@@ -60,7 +60,7 @@ void Scene::init()
 	police->setTileMap(map);
 
 	storeObjects();
-	//loadObjects("levels/OP_level01.txt");
+	loadObjects("levels/OP_level01.txt");
 
 	money = 0;
 	lives = 4;
@@ -80,7 +80,7 @@ void Scene::init()
 void Scene::update(int deltaTime)
 {
 	currentTime += deltaTime;
-	player->update(deltaTime);
+	player->update(deltaTime, subnivel);
 	ball->update(deltaTime, objectsInGame, subnivel);
 	police->update(deltaTime, player);
 	for (int i = 0; i < objectsInGame.size(); i++) {
@@ -88,24 +88,55 @@ void Scene::update(int deltaTime)
 	}
 	police->update(deltaTime, player);
 	ballPos = ball->position();
+	playerPos = player->getPosition();
 	//cout << "points = " << points << endl;
 	//cout << "money = " << money << endl << endl;
-	cout << "posBall = (" << ballPos.x << " , " << ballPos.y << endl << endl;
+	//cout << "posBall = (" << ballPos.x << " , " << ballPos.y << endl << endl;
 	// Bajar nivel?
-	if (ballPos.x > 144 && ballPos.x < 272 && ballPos.y >= 464 && yAnterior < ballPos.y && subnivel != 2) {
-		switch (subnivel) {
-		case 0:
-			map = TileMap::createTileMap("levels/level01.txt", glm::vec2(SCREEN_X, SCREEN_Y - 464), texProgram);
-			subnivel = 1;
-			ball->setPosition(glm::vec2(ballPos.x, 16.0f));
-			break;
-		case 1:
-			map = TileMap::createTileMap("levels/level01.txt", glm::vec2(SCREEN_X, SCREEN_Y - 928), texProgram);
+	switch (subnivel) {
+	case 3:
+		if (ballPos.y >= 464.f) {
+			tapadorArriba = Sprite::createSprite(glm::ivec2(384.0f, 16.0f), glm::vec2(0.0f, 0.0f), glm::vec2(1.0f, 1.0f), &tapadorTexture, &texProgram, false);
+			tapadorArriba->setPosition(glm::vec2(SCREEN_X, 448.0f));
+			tapadorAbajo = Sprite::createSprite(glm::ivec2(384.0f, 16.0f), glm::vec2(0.0f, 0.0f), glm::vec2(1.0f, 1.0f), &tapadorTexture, &texProgram, false);
+			tapadorAbajo->setPosition(glm::vec2(SCREEN_X, 912.0f));
+			projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(448 + SCREEN_HEIGHT - 1), 448.f);
+			player->setPosition(glm::vec2(playerPos.x, playerPos.y + 448));
 			subnivel = 2;
-			ball->setPosition(glm::vec2(ballPos.x, 16.0f));
-			break;
 		}
-		yAnterior = 0.0f;
+		break;
+	case 2:
+		if (ballPos.y < 448.f) {
+			tapadorArriba = Sprite::createSprite(glm::ivec2(384.0f, 16.0f), glm::vec2(0.0f, 0.0f), glm::vec2(1.0f, 1.0f), &tapadorTexture, &texProgram, false);
+			tapadorArriba->setPosition(glm::vec2(SCREEN_X, 0.0f));
+			tapadorAbajo = Sprite::createSprite(glm::ivec2(384.0f, 16.0f), glm::vec2(0.0f, 0.0f), glm::vec2(1.0f, 1.0f), &tapadorTexture, &texProgram, false);
+			tapadorAbajo->setPosition(glm::vec2(SCREEN_X, 464.0f));
+			projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
+			player->setPosition(glm::vec2(playerPos.x, playerPos.y - 448));
+			subnivel = 3;
+		}
+		else if (ballPos.y >= 912.f) {
+			tapadorArriba = Sprite::createSprite(glm::ivec2(384.0f, 16.0f), glm::vec2(0.0f, 0.0f), glm::vec2(1.0f, 1.0f), &tapadorTexture, &texProgram, false);
+			tapadorArriba->setPosition(glm::vec2(SCREEN_X, 896.0f));
+			tapadorAbajo = Sprite::createSprite(glm::ivec2(384.0f, 16.0f), glm::vec2(0.0f, 0.0f), glm::vec2(1.0f, 1.0f), &tapadorTexture, &texProgram, false);
+			tapadorAbajo->setPosition(glm::vec2(SCREEN_X, 1376.0f));
+			projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(896 + SCREEN_HEIGHT - 1), 896.f);
+			player->setPosition(glm::vec2(playerPos.x, playerPos.y + 448));
+			subnivel = 1;
+		}
+		break;
+	case 1:
+		if (ballPos.y < 896.f) {
+			tapadorArriba = Sprite::createSprite(glm::ivec2(384.0f, 16.0f), glm::vec2(0.0f, 0.0f), glm::vec2(1.0f, 1.0f), &tapadorTexture, &texProgram, false);
+			tapadorArriba->setPosition(glm::vec2(SCREEN_X, 448.0f));
+			tapadorAbajo = Sprite::createSprite(glm::ivec2(384.0f, 16.0f), glm::vec2(0.0f, 0.0f), glm::vec2(1.0f, 1.0f), &tapadorTexture, &texProgram, false);
+			tapadorAbajo->setPosition(glm::vec2(SCREEN_X, 912.0f));
+			projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(448 + SCREEN_HEIGHT - 1), 448.f);
+			player->setPosition(glm::vec2(playerPos.x, playerPos.y - 448));
+			subnivel = 2;
+		}
+		break;
+	}
 		/*duration = 2.0;
 		timeFin = currentTime + duration;
 		nSteps = duration / TIME_PER_FRAME;
@@ -120,27 +151,6 @@ void Scene::update(int deltaTime)
 	else {
 		isTransitioning = false;
 	}*/
-	}
-	// Subir nivel?
-	else if (ballPos.x > 144 && ballPos.x < 272 && ballPos.y <= 16 && yAnterior > ballPos.y && subnivel != 0) {
-		switch (subnivel) {
-		case 1:
-			map = TileMap::createTileMap("levels/level01.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
-			subnivel = 0;
-			ball->setPosition(glm::vec2(ballPos.x, 464.0f));
-			break;
-		case 2:
-			map = TileMap::createTileMap("levels/level01.txt", glm::vec2(SCREEN_X, SCREEN_Y - 464), texProgram);
-			subnivel = 1;
-			ball->setPosition(glm::vec2(ballPos.x, 464.0f));
-			break;
-		}
-		yAnterior = 480.0f;
-	}
-	else {
-		yAnterior = ballPos.y;
-	}
-
 	
 }
 
@@ -157,8 +167,10 @@ void Scene::render()
 	map->render();
 	player->render();
 	ball->render();
+	tapadorArriba->render();
+	tapadorAbajo->render();
 	//police->render();
-	/*for (int i = 0; i < objectsInGame.size(); i++) {
+	for (int i = 0; i < objectsInGame.size(); i++) {
 		if (objectsInGame.at(i).getType() != 0) {
 			if (objectsInGame.at(i).isFinished()) {
 				if (objectsInGame.at(i).getType() == 1) {
@@ -183,7 +195,7 @@ void Scene::render()
 		else {
 			objectsInGame.at(i).render();
 		}
-	}*/
+	}
 	text.render("Videogames!!!", glm::vec2(10, SCREEN_HEIGHT - 20), 32, glm::vec4(1, 1, 1, 1));
 }
 

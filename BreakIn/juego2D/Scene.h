@@ -50,6 +50,7 @@ private:
 	Sprite *tapadorAbajo;
 	Text text;
 	glm::ivec2 ballPos;
+	glm::ivec2 playerPos;
 	ShaderProgram simpleProgram, texProgram;
 	glm::mat4 projection;
 	vector<Element> objectsInGame, objVector;

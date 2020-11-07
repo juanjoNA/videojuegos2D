@@ -30,27 +30,27 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	
 }
 
-void Player::update(int deltaTime)
+void Player::update(int deltaTime, int subnivel)
 {
 	sprite->update(deltaTime);
 	direction = glm::vec2(0, 0);
 	if(Game::instance().getSpecialKey(GLUT_KEY_LEFT))
 	{
-		if(!CollisionManager::instance().collisionPlayerMap(posPlayer, glm::ivec2(SIZE_X, SIZE_Y), map, glm::ivec2(-1,0)*speed)) direction += glm::ivec2(-1, 0);
+		if(!CollisionManager::instance().collisionPlayerMap(posPlayer, subnivel, glm::ivec2(SIZE_X, SIZE_Y), map, glm::ivec2(-1,0)*speed)) direction += glm::ivec2(-1, 0);
 	}
 	if(Game::instance().getSpecialKey(GLUT_KEY_RIGHT))
 	{
-		if (!CollisionManager::instance().collisionPlayerMap(posPlayer, glm::ivec2(SIZE_X, SIZE_Y), map, glm::ivec2(1, 0)*speed)) direction += glm::ivec2(1, 0);
+		if (!CollisionManager::instance().collisionPlayerMap(posPlayer, subnivel, glm::ivec2(SIZE_X, SIZE_Y), map, glm::ivec2(1, 0)*speed)) direction += glm::ivec2(1, 0);
 	}
 	if (Game::instance().getSpecialKey(GLUT_KEY_UP))
 	{
 		if (!start) start = true;
-		if (!CollisionManager::instance().collisionPlayerMap(posPlayer, glm::ivec2(SIZE_X, SIZE_Y), map, glm::ivec2(0, -1)*speed)) direction += glm::ivec2(0, -1);
+		if (!CollisionManager::instance().collisionPlayerMap(posPlayer, subnivel, glm::ivec2(SIZE_X, SIZE_Y), map, glm::ivec2(0, -1)*speed)) direction += glm::ivec2(0, -1);
 	}
 	if (Game::instance().getSpecialKey(GLUT_KEY_DOWN))
 	{
 		if (!start) start = true;
-		if (!CollisionManager::instance().collisionPlayerMap(posPlayer, glm::ivec2(SIZE_X, SIZE_Y), map, glm::ivec2(0, 1)*speed)) direction += glm::ivec2(0, 1);
+		if (!CollisionManager::instance().collisionPlayerMap(posPlayer, subnivel, glm::ivec2(SIZE_X, SIZE_Y), map, glm::ivec2(0, 1)*speed)) direction += glm::ivec2(0, 1);
 	}
 	oldPosPlayer = posPlayer;
 	posPlayer += direction*speed;

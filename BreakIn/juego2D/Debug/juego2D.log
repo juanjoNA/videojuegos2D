@@ -1,2 +1,9 @@
-﻿  juego2D.vcxproj -> C:\Users\Juanjo\Desktop\Carpetas\universidad\4o\Videojuegos\proyecto2D\videojuegos2D\BreakIn\Debug\juego2D.exe
-  juego2D.vcxproj -> C:\Users\Juanjo\Desktop\Carpetas\universidad\4o\Videojuegos\proyecto2D\videojuegos2D\BreakIn\Debug\juego2D.pdb (Full PDB)
+﻿  CollisionManager.cpp
+c:\users\imunozbu\documents\universitat\videojuegos2d\breakin\juego2d\collisionmanager.cpp(182): warning C4018: '<': signed/unsigned mismatch
+c:\users\imunozbu\documents\universitat\videojuegos2d\breakin\juego2d\collisionmanager.cpp(187): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+c:\users\imunozbu\documents\universitat\videojuegos2d\breakin\juego2d\collisionmanager.cpp(188): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+c:\users\imunozbu\documents\universitat\videojuegos2d\breakin\juego2d\collisionmanager.cpp(189): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+c:\users\imunozbu\documents\universitat\videojuegos2d\breakin\juego2d\collisionmanager.cpp(190): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+c:\users\imunozbu\documents\universitat\videojuegos2d\breakin\juego2d\collisionmanager.cpp(178): warning C4715: 'CollisionManager::collisionPlayerMap': not all control paths return a value
+  juego2D.vcxproj -> C:\Users\imunozbu\Documents\Universitat\videojuegos2D\BreakIn\Debug\juego2D.exe
+  juego2D.vcxproj -> C:\Users\imunozbu\Documents\Universitat\videojuegos2D\BreakIn\Debug\juego2D.pdb (Full PDB)

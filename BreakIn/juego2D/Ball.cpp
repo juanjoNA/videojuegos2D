@@ -27,20 +27,8 @@ void Ball::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, Play
 void Ball::update(int deltaTime, vector<class Element>& objInGame, int level)
 {
 	if (start) {
-		int trans;
 		sprite->update(deltaTime);
-		switch (level) {
-		case 0:
-			trans = 0;
-			break;
-		case 1:
-			trans = 464;
-			break;
-		case 2:
-			trans = 928;
-			break;
-		}
-		if (CollisionManager::instance().collisionBallMap(glm::ivec2(posBall.x, posBall.y + trans), glm::ivec2(oldPosBall.x, oldPosBall.y + trans), glm::ivec2(SIZE_X, SIZE_Y), map, velocitat));
+		if (CollisionManager::instance().collisionBallMap(glm::ivec2(posBall.x, posBall.y), glm::ivec2(oldPosBall.x, oldPosBall.y), glm::ivec2(SIZE_X, SIZE_Y), map, velocitat));
 		else if (CollisionManager::instance().collisionObjects(posBall, oldPosBall, glm::ivec2(SIZE_X, SIZE_Y), objInGame, velocitat));
 		else if (CollisionManager::instance().collisionBallPlayer(posBall, oldPosBall, glm::ivec2(SIZE_X, SIZE_Y), player, velocitat));
 		oldPosBall = posBall;

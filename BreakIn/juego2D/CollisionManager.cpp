@@ -150,28 +150,31 @@ bool CollisionManager::collisionBallPlayer(glm::ivec2 &pos, glm::ivec2 &oldPos, 
 	return false;
 }
 
-bool CollisionManager::collisionPlayerMap(glm::ivec2 &pos, const glm::ivec2 & size, TileMap *tileMap, glm::ivec2 direction) const
+bool CollisionManager::collisionPlayerMap(glm::ivec2 &pos, int subnivel, const glm::ivec2 & size, TileMap *tileMap, glm::ivec2 direction) const
 {
-	/*int xmin = pos.x / tileMap->getTileSize();
-	int ymin = pos.y / tileMap->getTileSize();
-	int xmax = (pos.x + size.x) / tileMap->getTileSize();
-	int ymax = (pos.y + size.y) / tileMap->getTileSize();
-	int *map = tileMap->getMap();
-	if (direction.x < 0) xmin = (pos.x+direction.x) / tileMap->getTileSize();
-	else if (direction.x > 0) xmax = (pos.x + size.x + direction.x) / tileMap->getTileSize();
-	else if (direction.y < 0) ymin = (pos.y + direction.y) / tileMap->getTileSize();
-	else ymax = (pos.y + size.y + direction.y) / tileMap->getTileSize();
-	int topLeft = map[(ymin * tileMap->getMapSize().x) + xmin];
-	int topRight = map[(ymin * tileMap->getMapSize().x) + xmax];
-	int bottomLeft = map[(ymax * tileMap->getMapSize().x) + xmin];
-	int bottomRight = map[(ymax * tileMap->getMapSize().x) + xmax];
-	if ((topLeft <= 3) || (topRight <= 3) || (bottomLeft <= 3) || (bottomRight <= 3)) return true;
-	else return false;*/
-
-	if ((pos.x + direction.x < 16) || (pos.x + size.x + direction.x > 432) &&
-		(pos.y + direction.y < 16) || (pos.y + size.y + direction.y > 432)) {
-		return true;
-	}else return false;
+	cout << (pos.x + size.x + direction.x) << endl;
+	cout << (pos.y + direction.y) << endl;
+	if (subnivel == 3) {
+		if ((pos.x + direction.x < 16) || (pos.x + size.x + direction.x > 368) ||
+			(pos.y + direction.y < 16) || (pos.y + size.y + direction.y > 432)) {
+			return true;
+		}
+		else return false;
+	}
+	else if (subnivel == 2) {
+		if ((pos.x + direction.x < 16) || (pos.x + size.x + direction.x > 368) ||
+			(pos.y + direction.y < 464) || (pos.y + size.y + direction.y > 880)) {
+			return true;
+		}
+		else return false;
+	}
+	else if (subnivel == 1) {
+		if ((pos.x + direction.x < 16) || (pos.x + size.x + direction.x > 368) ||
+			(pos.y + direction.y < 912) || (pos.y + size.y + direction.y > 1328)) {
+			return true;
+		}
+		else return false;
+	}
 }
 
 bool CollisionManager::collisionObjects(glm::ivec2 &pos, glm::ivec2 &oldPos, const glm::ivec2 &size, vector<class Element>& elements, glm::vec2 &velocitat) const
