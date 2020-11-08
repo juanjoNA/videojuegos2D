@@ -29,6 +29,7 @@ public:
 	void init();
 	void update(int deltaTime);
 	void render();
+	void reinit();
 
 private:
 	void initShaders();
@@ -40,14 +41,24 @@ private:
 	void createMoney();
 	void createKey();
 	void createAlarm();
+	void setGameTextPosition(int subnivel);
+	void pierdeVida();
 
 private:
-	TileMap *map;
+	TileMap *map, *map1, *map2, *map3;
+	TexturedQuad* gameOverTextureQuad;
+	Texture gameOver;
 	Player *player;
 	Ball *ball;
 	Texture tapadorTexture;
+	Texture titlesTexture;
 	Sprite *tapadorArriba;
 	Sprite *tapadorAbajo;
+	Sprite *moneyTitle;
+	Sprite *levelTitle;
+	Sprite *pointsTitle;
+	Sprite *roomTitle;
+	Sprite *livesTitle;
 	Text text;
 	glm::ivec2 ballPos;
 	glm::ivec2 playerPos;

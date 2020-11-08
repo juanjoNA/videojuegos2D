@@ -43,8 +43,8 @@ bool CollisionManager::collisionBallMap(glm::ivec2 &pos, glm::ivec2 &oldPos, con
 		float difX, difY; //decimales de los dos ejes
 
 		//calculo el centro de la pelota
-		glm::vec2 c = glm::vec2((pos.x + pos.x + size.x) / 2, (pos.y + pos.y + size.y) / 2); 
-		
+		glm::vec2 c = glm::vec2((pos.x + pos.x + size.x) / 2, (pos.y + pos.y + size.y) / 2);
+
 		if (topLeft <= 3) {
 			if (oldPos.y < pos.y) velocitat.x = -velocitat.x;
 			else if (oldPos.x < pos.x) velocitat.y = -velocitat.y;
@@ -91,7 +91,7 @@ bool CollisionManager::collisionBallMap(glm::ivec2 &pos, glm::ivec2 &oldPos, con
 				difY = (int(ymax) * tileMap->getTileSize()) - c.y;
 				if (difX > difY) velocitat.x = -velocitat.x;
 				else if (difY > difX)  velocitat.y = -velocitat.y;
-				else velocitat = -velocitat; 
+				else velocitat = -velocitat;
 			}
 		}
 
@@ -154,32 +154,16 @@ bool CollisionManager::collisionPlayerMap(glm::ivec2 &pos, int subnivel, const g
 {
 	cout << (pos.x + size.x + direction.x) << endl;
 	cout << (pos.y + direction.y) << endl;
-	
+
 
 	int ymin = 16 + (432 * (3 - subnivel) + ((3 - subnivel) * 16));
 	int ymax = 432 + (ymin - 16);
 
-	if ((pos.x + direction.x < 16) || (pos.x + size.x + direction.x > 368) || 
+	if ((pos.x + direction.x < 16) || (pos.x + size.x + direction.x > 368) ||
 		(pos.y + direction.y < ymin) || (pos.y + size.y + direction.y > ymax)) return true;
 
 	return false;
-	/*if (subnivel == 3) {
-		if ((pos.y + direction.y < 16) || (pos.y + size.y + direction.y > 432)) return true;
-	}
-	else if (subnivel == 2) {
-		if ((pos.x + direction.x < 16) || (pos.x + size.x + direction.x > 368) ||
-			(pos.y + direction.y < 464) || (pos.y + size.y + direction.y > 880)) {
-			return true;
-		}
-		else return false;
-	}
-	else if (subnivel == 1) {
-		if ((pos.x + direction.x < 16) || (pos.x + size.x + direction.x > 368) ||
-			(pos.y + direction.y < 912) || (pos.y + size.y + direction.y > 1328)) {
-			return true;
-		}
-		else return false;
-	}*/
+
 }
 
 bool CollisionManager::collisionObjects(glm::ivec2 &pos, glm::ivec2 &oldPos, const glm::ivec2 &size, vector<class Element>& elements, glm::vec2 &velocitat) const
@@ -223,7 +207,7 @@ bool CollisionManager::collisionObjects(glm::ivec2 &pos, glm::ivec2 &oldPos, con
 				else if (difX > difY) velocitat.x = -velocitat.x;
 				else velocitat = -velocitat;
 			}
-			
+
 			if (type == 0 && elements.at(i).getResistance() == 0) {
 				//Brick
 				CollisionSound->play2D("audio/brickBreak.wav");

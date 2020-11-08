@@ -8,3 +8,5 @@
 
 #define BUTTON_X 128
 #define BUTTON_Y 64
+
+#define LEVEL_HEIGHT 448

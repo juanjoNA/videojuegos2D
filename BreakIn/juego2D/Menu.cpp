@@ -141,27 +141,24 @@ void Menu::render() {
 	else if (bCredits) creditsTextureQuad->render(creditsTexture);
 	else {
 		mainTextureQuad->render(mainTexture);
-		switch (index) { //This only renders the actual "selected" text with different color
+		switch (index) {
 		case 0:
 			play2Button->render();
 			controls1Button->render();
 			credits1Button->render();
 			password1Button->render();
-			//playText.render("*", glm::vec2(screen_width*0.08, screen_height*0.57), text_size, glm::vec4(1, 1, 1, 1));
 			break;
 		case 1:
 			play1Button->render();
 			controls2Button->render();
 			credits1Button->render();
 			password1Button->render();
-			//instructionsText.render("*", glm::vec2(screen_width*0.08, screen_height*0.73), text_size, glm::vec4(1, 1, 1, 1));
 			break;
 		case 2:
 			play1Button->render();
 			controls1Button->render();
 			credits2Button->render();
 			password1Button->render();
-			//recordsText.render("*", glm::vec2(screen_width*0.08, screen_height*0.89), text_size, glm::vec4(1, 1, 1, 1));
 			break;
 		case 3:
 			play1Button->render();
