@@ -28,17 +28,17 @@ private:
 	int index;
 	int numOptions;
 	bool bUpPressed, bDownPressed, bEnterPressed;
-	bool bCredits; //Go to credits screen
-	bool bControls; //Go to instructions screen
-	bool bPassword; //Go to password screen
+	bool bCredits;
+	bool bControls; 
+	bool bPassword; 
 
 	ShaderProgram texProgram;
 	glm::mat4 projection;
 	Texture titlesTexture;
-	TexturedQuad* mainTextureQuad; //GUI Background
-	TexturedQuad* controlsTextureQuad; //GUI Background
-	TexturedQuad* creditsTextureQuad; //GUI Background
-	TexturedQuad* passwordTextureQuad; //GUI Background
+	TexturedQuad* mainTextureQuad;
+	TexturedQuad* controlsTextureQuad;
+	TexturedQuad* creditsTextureQuad; 
+	TexturedQuad* passwordTextureQuad;
 	Texture mainTexture;
 	Texture controlsTexture;
 	Texture creditsTexture;

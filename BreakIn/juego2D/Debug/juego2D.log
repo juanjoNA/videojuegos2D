@@ -1,7 +1,7 @@
 ﻿  Scene.cpp
-c:\users\imunozbu\documents\universitat\videojuegos2d\breakin\juego2d\scene.cpp(126): warning C4018: '<': signed/unsigned mismatch
-c:\users\imunozbu\documents\universitat\videojuegos2d\breakin\juego2d\scene.cpp(197): warning C4018: '<': signed/unsigned mismatch
-c:\users\imunozbu\documents\universitat\videojuegos2d\breakin\juego2d\scene.cpp(342): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-c:\users\imunozbu\documents\universitat\videojuegos2d\breakin\juego2d\scene.cpp(343): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\imunozbu\documents\universitat\videojuegos2d\breakin\juego2d\scene.cpp(112): warning C4018: '<': signed/unsigned mismatch
+c:\users\imunozbu\documents\universitat\videojuegos2d\breakin\juego2d\scene.cpp(194): warning C4018: '<': signed/unsigned mismatch
+c:\users\imunozbu\documents\universitat\videojuegos2d\breakin\juego2d\scene.cpp(345): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\imunozbu\documents\universitat\videojuegos2d\breakin\juego2d\scene.cpp(346): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
   juego2D.vcxproj -> C:\Users\imunozbu\Documents\Universitat\videojuegos2D\BreakIn\Debug\juego2D.exe
   juego2D.vcxproj -> C:\Users\imunozbu\Documents\Universitat\videojuegos2D\BreakIn\Debug\juego2D.pdb (Full PDB)

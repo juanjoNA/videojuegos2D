@@ -8,6 +8,8 @@
 #include "Scene.h"
 #include "Game.h"
 #include "Definitions.h"
+#include <irrKlang.h>
+using namespace irrklang;
 
 #define TIME_PER_FRAME 1000.f / 60.f // Approx. 60 fps
 
@@ -17,6 +19,7 @@
 #define INIT_PLAYER_X_TILES 10
 #define INIT_PLAYER_Y_TILES 25
 
+ISoundEngine *SceneSound = createIrrKlangDevice();
 
 Scene::Scene()
 {
@@ -32,47 +35,33 @@ Scene::~Scene()
 		delete player;
 }
 
-void Scene::setGameTextPosition(int subnivel) {
-	if (subnivel == 3) {
-		pointsTitle->setPosition(glm::vec2(430.0f, 16.0f));
-		levelTitle->setPosition(glm::vec2(430.0f, 106.0f));
-		moneyTitle->setPosition(glm::vec2(430.0f, 196.0f));
-		livesTitle->setPosition(glm::vec2(430.0f, 286.0f));
-		roomTitle->setPosition(glm::vec2(430.0f, 376.0f));
-		tapadorArriba->setPosition(glm::vec2(SCREEN_X, 0.0f));
-		tapadorAbajo->setPosition(glm::vec2(SCREEN_X, 464.0f));
-		projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
-	}
-	else if (subnivel == 2) {
-		pointsTitle->setPosition(glm::vec2(430.0f, 16.0f + LEVEL_HEIGHT));
-		levelTitle->setPosition(glm::vec2(430.0f, 106.0f + LEVEL_HEIGHT));
-		moneyTitle->setPosition(glm::vec2(430.0f, 196.0f + LEVEL_HEIGHT));
-		livesTitle->setPosition(glm::vec2(430.0f, 286.0f + LEVEL_HEIGHT));
-		roomTitle->setPosition(glm::vec2(430.0f, 376.0f + LEVEL_HEIGHT));
-		tapadorArriba->setPosition(glm::vec2(SCREEN_X, 448.0f));
-		tapadorAbajo->setPosition(glm::vec2(SCREEN_X, 912.0f));
-		projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(448 + SCREEN_HEIGHT - 1), 448.f);
-	}
-	else if (subnivel == 1) {
-		pointsTitle->setPosition(glm::vec2(430.0f, 16.0f + LEVEL_HEIGHT * 2));
-		levelTitle->setPosition(glm::vec2(430.0f, 106.0f + LEVEL_HEIGHT * 2));
-		moneyTitle->setPosition(glm::vec2(430.0f, 196.0f + LEVEL_HEIGHT * 2));
-		livesTitle->setPosition(glm::vec2(430.0f, 286.0f + LEVEL_HEIGHT * 2));
-		roomTitle->setPosition(glm::vec2(430.0f, 376.0f + LEVEL_HEIGHT * 2));
-		tapadorArriba->setPosition(glm::vec2(SCREEN_X, 896.0f));
-		tapadorAbajo->setPosition(glm::vec2(SCREEN_X, 1376.0f));
-		projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(896 + SCREEN_HEIGHT - 1), 896.f);
-	}
-}
-
-
 void Scene::init()
 {
 	initShaders();
 	map1 = TileMap::createTileMap("levels/level01.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
-	map2 = TileMap::createTileMap("levels/level01.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
-	map3 = TileMap::createTileMap("levels/level01.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
-	map = map1;
+	map2 = TileMap::createTileMap("levels/level02.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+	map3 = TileMap::createTileMap("levels/level03.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+	money = 0;
+	lives = 4;
+	points = 0;
+	level = 3;
+	switch (level) {
+	case 1:
+		map = map1;
+		storeObjects();
+		loadObjects("levels/OP_level01.txt");
+		break;
+	case 2:
+		map = map2;
+		storeObjects();
+		loadObjects("levels/OP_level02.txt");
+		break;
+	case 3:
+		map = map3;
+		storeObjects();
+		loadObjects("levels/OP_level03.txt");
+		break;
+	}
 	subnivel = 1;
 
 	tapadorTexture.loadFromFile("images/tapador.png", TEXTURE_PIXEL_FORMAT_RGBA);
@@ -84,6 +73,10 @@ void Scene::init()
 	titlesTexture.loadFromFile("images/menuSpritesheet.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	tapadorArriba = Sprite::createSprite(glm::ivec2(384.0f, 16.0f), glm::vec2(0.0f, 0.0f), glm::vec2(1.0f, 1.0f), &tapadorTexture, &texProgram, false);
 	tapadorAbajo = Sprite::createSprite(glm::ivec2(384.0f, 16.0f), glm::vec2(0.0f, 0.0f), glm::vec2(1.0f, 1.0f), &tapadorTexture, &texProgram, false);
+	glm::vec2 texCoords[2] = { glm::vec2(0.f, 0.f), glm::vec2(1.f, 1.f) };
+	glm::vec2 geomGUI[2] = { glm::vec2(0.f, 0.f), glm::vec2(float(SCREEN_WIDTH), float(SCREEN_HEIGHT)) };
+	gameOverTextureQuad = TexturedQuad::createTexturedQuad(geomGUI, texCoords, texProgram);
+	gameOver.loadFromFile("images/credits.png", TEXTURE_PIXEL_FORMAT_RGB);
 	setGameTextPosition(subnivel);
 
 	player = new Player();
@@ -101,13 +94,6 @@ void Scene::init()
 	police->setPosition(glm::vec2(20 * map->getTileSize(), 20 * map->getTileSize() - 100));
 	police->setTileMap(map);
 
-	storeObjects();
-	loadObjects("levels/OP_level01.txt");
-
-	money = 0;
-	lives = 4;
-	points = 0;
-	level = 1;
 	currentTime = 0.0f;
 
 	// Select which font you want to use
@@ -131,7 +117,7 @@ void Scene::update(int deltaTime)
 	playerPos = player->getPosition();
 	//cout << "points = " << points << endl;
 	//cout << "money = " << money << endl << endl;
-	//cout << "posBall = (" << ballPos.x << " , " << ballPos.y << endl << endl;
+	cout << "posBall = (" << ballPos.x << " , " << ballPos.y << endl << endl;
 	// Bajar nivel?
 	switch (subnivel) {
 	case 3:
@@ -158,6 +144,15 @@ void Scene::update(int deltaTime)
 			player->setPosition(glm::vec2(playerPos.x, playerPos.y - 448));
 			subnivel = 2;
 			setGameTextPosition(subnivel);
+		}
+		else if (ballPos.y >= 1328.f) {
+			if (lives == 1) {
+				--lives;
+				SceneSound->play2D("audio/looseGame.wav");
+			}
+			else {
+				pierdeVida();
+			}
 		}
 		break;
 	}
@@ -188,22 +183,33 @@ void Scene::render()
 	modelview = glm::mat4(1.0f);
 	texProgram.setUniformMatrix4f("modelview", modelview);
 	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
-	map->render();
-	player->render();
-	ball->render();
-	tapadorArriba->render();
-	tapadorAbajo->render();
-	//police->render();
-	for (int i = 0; i < objectsInGame.size(); i++) {
-		if (objectsInGame.at(i).getType() != 0) {
-			if (objectsInGame.at(i).isFinished()) {
-				if (objectsInGame.at(i).getType() == 1) {
-					money += objectsInGame.at(i).getValue();
-				}
-				else if(objectsInGame.at(i).getType() == 2){
-					points += 50;
-				}
 
+	if (lives > 0) {
+		map->render();
+		player->render();
+		ball->render();
+		tapadorArriba->render();
+		tapadorAbajo->render();
+		//police->render();
+		for (int i = 0; i < objectsInGame.size(); i++) {
+			if (objectsInGame.at(i).getType() != 0) {
+				if (objectsInGame.at(i).isFinished()) {
+					if (objectsInGame.at(i).getType() == 1) {
+						money += objectsInGame.at(i).getValue();
+					}
+					else if (objectsInGame.at(i).getType() == 2) {
+						points += 50;
+					}
+
+					//objectsInGame.at(i).free();
+					objectsInGame.erase(objectsInGame.begin() + i);
+				}
+				else {
+					objectsInGame.at(i).render();
+				}
+			}
+			else if (objectsInGame.at(i).getResistance() == 0) {
+				points += 50;
 				//objectsInGame.at(i).free();
 				objectsInGame.erase(objectsInGame.begin() + i);
 			}
@@ -211,30 +217,27 @@ void Scene::render()
 				objectsInGame.at(i).render();
 			}
 		}
-		else if (objectsInGame.at(i).getResistance() == 0) {
-			points += 50;
-			//objectsInGame.at(i).free();
-			objectsInGame.erase(objectsInGame.begin() + i);
-		}
-		else {
-			objectsInGame.at(i).render();
-		}
+		text.render("MONEY", glm::vec2(510, 40), 25, glm::vec4(1, 1, 1, 1));
+		text.render(to_string(money), glm::vec2(510, 70), 25, glm::vec4(1, 1, 1, 1));
+		text.render("POINTS", glm::vec2(510, 105), 25, glm::vec4(1, 1, 1, 1));
+		text.render(to_string(points), glm::vec2(510, 135), 25, glm::vec4(1, 1, 1, 1));
+		text.render("LIVES", glm::vec2(510, 170), 25, glm::vec4(1, 1, 1, 1));
+		text.render(to_string(lives), glm::vec2(510, 200), 25, glm::vec4(1, 1, 1, 1));
+		text.render("BANK", glm::vec2(510, 235), 25, glm::vec4(1, 1, 1, 1));
+		text.render(to_string(level), glm::vec2(510, 260), 25, glm::vec4(1, 1, 1, 1));
+		text.render("ROOM", glm::vec2(510, 295), 25, glm::vec4(1, 1, 1, 1));
+		text.render(to_string(subnivel), glm::vec2(510, 320), 25, glm::vec4(1, 1, 1, 1));
+		/*pointsTitle->render();
+		moneyTitle->render();
+		livesTitle->render();
+		levelTitle->render();
+		roomTitle->render();*/
 	}
-	text.render("MONEY", glm::vec2(510, 40), 25, glm::vec4(1, 1, 1, 1));
-	text.render(to_string(money), glm::vec2(510, 70), 25, glm::vec4(1, 1, 1, 1));
-	text.render("POINTS", glm::vec2(510, 105), 25, glm::vec4(1, 1, 1, 1));
-	text.render(to_string(points), glm::vec2(510, 135), 25, glm::vec4(1, 1, 1, 1));
-	text.render("LIVES", glm::vec2(510, 170), 25, glm::vec4(1, 1, 1, 1));
-	text.render(to_string(4), glm::vec2(510, 200), 25, glm::vec4(1, 1, 1, 1));
-	text.render("BANK", glm::vec2(510, 235), 25, glm::vec4(1, 1, 1, 1));
-	text.render(to_string(1), glm::vec2(510, 260), 25, glm::vec4(1, 1, 1, 1));
-	text.render("ROOM", glm::vec2(510, 295), 25, glm::vec4(1, 1, 1, 1));
-	text.render(to_string(subnivel), glm::vec2(510, 320), 25, glm::vec4(1, 1, 1, 1));
-	/*pointsTitle->render();
-	moneyTitle->render();
-	livesTitle->render();
-	levelTitle->render();
-	roomTitle->render();*/
+	else {
+		reinit();
+		gameOverTextureQuad->render(gameOver);
+		Game::instance().setState(MENU);
+	}
 }
 
 void Scene::initShaders()
@@ -429,4 +432,81 @@ bool Scene::loadObjects(const string &loadObjectsFile) {
 	return true;
 }
 
+void Scene::pierdeVida() {
+	SceneSound->play2D("audio/gameOver.mp3");
+	Sleep(2000);
+	--lives;
+	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize() + LEVEL_HEIGHT * 2));
+	ball->setPosition(glm::vec2(player->getPosition().x + (player->getSize().x) / 2, player->getPosition().y - player->getSize().y));
+}
 
+void Scene::setGameTextPosition(int subnivel) {
+	if (subnivel == 3) {
+		pointsTitle->setPosition(glm::vec2(430.0f, 16.0f));
+		levelTitle->setPosition(glm::vec2(430.0f, 106.0f));
+		moneyTitle->setPosition(glm::vec2(430.0f, 196.0f));
+		livesTitle->setPosition(glm::vec2(430.0f, 286.0f));
+		roomTitle->setPosition(glm::vec2(430.0f, 376.0f));
+		tapadorArriba->setPosition(glm::vec2(SCREEN_X, 0.0f));
+		tapadorAbajo->setPosition(glm::vec2(SCREEN_X, 464.0f));
+		projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
+	}
+	else if (subnivel == 2) {
+		pointsTitle->setPosition(glm::vec2(430.0f, 16.0f + LEVEL_HEIGHT));
+		levelTitle->setPosition(glm::vec2(430.0f, 106.0f + LEVEL_HEIGHT));
+		moneyTitle->setPosition(glm::vec2(430.0f, 196.0f + LEVEL_HEIGHT));
+		livesTitle->setPosition(glm::vec2(430.0f, 286.0f + LEVEL_HEIGHT));
+		roomTitle->setPosition(glm::vec2(430.0f, 376.0f + LEVEL_HEIGHT));
+		tapadorArriba->setPosition(glm::vec2(SCREEN_X, 448.0f));
+		tapadorAbajo->setPosition(glm::vec2(SCREEN_X, 912.0f));
+		projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(448 + SCREEN_HEIGHT - 1), 448.f);
+	}
+	else if (subnivel == 1) {
+		pointsTitle->setPosition(glm::vec2(430.0f, 16.0f + LEVEL_HEIGHT * 2));
+		levelTitle->setPosition(glm::vec2(430.0f, 106.0f + LEVEL_HEIGHT * 2));
+		moneyTitle->setPosition(glm::vec2(430.0f, 196.0f + LEVEL_HEIGHT * 2));
+		livesTitle->setPosition(glm::vec2(430.0f, 286.0f + LEVEL_HEIGHT * 2));
+		roomTitle->setPosition(glm::vec2(430.0f, 376.0f + LEVEL_HEIGHT * 2));
+		tapadorArriba->setPosition(glm::vec2(SCREEN_X, 896.0f));
+		tapadorAbajo->setPosition(glm::vec2(SCREEN_X, 1376.0f));
+		projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(896 + SCREEN_HEIGHT - 1), 896.f);
+	}
+}
+
+void Scene::reinit()
+{
+	money = 0;
+	lives = 4;
+	points = 0;
+	level = 3;
+	switch (level) {
+	case 1:
+		map = map1;
+		storeObjects();
+		loadObjects("levels/OP_level01.txt");
+		break;
+	case 2:
+		map = map2;
+		storeObjects();
+		loadObjects("levels/OP_level02.txt");
+		break;
+	case 3:
+		map = map3;
+		storeObjects();
+		loadObjects("levels/OP_level03.txt");
+		break;
+	}
+	subnivel = 1;
+
+	setGameTextPosition(subnivel);
+	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize() + LEVEL_HEIGHT * 2));
+	player->setTileMap(map);
+
+	ball->setPosition(glm::vec2(player->getPosition().x + (player->getSize().x) / 2, player->getPosition().y - player->getSize().y));
+	ball->setTileMap(map);
+
+	police->setPosition(glm::vec2(20 * map->getTileSize(), 20 * map->getTileSize() - 100));
+	police->setTileMap(map);
+
+	currentTime = 0.0f;
+}
