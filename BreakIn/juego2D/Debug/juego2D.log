@@ -1,3 +1,7 @@
-﻿  Police.cpp
-  juego2D.vcxproj -> C:\Users\Juanjo\Desktop\Carpetas\universidad\4o\Videojuegos\proyecto2D\videojuegos2D\BreakIn\Debug\juego2D.exe
-  juego2D.vcxproj -> C:\Users\Juanjo\Desktop\Carpetas\universidad\4o\Videojuegos\proyecto2D\videojuegos2D\BreakIn\Debug\juego2D.pdb (Full PDB)
+﻿  Scene.cpp
+c:\users\juanjo\desktop\carpetas\universidad\4o\videojuegos\proyecto2d\videojuegos2d\breakin\breakin\juego2d\scene.cpp(110): warning C4018: '<': no coinciden signed/unsigned
+c:\users\juanjo\desktop\carpetas\universidad\4o\videojuegos\proyecto2d\videojuegos2d\breakin\breakin\juego2d\scene.cpp(204): warning C4018: '<': no coinciden signed/unsigned
+c:\users\juanjo\desktop\carpetas\universidad\4o\videojuegos\proyecto2d\videojuegos2d\breakin\breakin\juego2d\scene.cpp(355): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+c:\users\juanjo\desktop\carpetas\universidad\4o\videojuegos\proyecto2d\videojuegos2d\breakin\breakin\juego2d\scene.cpp(356): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+  juego2D.vcxproj -> C:\Users\Juanjo\Desktop\Carpetas\universidad\4o\Videojuegos\proyecto2D\videojuegos2D\BreakIn\BreakIn\Debug\juego2D.exe
+  juego2D.vcxproj -> C:\Users\Juanjo\Desktop\Carpetas\universidad\4o\Videojuegos\proyecto2D\videojuegos2D\BreakIn\BreakIn\Debug\juego2D.pdb (Full PDB)

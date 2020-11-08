@@ -23,8 +23,11 @@ ISoundEngine *SceneSound = createIrrKlangDevice();
 
 Scene::Scene()
 {
-	map = NULL;
-	player = NULL;
+	money = 0;
+	lives = 4;
+	points = 0;
+	level = 1;
+	subnivel = 1;
 }
 
 Scene::~Scene()
@@ -41,10 +44,7 @@ void Scene::init()
 	map1 = TileMap::createTileMap("levels/level01.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 	map2 = TileMap::createTileMap("levels/level02.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 	map3 = TileMap::createTileMap("levels/level03.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
-	money = 0;
-	lives = 4;
-	points = 0;
-	level = 3;
+
 	switch (level) {
 	case 1:
 		map = map1;
@@ -62,7 +62,6 @@ void Scene::init()
 		loadObjects("levels/OP_level03.txt");
 		break;
 	}
-	subnivel = 1;
 
 	tapadorTexture.loadFromFile("images/tapador.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	pointsTitle = Sprite::createSprite(glm::ivec2(80, 40), glm::vec2(0.0f, 0.5f), glm::vec2(0.25f, 0.25f), &titlesTexture, &texProgram, false);
@@ -218,6 +217,14 @@ void Scene::render()
 				else {
 					objectsInGame.at(i).render();
 				}
+			}
+			else if (objectsInGame.at(i).getResistance() == 0) {
+					points += 50;
+					//objectsInGame.at(i).free();
+					objectsInGame.erase(objectsInGame.begin() + i);
+			}
+			else {
+					objectsInGame.at(i).render();
 			}
 		}
 		text.render("MONEY", glm::vec2(510, 40), 25, glm::vec4(1, 1, 1, 1));
