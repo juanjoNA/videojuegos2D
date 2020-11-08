@@ -154,12 +154,17 @@ bool CollisionManager::collisionPlayerMap(glm::ivec2 &pos, int subnivel, const g
 {
 	cout << (pos.x + size.x + direction.x) << endl;
 	cout << (pos.y + direction.y) << endl;
-	if (subnivel == 3) {
-		if ((pos.x + direction.x < 16) || (pos.x + size.x + direction.x > 368) ||
-			(pos.y + direction.y < 16) || (pos.y + size.y + direction.y > 432)) {
-			return true;
-		}
-		else return false;
+	
+
+	int ymin = 16 + (432 * (3 - subnivel) + ((3 - subnivel) * 16));
+	int ymax = 432 + (ymin - 16);
+
+	if ((pos.x + direction.x < 16) || (pos.x + size.x + direction.x > 368) || 
+		(pos.y + direction.y < ymin) || (pos.y + size.y + direction.y > ymax)) return true;
+
+	return false;
+	/*if (subnivel == 3) {
+		if ((pos.y + direction.y < 16) || (pos.y + size.y + direction.y > 432)) return true;
 	}
 	else if (subnivel == 2) {
 		if ((pos.x + direction.x < 16) || (pos.x + size.x + direction.x > 368) ||
@@ -174,7 +179,7 @@ bool CollisionManager::collisionPlayerMap(glm::ivec2 &pos, int subnivel, const g
 			return true;
 		}
 		else return false;
-	}
+	}*/
 }
 
 bool CollisionManager::collisionObjects(glm::ivec2 &pos, glm::ivec2 &oldPos, const glm::ivec2 &size, vector<class Element>& elements, glm::vec2 &velocitat) const
@@ -219,12 +224,6 @@ bool CollisionManager::collisionObjects(glm::ivec2 &pos, glm::ivec2 &oldPos, con
 				else velocitat = -velocitat;
 			}
 			
-			
-			
-			
-			
-			
-			
 			if (type == 0 && elements.at(i).getResistance() == 0) {
 				//Brick
 				CollisionSound->play2D("audio/brickBreak.wav");
@@ -268,4 +267,24 @@ int CollisionManager::collisionMisil(glm::ivec2 &posMisil, const glm::ivec2 &siz
 	}
 	else if (ymax == 432) return 2;
 	else return 0;
+}
+
+bool CollisionManager::collisionPolice(glm::ivec2 & pos, Player * player, glm::ivec2 & size)
+{
+	int xmin = pos.x;
+	int xmax = pos.x + size.x;
+	int ymin = pos.y;
+	int ymax = pos.y + size.y;
+
+	if (
+		(player->getPosition().x + player->getSize().x >= xmin) &&
+		(xmax >= player->getPosition().x) &&
+		(player->getPosition().y + player->getSize().y >= ymin) &&
+		(ymax >= player->getPosition().y)
+		)
+	{
+		return true;
+	}
+
+	return false;
 }

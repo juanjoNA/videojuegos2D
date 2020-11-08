@@ -26,6 +26,7 @@ public:
 	glm::vec2 getSize();
 	int collision();
 	bool isFinished();
+	bool isActivated();
 	int getResistance();
 	int getType();
 	int getValue() { return value; }
@@ -33,11 +34,11 @@ public:
 
 private:
 	glm::ivec2 tileMapDispl, posElement;
-	int resistance;
+	int resistance, value;
 	Texture spritesheet;
 	Sprite sprite;
 	int type; //BRICK = 0, MONEY = 1, ALARM = 2, KEY = 3;
-	int value;
+	bool activateConsequence;
 };
 
 

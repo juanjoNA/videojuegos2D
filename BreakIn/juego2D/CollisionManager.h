@@ -24,6 +24,7 @@ public:
 	bool collisionPlayerMap(glm::ivec2 &pos, int subnivel, const glm::ivec2 &size, TileMap *tileMap, glm::ivec2 direction) const;
 	bool collisionObjects(glm::ivec2 &pos, glm::ivec2 &oldPos, const glm::ivec2 &size, vector<class Element>& elements, glm::vec2 &velocitat) const;
 	int collisionMisil(glm::ivec2 &posMisil, const glm::ivec2 &sizeMisil, Player *player) const;
+	bool collisionPolice(glm::ivec2 &pos, Player *player, glm::ivec2 &size);
 
 private:
 

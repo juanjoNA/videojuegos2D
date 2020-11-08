@@ -38,6 +38,7 @@ void Element::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, g
 			}
 		}
 	}
+	activateConsequence = false;
 	resistance = resistencia;
 	tileMapDispl = tileMapPos;
 	if (letter == 'B') type = BRICK;
@@ -85,6 +86,7 @@ int Element::collision()
 	}
 	else if(resistance == 0 && type != BRICK) {
 		sprite.changeAnimation(0);
+		if (!activateConsequence && (type == 2 || type == 3)) activateConsequence = true;
 	}
 	else {
 
@@ -95,6 +97,10 @@ int Element::collision()
 
 bool Element::isFinished() {
 	return sprite.isFinished();
+}
+
+bool Element::isActivated() {
+	return activateConsequence;
 }
 
 int Element::getResistance() {

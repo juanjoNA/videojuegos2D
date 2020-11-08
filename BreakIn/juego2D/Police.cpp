@@ -28,23 +28,29 @@ void Police::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 
 	tileMapDispl = tileMapPos;
 	speed = 1;
-	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPolice.x), float(tileMapDispl.y + posPolice.y)));
-
+	start = true;
+	colPlayer = false;
+	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posIni.x), float(tileMapDispl.y + posIni.y)));
 }
 
-void Police::update(int deltaTime, Player *player)
+void Police::update(int deltaTime, Player *player, int sublevel)
 {
-	sprite->update(deltaTime);
+	if (start && sublevel==3)
+	{
+		sprite->update(deltaTime);
+		
+		direction = moveToPlayer(player);
+		posPolice += direction*speed;
+		
+		if (CollisionManager::instance().collisionPolice(posPolice, player, getSize())) colPlayer = true;
 
-	direction = moveToPlayer(player);
-	posPolice += direction*speed;
-
-	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPolice.x), float(tileMapDispl.y + posPolice.y)));
+		sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPolice.x), float(tileMapDispl.y + posPolice.y)));
+	}
 }
 
 void Police::render()
 {
-	sprite->render();
+	if(start) sprite->render();
 }
 
 void Police::setTileMap(TileMap *tileMap)
@@ -54,6 +60,7 @@ void Police::setTileMap(TileMap *tileMap)
 
 void Police::setPosition(const glm::vec2 &pos)
 {
+	posIni = pos;
 	posPolice = pos;
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPolice.x), float(tileMapDispl.y + posPolice.y)));
 }
@@ -82,28 +89,12 @@ glm::ivec2 Police::getSize()
 	return glm::ivec2(SIZE_X, SIZE_Y);
 }
 
-/*
-bool Police::collision(glm::ivec2 &pos, Player *player, const glm::ivec2 &size) const
-{
-	int xmin = pos.x;
-	int xmax = pos.x + size.x;
-	int ymin = pos.y;
-	int ymax = pos.y + size.y;
+void Police::restart() {
+	posPolice = posIni;
+	colPlayer = false;
+	direction = glm::ivec2(0, 0);
+}
 
-	if (
-		(posPolice.x + SIZE_X >= xmin) &&
-		(xmax >= posPolice.x) &&
-		(posPolice.y + SIZE_Y >= ymin) &&
-		(ymax >= posPolice.y)
-		)
-	{
-		pos.y = pos.y - (ymax - posPolice.y);
-		return true;
-	}
-
-	return false;
-}*/
-
-
-
-
+void Police::setStart(bool s) {
+	start = s;
+}

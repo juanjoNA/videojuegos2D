@@ -5,6 +5,7 @@
 #include "Sprite.h"
 #include "TileMap.h"
 #include "Player.h"
+#include "CollisionManager.h"
 
 
 // Player is basically a Sprite that represents the player. As such it has
@@ -16,7 +17,7 @@ class Police
 
 public:
 	void init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram);
-	void update(int deltaTime, Player *player);
+	void update(int deltaTime, Player *player, int sublevel);
 	void render();
 
 	void setTileMap(TileMap *tileMap);
@@ -24,15 +25,18 @@ public:
 
 	glm::ivec2 getSize();
 	glm::ivec2 moveToPlayer(Player *player);
+	void restart();
+	bool isStarted() { return start; }
+	void setStart(bool start);
+	bool catchPlayer() { return colPlayer; }
 	//metodes de colisió
 	bool collision(glm::ivec2 &pos, Player *player, glm::ivec2 &size) const;
-	/*bool collisionLeft(const glm::ivec2 &pos, const glm::ivec2 &size) const;
-	bool collisionMiddle(const glm::ivec2 &pos, const glm::ivec2 &size) const;
-	*/
+	
 
 private:
-	glm::ivec2 tileMapDispl, posPolice, direction;
+	glm::ivec2 tileMapDispl, posIni, posPolice, direction;
 	int speed;
+	bool colPlayer, start;
 	Texture spritesheet;
 	Sprite *sprite;
 	TileMap *map;

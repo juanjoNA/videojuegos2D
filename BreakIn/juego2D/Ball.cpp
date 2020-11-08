@@ -37,7 +37,8 @@ void Ball::update(int deltaTime, vector<class Element>& objInGame, int level)
 	}
 	else {
 		if (player->isStarted()) start = true;
-		sprite->setPosition(glm::vec2((player->getPosition().x + (player->getSize().x) / 2)+SIZE_X, (player->getPosition().y - player->getSize().y)+SIZE_Y));
+		posBall = glm::vec2(player->getPosition().x + (player->getSize().x) / 2, player->getPosition().y - player->getSize().y);
+		sprite->setPosition(glm::vec2(posBall.x+SIZE_X, posBall.y+SIZE_Y));
 	}
 	
 }
