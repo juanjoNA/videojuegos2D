@@ -31,9 +31,11 @@ public:
 	int getType();
 	int getValue() { return value; }
 	void free();
+	void activate();
+	void executedConsequence();
 
 private:
-	glm::ivec2 tileMapDispl, posElement;
+	glm::ivec2 tileMapDispl, posElement, size;
 	int resistance, value;
 	Texture spritesheet;
 	Sprite sprite;

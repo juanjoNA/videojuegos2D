@@ -5,19 +5,15 @@
 #include "Element.h"
 #include "Game.h"
 
-#define SIZE_X 32
-#define SIZE_Y 16
-
-
 enum elementType {
-	BRICK, MONEY, ALARM, KEY
+	BRICK, MONEY, ALARM, KEY, DOOR
 };
 
-void Element::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, glm::ivec2 &size, glm::vec2 &posInSpritesheet, glm::vec2 &sizeInSpritesheet, int resistencia, vector<glm::vec2> &animations, char letter)
+void Element::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, glm::ivec2 &s, glm::vec2 &posInSpritesheet, glm::vec2 &sizeInSpritesheet, int resistencia, vector<glm::vec2> &animations, char letter)
 {
 	spritesheet.loadFromFile("images/spriteSheet.png", TEXTURE_PIXEL_FORMAT_RGBA);
-	if(letter != 'A') sprite = Sprite(size, posInSpritesheet, sizeInSpritesheet, &spritesheet, &shaderProgram, false);
-	else sprite = Sprite(size, posInSpritesheet, sizeInSpritesheet, &spritesheet, &shaderProgram, true);
+	if(letter != 'A') sprite = Sprite(s, posInSpritesheet, sizeInSpritesheet, &spritesheet, &shaderProgram, false);
+	else sprite = Sprite(s, posInSpritesheet, sizeInSpritesheet, &spritesheet, &shaderProgram, true);
 	sprite.setNumberAnimations(resistencia);
 
 	if (resistencia > 1)
@@ -38,19 +34,36 @@ void Element::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, g
 			}
 		}
 	}
+
+	
 	activateConsequence = false;
 	resistance = resistencia;
 	tileMapDispl = tileMapPos;
-	if (letter == 'B') type = BRICK;
-	else if (letter == 'M') type = MONEY;
-	else if (letter == 'A') type = ALARM;
-	else type = KEY;
+	size = s;
 
+	switch (letter) {
+		case 'B':
+			type = BRICK;
+			break;
+		case 'M':
+			type = MONEY;
+			break;
+		case 'A':
+			type = ALARM;
+			break;
+		case 'K':
+			type = KEY;
+			break;
+		case 'D':
+			type = DOOR;
+			break;
+
+	}
 }
 
-void Element::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, glm::ivec2 &size, glm::vec2 &posInSpritesheet, glm::vec2 &sizeInSpritesheet, int resistencia, vector<glm::vec2> &animations, char letter, int val)
+void Element::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, glm::ivec2 &s, glm::vec2 &posInSpritesheet, glm::vec2 &sizeInSpritesheet, int resistencia, vector<glm::vec2> &animations, char letter, int val)
 {
-	init(tileMapPos, shaderProgram, size, posInSpritesheet, sizeInSpritesheet, resistencia, animations, letter);
+	init(tileMapPos, shaderProgram, s, posInSpritesheet, sizeInSpritesheet, resistencia, animations, letter);
 	value = val;
 }
 
@@ -74,22 +87,23 @@ void Element::setPosition(const glm::vec2 &pos)
 
 glm::vec2 Element::getSize()
 {
-	return glm::vec2(SIZE_X, SIZE_Y);
+	return size;
 }
 
 int Element::collision()
 {
-	resistance--;
-	if (resistance > 0) {
-		int animId = sprite.getCurrentAnimation();
-		sprite.changeAnimation(animId + 1);
-	}
-	else if(resistance == 0 && type != BRICK) {
-		sprite.changeAnimation(0);
-		if (!activateConsequence && (type == 2 || type == 3)) activateConsequence = true;
-	}
-	else {
-
+	if (type != DOOR) {
+		resistance--;
+		if (resistance > 0) {
+			int animId = sprite.getCurrentAnimation();
+			sprite.changeAnimation(animId + 1);
+		}
+		else if (resistance == 0 && type != BRICK) {
+			sprite.changeAnimation(0);
+			if (!activateConsequence && (type == ALARM || type == KEY)) {
+				activateConsequence = true;
+			}
+		}
 	}
 
 	return resistance;
@@ -113,4 +127,14 @@ int Element::getType() {
 
 void Element::free() {
 	sprite.free();
+}
+
+void Element::activate() {
+	int animId = sprite.getCurrentAnimation();
+	sprite.changeAnimation(animId + 1);
+}
+
+void Element::executedConsequence()
+{
+	activateConsequence = false;
 }

@@ -177,6 +177,7 @@ bool CollisionManager::collisionObjects(glm::ivec2 &pos, glm::ivec2 &oldPos, con
 		int posY = elements.at(i).getPosition().y;
 		int sizeX = elements.at(i).getSize().x;
 		int sizeY = elements.at(i).getSize().y;
+
 		if (
 			((posX + sizeX) >= xmin) &&
 			(xmax >= posX) &&
@@ -184,8 +185,10 @@ bool CollisionManager::collisionObjects(glm::ivec2 &pos, glm::ivec2 &oldPos, con
 			(ymax >= posY)
 			)
 		{
-			int resistance = elements.at(i).collision();
+			
 			int type = elements.at(i).getType();
+
+			int resistance = elements.at(i).collision();
 			glm::vec2 c = glm::vec2((pos.x + pos.x + size.x) / 2, (pos.y + pos.y + size.y) / 2);
 
 			if (c.x >= posX && c.x <= posX + sizeX) velocitat.y = -velocitat.y;			//GOLPEA POR ARRIBA O POR ABAJO

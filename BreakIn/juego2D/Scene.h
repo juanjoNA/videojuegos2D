@@ -41,6 +41,7 @@ private:
 	void createMoney();
 	void createKey();
 	void createAlarm();
+	void createDoor();
 	void setGameTextPosition(int subnivel);
 	void pierdeVida();
 
@@ -65,7 +66,7 @@ private:
 	ShaderProgram simpleProgram, texProgram;
 	glm::mat4 projection;
 	vector<Element> objectsInGame, objVector;
-	Element *key, *alarm;
+	Element *key, *alarm, *door;
 	Police *police;
 	float translation;
 	int subnivel;

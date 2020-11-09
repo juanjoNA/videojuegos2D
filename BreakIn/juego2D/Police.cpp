@@ -28,7 +28,7 @@ void Police::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 
 	tileMapDispl = tileMapPos;
 	speed = 1;
-	start = true;
+	start = false;
 	colPlayer = false;
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posIni.x), float(tileMapDispl.y + posIni.y)));
 }

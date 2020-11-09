@@ -107,15 +107,21 @@ void Scene::update(int deltaTime)
 	player->update(deltaTime, subnivel);
 	ball->update(deltaTime, objectsInGame, subnivel);
 	police->update(deltaTime, player, subnivel);
-	for (int i = 0; i < objectsInGame.size(); i++) {
+	bool open = false;
+	for (int i = objectsInGame.size()-1; i >= 0 ; i--) {
 		objectsInGame.at(i).update(deltaTime);
 		if (objectsInGame.at(i).isActivated()) {
 			if (objectsInGame.at(i).getType() == 2) { //ALARMA
 				if (!police->isStarted()) police->setStart(true);
 			}
 			else {	//LLAVE
-
+				open = true;
+				objectsInGame.at(i).executedConsequence();
 			}
+		}
+		if (objectsInGame.at(i).getType() == 4 && open) {
+			open = false;
+			objectsInGame.at(i).activate();
 		}
 	}
 	ballPos = ball->position();
@@ -196,12 +202,7 @@ void Scene::render()
 
 	if (lives > 0) {
 		map->render();
-		player->render();
-		ball->render();
-		tapadorArriba->render();
-		tapadorAbajo->render();
-		//police->render();
-		for (int i = 0; i < objectsInGame.size(); i++) {
+		for (int i = objectsInGame.size()-1; i >= 0 ; i--) {
 			if (objectsInGame.at(i).getType() != 0) {
 				if (objectsInGame.at(i).isFinished()) {
 					if (objectsInGame.at(i).getType() == 1) {
@@ -227,6 +228,12 @@ void Scene::render()
 					objectsInGame.at(i).render();
 			}
 		}
+
+		player->render();
+		ball->render();
+		tapadorArriba->render();
+		tapadorAbajo->render();
+		police->render();
 		text.render("MONEY", glm::vec2(510, 40), 25, glm::vec4(1, 1, 1, 1));
 		text.render(to_string(money), glm::vec2(510, 70), 25, glm::vec4(1, 1, 1, 1));
 		text.render("POINTS", glm::vec2(510, 105), 25, glm::vec4(1, 1, 1, 1));
@@ -288,6 +295,7 @@ void Scene::storeObjects()
 	createMoney();
 	createAlarm();
 	createKey();
+	createDoor();
 }
 
 void Scene::createBricks1()
@@ -380,10 +388,12 @@ void Scene::createKey()
 	glm::vec2 posIn = glm::vec2(0.4f, 0.6f);
 	glm::vec2 sizeIn(0.05f, 0.1f);
 	key = new Element();
-	vector<glm::vec2> animations;
-	for (int j = 0; j < 4; j++) {
-		animations.push_back(glm::vec2(0.05 * j, 0.f));
-	}
+	vector<glm::vec2> animations(4);
+	animations[0] = glm::vec2(0.f, 0.f);
+	animations[1] = glm::vec2(0.05f, 0.f);
+	animations[2] = glm::vec2(0.1f, 0.f);
+	animations[3] = glm::vec2(0.15f, 0.f);
+
 	key->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::ivec2(32, 32), posIn, sizeIn, 1, animations, 'K');
 	objVector.push_back(*key);
 }
@@ -393,13 +403,29 @@ void Scene::createAlarm()
 	glm::vec2 posIn = glm::vec2(0.6f, 0.6f);
 	glm::vec2 sizeIn(0.05f, 0.1f);
 	alarm = new Element();
-	vector<glm::vec2> animations;
-	for (int j = 0; j < 4; j++) {
-		animations.push_back(glm::vec2(0.05 * j, 0.f));
-	}
+	vector<glm::vec2> animations(5);
+	animations[0] = glm::vec2(0.f, 0.f);
+	animations[1] = glm::vec2(0.05f, 0.f);
+	animations[2] = glm::vec2(0.1f, 0.f);
+	animations[3] = glm::vec2(0.15f, 0.f);
+	animations[4] = glm::vec2(0.f, 0.1f);
 	alarm->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::ivec2(32, 32), posIn, sizeIn, 1, animations, 'A');
 	objVector.push_back(*alarm);
 }
+
+void Scene::createDoor()
+{
+	glm::vec2 posIn = glm::vec2(0.7f, 0.7f);
+	glm::vec2 sizeIn(0.1f, 0.1f);
+	door = new Element();
+	vector<glm::vec2> animations(3);
+	animations[0] = glm::vec2(0.f, 0.f);
+	animations[1] = glm::vec2(0.f, 0.1f);
+	animations[2] = glm::vec2(0.f, 0.2f);
+	door->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::ivec2(128-level*32, 16), posIn, sizeIn, 1, animations, 'D');
+	objVector.push_back(*door);
+}
+
 
 bool Scene::loadObjects(const string &loadObjectsFile) {
 
@@ -488,7 +514,7 @@ void Scene::reinit()
 	money = 0;
 	lives = 4;
 	points = 0;
-	level = 3;
+	level = 2;
 	switch (level) {
 	case 1:
 		map = map1;
