@@ -19,6 +19,10 @@ ISoundEngine *MenuSound = createIrrKlangDevice();
 
 int firstButtonY = SCREEN_HEIGHT / 2 - 64;
 
+Menu::Menu()
+{
+}
+
 void Menu::init() {
 	initShaders();
 
@@ -45,7 +49,7 @@ void Menu::init() {
 	creditsTexture.loadFromFile("images/credits.png", TEXTURE_PIXEL_FORMAT_RGB);
 
 	passwordTextureQuad = TexturedQuad::createTexturedQuad(geomGUI, texCoords, texProgram);
-	passwordTexture.loadFromFile("images/fondoBreakIn.png", TEXTURE_PIXEL_FORMAT_RGB);
+	passwordTexture.loadFromFile("images/password.png", TEXTURE_PIXEL_FORMAT_RGB);
 
 	menuTexture.loadFromFile("images/menuSpritesheet.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	menuTexture.setMinFilter(GL_NEAREST);
@@ -77,9 +81,29 @@ void Menu::init() {
 
 	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
 
+	// Select which font you want to use
+	if (!text.init("fonts/OpenSans-Regular.ttf"))
+		//if(!text.init("fonts/OpenSans-Bold.ttf"))
+		//if(!text.init("fonts/DroidSerif.ttf"))
+		cout << "Could not load font!!!" << endl;
 }
 
 void Menu::update() {
+	if (Game::instance().bF1) {
+		Game::instance().bF1 = false;
+	}
+	else if (Game::instance().bF2) {
+		Game::instance().bF2 = false;
+	}
+	if (Game::instance().bF3) {
+		Game::instance().bF3 = false;
+	}
+	if (Game::instance().bF4) {
+		Game::instance().bF4 = false;
+	}
+	if (Game::instance().bF5) {
+		Game::instance().bF5 = false;
+	}
 	//Change option
 	if (Game::instance().getSpecialKey(GLUT_KEY_UP) && !bUpPressed && !bPassword && !bControls && !bCredits) {
 		--index;
@@ -100,30 +124,57 @@ void Menu::update() {
 		MenuSound->play2D("audio/selection.mp3");
 		Sleep(350);
 		bEnterPressed = true;
-		if (bControls) //At instructions screen
-			bControls = false; //Exit instructions screen
-		else if (bCredits)
-			bCredits = false; //May be different for records!
-		else if (bPassword)
+		if (bControls) bControls = false;
+		else if (bCredits) bCredits = false;
+		else if (bPassword) {
+			Game::instance().b1 = false;
+			Game::instance().b2 = false;
+			Game::instance().b3 = false;
 			bPassword = false;
+		}
 		else { //Menu screen, check if options are selected
 			switch (index) {
-			case 0: //start game
-				Game::instance().setState(GAME);
+			case 0:
+				Game::instance().startingLevel = 1;
+				Game::instance().setState(GAME, false);
 				break;
-			case 1: //show instructions
+			case 1:
 				bControls = true;
 				break;
 			case 2:
-				bPassword = true;
-				break;
-			case 3: //show credits
 				bCredits = true;
+				break;
+			case 3:
+				bPassword = true;
 				break;
 			}
 		}
 	}
 	else if (!Game::instance().getKey(13)) bEnterPressed = false;
+
+	if (bPassword) {
+		if (Game::instance().b1) {
+			Game::instance().b1 = false;
+			bPassword = false;
+			index = 0;
+			Game::instance().startingLevel = 1;
+			Game::instance().setState(GAME, true);
+		}
+		else if (Game::instance().b2) {
+			Game::instance().b2 = false;
+			bPassword = false;
+			index = 0;
+			Game::instance().startingLevel = 2;
+			Game::instance().setState(GAME, true);
+		}
+		else if (Game::instance().b3) {
+			Game::instance().b3 = false;
+			bPassword = false;
+			index = 0;
+			Game::instance().startingLevel = 3;
+			Game::instance().setState(GAME, true);
+		}
+	}
 }
 
 void Menu::render() {
@@ -137,7 +188,11 @@ void Menu::render() {
 	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
 
 	if (bControls) controlsTextureQuad->render(controlsTexture);
-	else if (bPassword) passwordTextureQuad->render(passwordTexture);
+	else if (bPassword) {
+		passwordTextureQuad->render(passwordTexture);
+		password1 = "Introduce password";
+		text.render(password1, glm::vec2(GLUT_SCREEN_WIDTH / 2, GLUT_SCREEN_HEIGHT / 2), 25, glm::vec4(1, 1, 1, 1));
+	}
 	else if (bCredits) creditsTextureQuad->render(creditsTexture);
 	else {
 		mainTextureQuad->render(mainTexture);

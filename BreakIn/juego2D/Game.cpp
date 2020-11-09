@@ -15,15 +15,19 @@ void Game::init()
 	glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
 	menu.init();
 	scene.init();
-	setState(MENU);
+	setState(MENU, false);
 }
 
-void Game::setState(int state) {
+void Game::setState(int state, bool fromPassword) {
 	sceneAct = state;
 	if (sceneAct == MENU) {
 		GameSound->play2D("audio/breakout.mp3", true);
 	}
 	else if (sceneAct == GAME) {
+		if (fromPassword) {
+			fromPassword = false;
+			scene.reinit(startingLevel);
+		}
 		GameSound->stopAllSounds();
 	}
 	//Inicializar puntuación, vidas, sonido, ...
@@ -44,9 +48,10 @@ void Game::render()
 }
 
 void Game::keyPressed(int key)
-{;
-if (key == 27) {
-	bPlay = false;
+{
+	;
+	if (key == 27) {
+		bPlay = false;
 	}
 	keys[key] = true;
 }
@@ -54,6 +59,15 @@ if (key == 27) {
 void Game::keyReleased(int key)
 {
 	keys[key] = false;
+	if (key == 49) {
+		b1 = true;
+	}
+	else if (key == 50) {
+		b2 = true;
+	}
+	else if (key == 51) {
+		b3 = true;
+	}
 }
 
 void Game::specialKeyPressed(int key)
@@ -64,6 +78,21 @@ void Game::specialKeyPressed(int key)
 void Game::specialKeyReleased(int key)
 {
 	specialKeys[key] = false;
+	if (key == 1) {
+		bF1 = true;
+	}
+	else if (key == 2) {
+		bF2 = true;
+	}
+	else if (key == 3) {
+		bF3 = true;
+	}
+	else if (key == 4) {
+		bF4 = true;
+	}
+	else if (key == 5) {
+		bF5 = true;
+	}
 }
 
 void Game::mouseMove(int x, int y)

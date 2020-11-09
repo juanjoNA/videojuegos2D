@@ -1,5 +1,5 @@
 ﻿  Scene.cpp
-c:\users\juanjo\desktop\carpetas\universidad\4o\videojuegos\proyecto2d\videojuegos2d\breakin\breakin\juego2d\scene.cpp(363): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
-c:\users\juanjo\desktop\carpetas\universidad\4o\videojuegos\proyecto2d\videojuegos2d\breakin\breakin\juego2d\scene.cpp(364): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
-  juego2D.vcxproj -> C:\Users\Juanjo\Desktop\Carpetas\universidad\4o\Videojuegos\proyecto2D\videojuegos2D\BreakIn\BreakIn\Debug\juego2D.exe
-  juego2D.vcxproj -> C:\Users\Juanjo\Desktop\Carpetas\universidad\4o\Videojuegos\proyecto2D\videojuegos2D\BreakIn\BreakIn\Debug\juego2D.pdb (Full PDB)
+c:\users\imunozbu\documents\universitat\vj\videojuegos2d\breakin\juego2d\scene.cpp(440): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\imunozbu\documents\universitat\vj\videojuegos2d\breakin\juego2d\scene.cpp(441): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+  juego2D.vcxproj -> C:\Users\imunozbu\Documents\Universitat\VJ\videojuegos2D\BreakIn\Debug\juego2D.exe
+  juego2D.vcxproj -> C:\Users\imunozbu\Documents\Universitat\VJ\videojuegos2D\BreakIn\Debug\juego2D.pdb (Full PDB)

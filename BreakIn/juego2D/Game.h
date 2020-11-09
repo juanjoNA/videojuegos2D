@@ -17,21 +17,21 @@ class Game
 
 public:
 	Game() {}
-	
-	
+
+
 	static Game &instance()
 	{
 		static Game G;
-	
+
 		return G;
 	}
-	
+
 	void init();
 	bool update(int deltaTime);
 	void render();
 
-	void setState(int state);
-	
+	void setState(int state, bool fromPassword);
+
 	// Input callback methods
 	void keyPressed(int key);
 	void keyReleased(int key);
@@ -40,9 +40,19 @@ public:
 	void mouseMove(int x, int y);
 	void mousePress(int button);
 	void mouseRelease(int button);
-	
+
 	bool getKey(int key) const;
 	bool getSpecialKey(int key) const;
+
+	int startingLevel;
+	bool bF1 = false;
+	bool bF2 = false;
+	bool bF3 = false;
+	bool bF4 = false;
+	bool bF5 = false;
+	bool b1 = false;
+	bool b2 = false;
+	bool b3 = false;
 
 private:
 	bool bPlay;                       // Continue to play game?
@@ -50,7 +60,7 @@ private:
 	Scene scene;                      // Scene to render
 	Menu menu;
 	bool keys[256], specialKeys[256]; // Store key states so that 
-	                                  // we can have access at any time
+									  // we can have access at any time
 	int xPlay;
 	int yPlay;
 };

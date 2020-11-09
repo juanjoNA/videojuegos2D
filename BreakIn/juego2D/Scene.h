@@ -29,7 +29,8 @@ public:
 	void init();
 	void update(int deltaTime);
 	void render();
-	void reinit();
+	void reinit(int reinitLevel);
+	int level;
 
 private:
 	void initShaders();
@@ -72,7 +73,7 @@ private:
 	int subnivel;
 	float currentTime;
 	float yAnterior = 0;
-	int money, lives, points, level;
+	int money, lives, points;
 };
 
 

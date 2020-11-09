@@ -5,10 +5,10 @@
 #include "ShaderProgram.h"
 #include "Texture.h"
 #include "Sprite.h"
+#include "Text.h"
 
 class Menu {
 public:
-	Menu() {}
 
 	static Menu &instance()
 	{
@@ -16,6 +16,8 @@ public:
 
 		return M;
 	}
+
+	Menu();
 
 	void init();
 	void update();
@@ -29,21 +31,22 @@ private:
 	int numOptions;
 	bool bUpPressed, bDownPressed, bEnterPressed;
 	bool bCredits;
-	bool bControls; 
-	bool bPassword; 
+	bool bControls;
+	bool bPassword;
 
 	ShaderProgram texProgram;
 	glm::mat4 projection;
 	Texture titlesTexture;
 	TexturedQuad* mainTextureQuad;
 	TexturedQuad* controlsTextureQuad;
-	TexturedQuad* creditsTextureQuad; 
+	TexturedQuad* creditsTextureQuad;
 	TexturedQuad* passwordTextureQuad;
 	Texture mainTexture;
 	Texture controlsTexture;
 	Texture creditsTexture;
 	Texture passwordTexture;
 	Texture menuTexture;
+	Text text;
 	Sprite *play1Button;
 	Sprite *controls1Button;
 	Sprite *credits1Button;
@@ -52,4 +55,5 @@ private:
 	Sprite *controls2Button;
 	Sprite *credits2Button;
 	Sprite *password2Button;
+	string password1;
 };
