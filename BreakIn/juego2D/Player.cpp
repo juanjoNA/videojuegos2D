@@ -99,3 +99,10 @@ bool Player::collision(glm::ivec2 &pos, const glm::ivec2 &size) const
 
 	return false;
 }
+
+void Player::restart()
+{
+	sprite->changeAnimation(0);
+	start = false;
+	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
+}

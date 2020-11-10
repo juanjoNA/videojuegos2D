@@ -98,3 +98,8 @@ void Police::restart() {
 void Police::setStart(bool s) {
 	start = s;
 }
+
+void Police::setColision(bool colisionPlayer)
+{
+	colPlayer = colisionPlayer;
+}

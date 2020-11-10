@@ -26,10 +26,8 @@ public:
 	int getSpeed() { return speed; }
 	//metodes de colisió
 	bool collision(glm::ivec2 &pos, const glm::ivec2 &size) const;
-	/*bool collisionLeft(const glm::ivec2 &pos, const glm::ivec2 &size) const;
-	bool collisionMiddle(const glm::ivec2 &pos, const glm::ivec2 &size) const;
-	*/
 	bool isStarted() { return start; };
+	void restart();
 
 private:
 	glm::ivec2 tileMapDispl, posPlayer, oldPosPlayer, direction;

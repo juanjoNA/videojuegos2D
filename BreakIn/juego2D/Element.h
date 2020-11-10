@@ -33,6 +33,7 @@ public:
 	void free();
 	void activate();
 	void executedConsequence();
+	void setActivate(bool activated);
 
 private:
 	glm::ivec2 tileMapDispl, posElement, size;

@@ -107,12 +107,21 @@ void Scene::update(int deltaTime)
 	player->update(deltaTime, subnivel);
 	ball->update(deltaTime, objectsInGame, subnivel);
 	police->update(deltaTime, player, subnivel);
+	if (police->catchPlayer()) {
+		pierdeVida();
+		police->setColision(false);
+	}
 	bool open = false;
 	for (int i = objectsInGame.size()-1; i >= 0 ; i--) {
 		objectsInGame.at(i).update(deltaTime);
 		if (objectsInGame.at(i).isActivated()) {
 			if (objectsInGame.at(i).getType() == 2) { //ALARMA
 				if (!police->isStarted()) police->setStart(true);
+				else if (police->catchPlayer()) {
+					pierdeVida();
+					police->setColision(false);
+					objectsInGame.at(i).executedConsequence();
+				}
 			}
 			else {	//LLAVE
 				open = true;
@@ -126,9 +135,7 @@ void Scene::update(int deltaTime)
 	}
 	ballPos = ball->position();
 	playerPos = player->getPosition();
-	//cout << "points = " << points << endl;
-	//cout << "money = " << money << endl << endl;
-	cout << "posBall = (" << ballPos.x << " , " << ballPos.y << endl << endl;
+
 	// Bajar nivel?
 	if (Game::instance().bF1) {
 		Game::instance().bF1 = false;
@@ -152,11 +159,7 @@ void Scene::update(int deltaTime)
 				Game::instance().bF5 = false;
 				player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 				player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize() + LEVEL_HEIGHT));
-				player->setTileMap(map);
 
-				ball->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, player);
-				ball->setPosition(glm::vec2(player->getPosition().x + (player->getSize().x) / 2, player->getPosition().y - player->getSize().y));
-				ball->setTileMap(map);
 				subnivel = 2;
 				setGameTextPosition(subnivel);
 			}
@@ -170,25 +173,15 @@ void Scene::update(int deltaTime)
 		case 2:
 			if (Game::instance().bF4) {
 				Game::instance().bF4 = false;
-				player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 				player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize()));
-				player->setTileMap(map);
 
-				ball->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, player);
-				ball->setPosition(glm::vec2(player->getPosition().x + (player->getSize().x) / 2, player->getPosition().y - player->getSize().y));
-				ball->setTileMap(map);
 				subnivel = 3;
 				setGameTextPosition(subnivel);
 			}
 			else if (Game::instance().bF5) {
 				Game::instance().bF5 = false;
-				player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 				player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize() + LEVEL_HEIGHT * 2));
-				player->setTileMap(map);
 
-				ball->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, player);
-				ball->setPosition(glm::vec2(player->getPosition().x + (player->getSize().x) / 2, player->getPosition().y - player->getSize().y));
-				ball->setTileMap(map);
 				subnivel = 1;
 				setGameTextPosition(subnivel);
 			}
@@ -207,13 +200,8 @@ void Scene::update(int deltaTime)
 		case 1:
 			if (Game::instance().bF4) {
 				Game::instance().bF4 = false;
-				player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 				player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize() + LEVEL_HEIGHT));
-				player->setTileMap(map);
 
-				ball->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, player);
-				ball->setPosition(glm::vec2(player->getPosition().x + (player->getSize().x) / 2, player->getPosition().y - player->getSize().y));
-				ball->setTileMap(map);
 				subnivel = 2;
 				setGameTextPosition(subnivel);
 			}
@@ -548,10 +536,12 @@ bool Scene::loadObjects(const string &loadObjectsFile) {
 
 void Scene::pierdeVida() {
 	SceneSound->play2D("audio/gameOver.mp3");
-	Sleep(2000);
 	--lives;
 	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize() + LEVEL_HEIGHT * 2));
+	player->restart();
 	ball->setPosition(glm::vec2(player->getPosition().x + (player->getSize().x) / 2, player->getPosition().y - player->getSize().y));
+	ball->finish();
+	Sleep(2000);
 }
 
 void Scene::setGameTextPosition(int subnivel) {
@@ -618,6 +608,5 @@ void Scene::reinit(int reinitLevel)
 
 	ball->setPosition(glm::vec2(player->getPosition().x + (player->getSize().x) / 2, player->getPosition().y - player->getSize().y));
 	ball->setTileMap(map);
-
 	currentTime = 0.0f;
 }

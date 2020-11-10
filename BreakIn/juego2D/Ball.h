@@ -30,9 +30,7 @@ public:
 private:
 	glm::ivec2 tileMapDispl, posBall, oldPosBall;
 	glm::vec2 velocitat;
-	int startY;
 	bool start;
-	float bounceAngle;
 	Texture spritesheet;
 	Sprite *sprite;
 	TileMap *map;

@@ -138,3 +138,6 @@ void Element::executedConsequence()
 {
 	activateConsequence = false;
 }
+
+
+

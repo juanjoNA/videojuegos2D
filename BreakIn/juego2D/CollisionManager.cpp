@@ -168,73 +168,123 @@ bool CollisionManager::collisionPlayerMap(glm::ivec2 &pos, int subnivel, const g
 
 bool CollisionManager::collisionObjects(glm::ivec2 &pos, glm::ivec2 &oldPos, const glm::ivec2 &size, vector<class Element>& elements, glm::vec2 &velocitat) const
 {
+	vector<int> eCollision;
+	bool colision = false;
+
 	for (int i = 0; i < elements.size(); i++) {
-		int xmin = pos.x;
-		int xmax = pos.x + size.x;
-		int ymin = pos.y;
-		int ymax = pos.y + size.y;
-		int posX = elements.at(i).getPosition().x;
-		int posY = elements.at(i).getPosition().y;
-		int sizeX = elements.at(i).getSize().x;
-		int sizeY = elements.at(i).getSize().y;
-
-		if (
-			((posX + sizeX) >= xmin) &&
-			(xmax >= posX) &&
-			((posY + sizeY) >= ymin) &&
-			(ymax >= posY)
-			)
-		{
-			
-			int type = elements.at(i).getType();
-
-			int resistance = elements.at(i).collision();
-			glm::vec2 c = glm::vec2((pos.x + pos.x + size.x) / 2, (pos.y + pos.y + size.y) / 2);
-
-			if (c.x >= posX && c.x <= posX + sizeX) velocitat.y = -velocitat.y;			//GOLPEA POR ARRIBA O POR ABAJO
-			else if(c.y >= posY && c.y <= posY + sizeY) velocitat.x = -velocitat.x;		//GOLPEA POR UN LATERAL
-			else {
-				float difX, difY;
-				if (c.x < posX) {
-					difX = posX - c.x;
-					if (c.y < posY) difY = posY - c.y;		//CUADRANTE SUPERIOR IZQUIERDO
-					else difY = c.y - posY+sizeY;			//CUADRANTE INFERIOR IZQUIERDO
-				}
-				else {
-					difX = posX+sizeX - c.x;
-					if (c.y < posY) difY = posY - c.y;		//CUADRANTE SUPERIOR DERECHO
-					else difY = c.y - posY+sizeY;			//CUADRANTE INFERIOR DERECHO
-				}
-
-				if (difX < difY) velocitat.y = -velocitat.y;
-				else if (difX > difY) velocitat.x = -velocitat.x;
-				else velocitat = -velocitat;
-			}
-
-			if (type == 0 && elements.at(i).getResistance() == 0) {
-				//Brick
-				CollisionSound->play2D("audio/brickBreak.wav");
-			}
-			else if (type == 0) {
-				CollisionSound->play2D("audio/brick.mp3");
-			}
-			else if (type == 1) {
-				//Money
-				CollisionSound->play2D("audio/coin.wav");
-			}
-			else if (type == 2) {
-				//Alarm
-				CollisionSound->play2D("audio/alarm.mp3");
-			}
-			else {
-				//Key
-				CollisionSound->play2D("audio/key.mp3");
-			}
-			return true;
+		if (hayColision(pos, size, elements.at(i).getPosition(), elements.at(i).getSize())) {
+			eCollision.push_back(i);
+			if(!colision) colision = true;
 		}
 	}
+		
+	if (colision) {
+		glm::vec2 cBall, cE, posE, sizeE;
+		float d=1000, dAux, difX, difY;
+		int posicionVec, elemPos, type;
 
-	return false;
+		cBall = glm::vec2( (pos.x + pos.x + size.x) / 2, (pos.y + pos.y + size.y) / 2);
+		elements.at(elemPos).collision();
+
+		for (int j = 0; j < eCollision.size(); j++) {
+			posicionVec = eCollision.at(j);
+			posE = elements.at(posicionVec).getPosition();
+			sizeE = elements.at(posicionVec).getSize();
+			cE = glm::vec2((posE.x + posE.x + sizeE.x) / 2, (posE.y + posE.y + sizeE.y) / 2);
+			dAux = glm::distance(cBall, cE);
+
+			if (dAux < d) {
+				elemPos = eCollision.at(j);
+				d = dAux;
+			}
+		}
+
+		posE = elements.at(elemPos).getPosition();
+		sizeE = elements.at(elemPos).getSize();
+		type = elements.at(elemPos).getType();
+
+		if (cBall.x >= posE.x && cBall.x <= posE.x + sizeE.x) velocitat.y = -velocitat.y;			//GOLPEA POR ARRIBA O POR ABAJO
+		else if (cBall.y >= posE.y && cBall.y <= posE.y + sizeE.y) velocitat.x = -velocitat.x;		//GOLPEA POR UN LATERAL
+		else {
+			bool topLeft, topRight, bottomLeft, bottomRight;
+			topLeft = (pos.x <= posE.x+sizeE.x && pos.x > posE.x && pos.y >= posE.y && pos.y <= posE.y+sizeE.y);
+			topRight = (pos.x < posE.x && pos.x+size.x >= posE.x && pos.y >= posE.y && pos.y <= posE.y + sizeE.y);
+			bottomLeft = (pos.x <= posE.x + sizeE.x && pos.x > posE.x && pos.y+size.y >= posE.y && pos.y+size.y <= posE.y + sizeE.y);
+			bottomRight = (pos.x < posE.x && pos.x + size.x >= posE.x && pos.y+size.y >= posE.y && pos.y+size.y <= posE.y + sizeE.y);;
+
+			if (topLeft) {
+				if (oldPos.y < pos.y) velocitat.x = -velocitat.x;
+				else if (oldPos.x < pos.x) velocitat.y = -velocitat.y;
+				else if (bottomRight) velocitat = -velocitat;
+				else {
+					difX = cBall.x - posE.x;
+					difY = cBall.y - posE.y;
+					if (difX > difY) velocitat.x = -velocitat.x;
+					else if (difY > difX)  velocitat.y = -velocitat.y;
+					else velocitat = -velocitat;
+				}
+			}
+			else if (topRight) {
+				if (oldPos.y < pos.y) velocitat.x = -velocitat.x;
+				else if (oldPos.x > pos.x) velocitat.y = -velocitat.y;
+				else if (bottomLeft) velocitat = -velocitat;
+				else {
+					difX = posE.x+sizeE.x - cBall.x;
+					difY = cBall.y - posE.y;
+					if (difY == 0) velocitat.x = -velocitat.x;
+					else if (difX > difY) velocitat.x = -velocitat.x;
+					else if (difY > difX)  velocitat.y = -velocitat.y;
+					else velocitat = -velocitat;
+				}
+			}
+			else if (bottomLeft) {
+				if (oldPos.y > pos.y) velocitat.x = -velocitat.x;
+				else if (oldPos.x < pos.x) velocitat.y = -velocitat.y;
+				else if (topRight) velocitat = -velocitat;
+				else {
+					difX = cBall.x - posE.x;
+					difY = posE.y+sizeE.y - cBall.y;
+					if (difX > difY) velocitat.x = -velocitat.x;
+					else if (difY > difX)  velocitat.y = -velocitat.y;
+					else velocitat = -velocitat;
+				}
+			}
+			else {
+				if (oldPos.y > pos.y) velocitat.x = -velocitat.x;
+				else if (oldPos.x > pos.x) velocitat.y = -velocitat.y;
+				else if (topRight) velocitat = -velocitat;
+				else {
+					difX = posE.x+size.x - cBall.x;
+					difY = posE.y+size.y - cBall.y;
+					if (difX > difY) velocitat.x = -velocitat.x;
+					else if (difY > difX)  velocitat.y = -velocitat.y;
+					else velocitat = -velocitat;
+				}
+			}
+		}
+
+		switch (type) {
+			case 0:
+				if (elements.at(elemPos).getResistance()==0) CollisionSound->play2D("audio/brickBreak.wav");
+				else CollisionSound->play2D("audio/brick.mp3");
+				break;
+			case 1: 
+				CollisionSound->play2D("audio/coin.wav");
+				break;
+			case 2:
+				CollisionSound->play2D("audio/alarm.mp3");
+				break;
+			case 3:
+				//Llave
+				CollisionSound->play2D("audio/key.mp3");
+				break;
+			case 4:
+				//puerta
+				break;
+		}
+	}
+	
+	return colision;
 }
 
 int CollisionManager::collisionMisil(glm::ivec2 &posMisil, const glm::ivec2 &sizeMisil, Player *player) const
@@ -264,14 +314,30 @@ bool CollisionManager::collisionPolice(glm::ivec2 & pos, Player * player, glm::i
 	int ymax = pos.y + size.y;
 
 	if (
-		(player->getPosition().x + player->getSize().x >= xmin) &&
-		(xmax >= player->getPosition().x) &&
-		(player->getPosition().y + player->getSize().y >= ymin) &&
-		(ymax >= player->getPosition().y)
+		(player->getPosition().x + player->getSize().x > xmin) &&
+		(xmax > player->getPosition().x) &&
+		(player->getPosition().y + player->getSize().y > ymin-3) &&
+		(ymax-3 > player->getPosition().y)
 		)
 	{
 		return true;
 	}
 
 	return false;
+}
+
+bool CollisionManager::hayColision(glm::ivec2 & pos1, const glm::ivec2 & size1, const glm::ivec2 & pos2, const glm::ivec2 & size2) const
+{
+	int xmin1 = pos1.x;
+	int xmax1 = pos1.x + size1.x;
+	int ymin1 = pos1.y;
+	int ymax1 = pos1.y + size1.y;
+
+	int xmin2 = pos2.x;
+	int xmax2 = pos2.x + size2.x;
+	int ymin2 = pos2.y;
+	int ymax2 = pos2.y + size2.y;
+
+	if ((xmax2 >= xmin1) && (xmax1 >= xmin2) && (ymax2 >= ymin1) && (ymax1 >= ymin2)) return true;
+	else return false;
 }

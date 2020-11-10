@@ -26,11 +26,10 @@ public:
 	glm::ivec2 getSize();
 	glm::ivec2 moveToPlayer(Player *player);
 	void restart();
-	bool isStarted() { return start; }
+	bool isStarted() { return start; };
 	void setStart(bool start);
-	bool catchPlayer() { return colPlayer; }
-	//metodes de colisió
-	bool collision(glm::ivec2 &pos, Player *player, glm::ivec2 &size) const;
+	void setColision(bool colisionPlayer);
+	bool catchPlayer() { return colPlayer; };
 	
 
 private:

@@ -25,6 +25,7 @@ public:
 	bool collisionObjects(glm::ivec2 &pos, glm::ivec2 &oldPos, const glm::ivec2 &size, vector<class Element>& elements, glm::vec2 &velocitat) const;
 	int collisionMisil(glm::ivec2 &posMisil, const glm::ivec2 &sizeMisil, Player *player) const;
 	bool collisionPolice(glm::ivec2 &pos, Player *player, glm::ivec2 &size);
+	bool hayColision(glm::ivec2 &pos1, const glm::ivec2 &size1, const glm::ivec2 &pos2, const glm::ivec2 &size2) const;
 
 private:
 
