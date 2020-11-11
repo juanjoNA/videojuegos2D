@@ -68,6 +68,31 @@
     <Media Include="audio\level1.mp3" />
     <Media Include="audio\selection.mp3" />
   </ItemGroup>
+  <ItemGroup>
+    <Font Include="fonts\DroidSerif-Bold.ttf" />
+    <Font Include="fonts\DroidSerif-BoldItalic.ttf" />
+    <Font Include="fonts\DroidSerif-Italic.ttf" />
+    <Font Include="fonts\DroidSerif.ttf" />
+    <Font Include="fonts\LemonMilk.ttf" />
+    <Font Include="fonts\OpenSans-Bold.ttf" />
+    <Font Include="fonts\OpenSans-BoldItalic.ttf" />
+    <Font Include="fonts\OpenSans-ExtraBold.ttf" />
+    <Font Include="fonts\OpenSans-ExtraBoldItalic.ttf" />
+    <Font Include="fonts\OpenSans-Italic.ttf" />
+    <Font Include="fonts\OpenSans-Light.ttf" />
+    <Font Include="fonts\OpenSans-LightItalic.ttf" />
+    <Font Include="fonts\OpenSans-Regular.ttf" />
+    <Font Include="fonts\OpenSans-Semibold.ttf" />
+    <Font Include="fonts\OpenSans-SemiboldItalic.ttf" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="fonts\Droid_Serif.zip" />
+    <None Include="fonts\open-sans.zip" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="fonts\Apache License.txt" />
+    <Text Include="fonts\LICENSE.txt" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{5BE6CA2A-E5A8-40CC-9015-047CE0C78036}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>

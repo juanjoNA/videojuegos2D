@@ -86,16 +86,22 @@ void Game::keyPressed(int key)
 void Game::keyReleased(int key)
 {
 	keys[key] = false;
-	if (key == 49) {
-		b1 = true;
+	if (key == 8) {
+		borra = true;
 	}
-	else if (key == 50) {
-		b2 = true;
+	else if (key == 32) {
+		spacePressed = true;
 	}
-	else if (key == 51) {
-		b3 = true;
+	else if (key >= 65 && key <= 90) {
+		letra = char(key);
+		nuevaLetra = true;
 	}
-	else if (key == 103) {
+	else if (key >= 97 && key <= 122) {
+		letra = char(key - 32);
+		nuevaLetra = true;
+	}
+	
+	if (key == 103) {
 		if (godMode == false) godMode = true;
 		else godMode = false;
 	}

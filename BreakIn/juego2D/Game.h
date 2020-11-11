@@ -57,6 +57,10 @@ public:
 	bool b3 = false;
 	bool godMode = false;
 	bool gameOver = false;
+	char letra;
+	bool nuevaLetra = false;
+	bool borra = false;
+	bool spacePressed = false;
 
 	void initGamePropierties();
 

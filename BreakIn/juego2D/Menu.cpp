@@ -36,6 +36,8 @@ void Menu::init() {
 	bPassword = false;
 	bControls = false;
 
+	passwordAtempt = "";
+
 	glm::vec2 texCoords[2] = { glm::vec2(0.f, 0.f), glm::vec2(1.f, 1.f) };
 	glm::vec2 geomGUI[2] = { glm::vec2(0.f, 0.f), glm::vec2(float(SCREEN_WIDTH), float(SCREEN_HEIGHT)) };
 
@@ -49,7 +51,7 @@ void Menu::init() {
 	creditsTexture.loadFromFile("images/credits.png", TEXTURE_PIXEL_FORMAT_RGB);
 
 	passwordTextureQuad = TexturedQuad::createTexturedQuad(geomGUI, texCoords, texProgram);
-	passwordTexture.loadFromFile("images/fondoBreakIn.png.jpg", TEXTURE_PIXEL_FORMAT_RGB);
+	passwordTexture.loadFromFile("images/password.png", TEXTURE_PIXEL_FORMAT_RGB);
 
 	menuTexture.loadFromFile("images/menuSpritesheet.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	menuTexture.setMinFilter(GL_NEAREST);
@@ -82,10 +84,11 @@ void Menu::init() {
 	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
 
 	// Select which font you want to use
-	if (!text.init("fonts/OpenSans-Regular.ttf"))
+	if (!text.init("fonts/LemonMilk.ttf"))
 		//if(!text.init("fonts/OpenSans-Bold.ttf"))
 		//if(!text.init("fonts/DroidSerif.ttf"))
 		cout << "Could not load font!!!" << endl;
+	else cout << "Font loaded succesfully" << endl;
 }
 
 void Menu::update() {
@@ -145,12 +148,56 @@ void Menu::update() {
 				bCredits = true;
 				break;
 			case 3:
+				Game::instance().nuevaLetra = false;
+				Game::instance().borra = false;
+				Game::instance().spacePressed = false;
 				bPassword = true;
 				break;
 			}
 		}
 	}
 	else if (!Game::instance().getKey(13)) bEnterPressed = false;
+
+	if (bPassword) {
+
+		if (Game::instance().nuevaLetra && passwordAtempt.size() <= 20) {
+			passwordAtempt += Game::instance().letra;
+			Game::instance().nuevaLetra = false;
+		}
+		else if (Game::instance().borra) {
+			if (passwordAtempt.size() >= 1) passwordAtempt.resize(passwordAtempt.size() - 1);
+			Game::instance().borra = false;
+		}
+
+		if (Game::instance().spacePressed) {
+			Game::instance().spacePressed = false;
+			if (passwordAtempt == password1) {
+				Game::instance().sceneAnt = TELE_1;
+				Game::instance().setState(ANIMATION);
+				bPassword = false;
+				index = 0;
+				passwordAtempt = "";
+			}
+			else if (passwordAtempt == password2) {
+				Game::instance().sceneAnt = TELE_2;
+				Game::instance().setState(ANIMATION);
+				bPassword = false;
+				index = 0;
+				passwordAtempt = "";
+			}
+			else if (passwordAtempt == password3) {
+				Game::instance().sceneAnt = TELE_3;
+				Game::instance().setState(ANIMATION);
+				bPassword = false;
+				index = 0;
+				passwordAtempt = "";
+			}
+			else {
+				wrongPassword = true;
+				passwordAtempt = "";
+			}
+		}
+	}
 
 	/*if (bPassword) {
 		if (Game::instance().b1) {
@@ -183,10 +230,15 @@ void Menu::render() {
 
 	if (bControls) controlsTextureQuad->render(controlsTexture);
 	else if (bPassword) {
-		cout << "renderizaa" << endl;
 		passwordTextureQuad->render(passwordTexture);
-		password1 = "Introduce password";
-		text.render(password1, glm::vec2(GLUT_SCREEN_WIDTH / 2, GLUT_SCREEN_HEIGHT / 2), 25, glm::vec4(1, 1, 1, 1));
+		text.render("Introduce a password", glm::vec2(150, SCREEN_HEIGHT / 4), 30, glm::vec4(1.0f, 0.5f, 0.31f, 1));
+		if (wrongPassword) {
+			text.render("WRONG PASSWORD", glm::vec2(150, SCREEN_HEIGHT / 3), 20, glm::vec4(1.0f, 0.0f, 0.0f, 1));
+			wrongPassword = false;
+		}
+		else {
+			text.render(passwordAtempt, glm::vec2(150, SCREEN_HEIGHT / 3), 20, glm::vec4(1.0f, 1.0f, 1.0f, 1));
+		}
 	}
 	else if (bCredits) creditsTextureQuad->render(creditsTexture);
 	else {

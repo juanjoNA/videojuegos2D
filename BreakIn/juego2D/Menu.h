@@ -47,6 +47,10 @@ private:
 	Texture passwordTexture;
 	Texture menuTexture;
 	Text text;
+	string password1 = "TETRIS";
+	string password2 = "PACMAN";
+	string password3 = "TEKKEN";
+	bool wrongPassword = false;
 	Sprite *play1Button;
 	Sprite *controls1Button;
 	Sprite *credits1Button;
@@ -55,5 +59,5 @@ private:
 	Sprite *controls2Button;
 	Sprite *credits2Button;
 	Sprite *password2Button;
-	string password1;
+	string passwordAtempt;
 };
