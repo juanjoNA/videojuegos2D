@@ -95,6 +95,10 @@ void Game::keyReleased(int key)
 	else if (key == 51) {
 		b3 = true;
 	}
+	else if (key == 103) {
+		if (godMode == false) godMode = true;
+		else godMode = false;
+	}
 }
 
 void Game::specialKeyPressed(int key)

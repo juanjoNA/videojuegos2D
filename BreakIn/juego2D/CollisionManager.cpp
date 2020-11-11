@@ -5,6 +5,7 @@
 #include "CollisionManager.h"
 #include "TileMap.h"
 #include "Misil.h"
+#include "Game.h"
 #include <irrKlang.h>
 using namespace irrklang;
 
@@ -122,25 +123,31 @@ bool CollisionManager::collisionBallPlayer(glm::ivec2 &pos, glm::ivec2 &oldPos, 
 			float percentatgeCollision = ((player->getPosition().x + player->getSize().x) - center.x) / player->getSize().x;
 
 			if (percentatgeCollision <= 0.2f) {
-				velocitat.x = 5.f;
+				if (Game::instance().godMode) velocitat.x = 0.f;
+				else velocitat.x = 5.f;
 			}
 			else if (percentatgeCollision > 0.2f && percentatgeCollision <= 0.35f) {
-				velocitat.x = 3.f;
+				if (Game::instance().godMode) velocitat.x = 0.f;
+				else velocitat.x = 3.f;
 			}
 			else if (percentatgeCollision > 0.35f && percentatgeCollision < 0.5f) {
-				velocitat.x = 1.f;
+				if (Game::instance().godMode) velocitat.x = 0.f;
+				else velocitat.x = 1.f;
 			}
 			else if (percentatgeCollision == 0.5f) {
 				velocitat.x = 0;
 			}
 			else if (percentatgeCollision > 0.5f && percentatgeCollision <= 0.65f) {
-				velocitat.x = -1.f;
+				if (Game::instance().godMode) velocitat.x = 0.f;
+				else velocitat.x = -1.f;
 			}
 			else if (percentatgeCollision > 0.65f && percentatgeCollision <= 0.8f) {
-				velocitat.x = -3.f;
+				if (Game::instance().godMode) velocitat.x = 0.f;
+				else velocitat.x = -3.f;
 			}
 			else {
-				velocitat.x = -5.f;
+				if (Game::instance().godMode) velocitat.x = 0.f;
+				else velocitat.x = -5.f;
 			}
 			CollisionSound->play2D("audio/bounce.wav");
 			return true;
@@ -152,10 +159,6 @@ bool CollisionManager::collisionBallPlayer(glm::ivec2 &pos, glm::ivec2 &oldPos, 
 
 bool CollisionManager::collisionPlayerMap(glm::ivec2 &pos, int subnivel, const glm::ivec2 & size, TileMap *tileMap, glm::ivec2 direction) const
 {
-	cout << (pos.x + size.x + direction.x) << endl;
-	cout << (pos.y + direction.y) << endl;
-
-
 	int ymin = 16 + (432 * (3 - subnivel) + ((3 - subnivel) * 16));
 	int ymax = 432 + (ymin - 16);
 

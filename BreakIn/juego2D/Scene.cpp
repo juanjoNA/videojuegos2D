@@ -43,6 +43,8 @@ void Scene::init()
 	level = 1;
 	subnivel = 1;
 
+	Game::instance().godMode = false;
+
 	map1 = TileMap::createTileMap("levels/level01.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 	map2 = TileMap::createTileMap("levels/level02.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 	map3 = TileMap::createTileMap("levels/level03.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
@@ -621,6 +623,8 @@ void Scene::reinit(int reinitLevel)
 		break;
 	}
 	subnivel = 1;
+
+	Game::instance().godMode = false;
 
 	setGameTextPosition(subnivel);
 

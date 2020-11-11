@@ -55,6 +55,7 @@ public:
 	bool b1 = false;
 	bool b2 = false;
 	bool b3 = false;
+	bool godMode = false;
 	bool gameOver = false;
 
 	void initGamePropierties();
