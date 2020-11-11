@@ -184,7 +184,7 @@ bool CollisionManager::collisionObjects(glm::ivec2 &pos, glm::ivec2 &oldPos, con
 		int posicionVec, elemPos, type;
 
 		cBall = glm::vec2( (pos.x + pos.x + size.x) / 2, (pos.y + pos.y + size.y) / 2);
-		elements.at(elemPos).collision();
+		
 
 		for (int j = 0; j < eCollision.size(); j++) {
 			posicionVec = eCollision.at(j);
@@ -198,6 +198,7 @@ bool CollisionManager::collisionObjects(glm::ivec2 &pos, glm::ivec2 &oldPos, con
 				d = dAux;
 			}
 		}
+		elements.at(elemPos).collision();
 
 		posE = elements.at(elemPos).getPosition();
 		sizeE = elements.at(elemPos).getSize();
