@@ -84,6 +84,11 @@ static void idleCallback()
 	}
 }
 
+void resize(int width, int height) {
+	glutReshapeWindow(640, 500);
+}
+
+
 
 int main(int argc, char **argv)
 {
@@ -91,7 +96,7 @@ int main(int argc, char **argv)
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH);
 	glutInitWindowPosition(100, 100);
-	glutInitWindowSize(SCREEN_WIDTH, SCREEN_HEIGHT);
+	glutInitWindowSize(640, 500);
 
 	glutCreateWindow(argv[0]);
 	glutDisplayFunc(drawCallback);
@@ -102,6 +107,7 @@ int main(int argc, char **argv)
 	glutSpecialUpFunc(specialUpCallback);
 	glutMouseFunc(mouseCallback);
 	glutMotionFunc(motionCallback);
+	glutReshapeFunc(resize);
 
 	// GLEW will take care of OpenGL extension functions
 	glewExperimental = GL_TRUE;

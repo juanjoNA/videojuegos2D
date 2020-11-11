@@ -340,11 +340,11 @@ void Scene::render()
 		levelTitle->render();
 		roomTitle->render();
 
-		text.render(to_string(money), glm::vec2(430, 80), 25, glm::vec4(1, 1, 1, 1));
-		text.render(to_string(points), glm::vec2(430, 170), 25, glm::vec4(1, 1, 1, 1));
-		text.render(to_string(lives), glm::vec2(430, 260), 25, glm::vec4(1, 1, 1, 1));
-		text.render(to_string(level), glm::vec2(430, 350), 25, glm::vec4(1, 1, 1, 1));
-		text.render(to_string(subnivel), glm::vec2(430, 440), 25, glm::vec4(1, 1, 1, 1));
+		text.render(to_string(money), glm::vec2(430, 85), 25, glm::vec4(1, 1, 1, 1));
+		text.render(to_string(points), glm::vec2(430, 180), 25, glm::vec4(1, 1, 1, 1));
+		text.render(to_string(lives), glm::vec2(430, 275), 25, glm::vec4(1, 1, 1, 1));
+		text.render(to_string(level), glm::vec2(430, 370), 25, glm::vec4(1, 1, 1, 1));
+		text.render(to_string(subnivel), glm::vec2(430, 465), 25, glm::vec4(1, 1, 1, 1));
 }
 
 void Scene::initShaders()
