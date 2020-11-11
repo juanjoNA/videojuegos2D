@@ -512,7 +512,7 @@ void Scene::createDoor()
 	animations[0] = glm::vec2(0.f, 0.f);
 	animations[1] = glm::vec2(0.f, 0.1f);
 	animations[2] = glm::vec2(0.f, 0.2f);
-	door->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::ivec2(128-level*32, 16), posIn, sizeIn, 1, animations, 'D');
+	door->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::ivec2(160, 16), posIn, sizeIn, 1, animations, 'D');
 	objVector.push_back(*door);
 }
 
