@@ -59,10 +59,13 @@ void Animation::update(int deltaTime)
 	if (Game::instance().sceneAnt == -1 || Game::instance().sceneAnt == GAME_OVER || Game::instance().sceneAnt == LEVEL_3) {
 		Game::instance().setState(MENU);
 	}
-	else if (Game::instance().sceneAnt == LEVEL_1 || Game::instance().sceneAnt == PASSWORD_2) {
+	else if (Game::instance().sceneAnt == TELE_1) {
+		Game::instance().setState(LEVEL_1);
+	}
+	else if (Game::instance().sceneAnt == LEVEL_1 || Game::instance().sceneAnt == TELE_2) {
 		Game::instance().setState(LEVEL_2);
 	}
-	else if (Game::instance().sceneAnt == LEVEL_2 || Game::instance().sceneAnt == PASSWORD_3) {
+	else if (Game::instance().sceneAnt == LEVEL_2 || Game::instance().sceneAnt == TELE_3) {
 		Game::instance().setState(LEVEL_3);
 	}
 }
@@ -97,11 +100,15 @@ void Animation::render()
 		controlsTextureQuad->render(controlsTexture);
 		text.render("Animación victoria", glm::vec2(230, 80), 25, glm::vec4(1, 1, 1, 1));
 	}
-	else if (Game::instance().sceneAnt == PASSWORD_2) {
+	else if (Game::instance().sceneAnt == TELE_1) {
+		controlsTextureQuad->render(controlsTexture);
+		text.render("Teletransporting to Level 1", glm::vec2(230, 80), 25, glm::vec4(1, 1, 1, 1));
+	}
+	else if (Game::instance().sceneAnt == TELE_2) {
 		controlsTextureQuad->render(controlsTexture);
 		text.render("Teletransporting to Level 2", glm::vec2(230, 80), 25, glm::vec4(1, 1, 1, 1));
 	}
-	else if (Game::instance().sceneAnt == PASSWORD_3) {
+	else if (Game::instance().sceneAnt == TELE_3) {
 		controlsTextureQuad->render(controlsTexture);
 		text.render("Teletransporting to Level 3", glm::vec2(230, 80), 25, glm::vec4(1, 1, 1, 1));
 	}

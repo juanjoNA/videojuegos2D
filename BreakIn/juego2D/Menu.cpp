@@ -135,6 +135,7 @@ void Menu::update() {
 		else { //Menu screen, check if options are selected
 			switch (index) {
 			case 0:
+				Game::instance().sceneAnt = MENU;
 				Game::instance().setState(LEVEL_1);
 				break;
 			case 1:

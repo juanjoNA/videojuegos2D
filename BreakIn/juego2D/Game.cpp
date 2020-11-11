@@ -17,9 +17,16 @@ void Game::init()
 	sceneAnt = -1;
 }
 
+void Game::initGamePropierties() {
+	money = 0;
+	lives = 4;
+	points = 0;
+}
+
 void Game::setState(int state) {
 	sceneAct = state;
 	if (sceneAct == MENU) {
+		initGamePropierties();
 		if (sceneAnt == -1) {
 			menu.init();
 			scene.init();
@@ -32,6 +39,9 @@ void Game::setState(int state) {
 		GameSound->play2D("audio/breakout.mp3", true);
 	}
 	else if (sceneAct == LEVEL_1) {
+		if (sceneAnt != MENU) {
+			scene.reinit(1);
+		}
 		GameSound->stopAllSounds();
 	}
 	else if (sceneAct == LEVEL_2) {

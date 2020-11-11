@@ -23,11 +23,6 @@ ISoundEngine *SceneSound = createIrrKlangDevice();
 
 Scene::Scene()
 {
-	money = 0;
-	lives = 4;
-	points = 0;
-	level = 1;
-	subnivel = 1;
 }
 
 Scene::~Scene()
@@ -41,6 +36,13 @@ Scene::~Scene()
 void Scene::init()
 {
 	initShaders();
+
+	money = Game::instance().money;
+	points = Game::instance().points;
+	lives = Game::instance().lives;
+	level = 1;
+	subnivel = 1;
+
 	map1 = TileMap::createTileMap("levels/level01.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 	map2 = TileMap::createTileMap("levels/level02.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 	map3 = TileMap::createTileMap("levels/level03.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
@@ -131,15 +133,33 @@ void Scene::update(int deltaTime)
 	// Bajar nivel?
 	if (Game::instance().bF1) {
 		Game::instance().bF1 = false;
-		if (level != 1) reinit(1);
+		if (level != 1) {
+			Game::instance().money += money;
+			Game::instance().lives = lives;
+			Game::instance().points += points;
+			Game::instance().sceneAnt = TELE_1;
+			Game::instance().setState(ANIMATION);
+		}
 	}
 	else if (Game::instance().bF2) {
 		Game::instance().bF2 = false;
-		if (level != 2) reinit(2);
+		if (level != 2) {
+			Game::instance().money += money;
+			Game::instance().lives = lives;
+			Game::instance().points += points;
+			Game::instance().sceneAnt = TELE_2;
+			Game::instance().setState(ANIMATION);
+		}
 	}
 	else if (Game::instance().bF3) {
 		Game::instance().bF3 = false;
-		if (level != 3) reinit(3);
+		if (level != 3) {
+			Game::instance().money += money;
+			Game::instance().lives = lives;
+			Game::instance().points += points;
+			Game::instance().sceneAnt = TELE_3;
+			Game::instance().setState(ANIMATION);
+		}
 	}
 	else {
 		switch (subnivel) {
@@ -548,6 +568,9 @@ void Scene::pierdeVida() {
 }
 
 void Scene::subeNivel() {
+	Game::instance().money = money;
+	Game::instance().lives = lives + 3;
+	Game::instance().points = points;
 	Game::instance().sceneAnt = level;
 	Game::instance().setState(ANIMATION);
 }
@@ -576,9 +599,9 @@ void Scene::setGameTextPosition(int subnivel) {
 
 void Scene::reinit(int reinitLevel)
 {
-	money = 0;
-	lives = 4;
-	points = 0;
+	money = Game::instance().money;
+	points = Game::instance().points;
+	lives = Game::instance().lives;
 	level = reinitLevel;
 	switch (level) {
 	case 1:

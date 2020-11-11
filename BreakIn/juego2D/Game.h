@@ -46,6 +46,7 @@ public:
 	bool getSpecialKey(int key) const;
 
 	int sceneAnt;
+	int points, money, lives;
 	bool bF1 = false;
 	bool bF2 = false;
 	bool bF3 = false;
@@ -55,6 +56,8 @@ public:
 	bool b2 = false;
 	bool b3 = false;
 	bool gameOver = false;
+
+	void initGamePropierties();
 
 private:
 	bool bPlay;                       // Continue to play game?
