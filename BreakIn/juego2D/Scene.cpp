@@ -63,19 +63,18 @@ void Scene::init()
 		break;
 	}
 
+	titlesTexture.loadFromFile("images/menuSpritesheet.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	tapadorTexture.loadFromFile("images/tapador.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	gameOverTexture.loadFromFile("images/gameOver.png", TEXTURE_PIXEL_FORMAT_RGBA);
+
 	pointsTitle = Sprite::createSprite(glm::ivec2(80, 40), glm::vec2(0.0f, 0.5f), glm::vec2(0.25f, 0.25f), &titlesTexture, &texProgram, false);
 	levelTitle = Sprite::createSprite(glm::ivec2(80, 40), glm::vec2(0.25f, 0.5f), glm::vec2(0.25f, 0.25f), &titlesTexture, &texProgram, false);
 	moneyTitle = Sprite::createSprite(glm::ivec2(80, 40), glm::vec2(0.5f, 0.5f), glm::vec2(0.25f, 0.25f), &titlesTexture, &texProgram, false);
 	livesTitle = Sprite::createSprite(glm::ivec2(80, 40), glm::vec2(0.75f, 0.5f), glm::vec2(0.25f, 0.25f), &titlesTexture, &texProgram, false);
 	roomTitle = Sprite::createSprite(glm::ivec2(80, 40), glm::vec2(0.0f, 0.75f), glm::vec2(0.25f, 0.25f), &titlesTexture, &texProgram, false);
-	titlesTexture.loadFromFile("images/menuSpritesheet.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	tapadorArriba = Sprite::createSprite(glm::ivec2(384.0f, 16.0f), glm::vec2(0.0f, 0.0f), glm::vec2(1.0f, 1.0f), &tapadorTexture, &texProgram, false);
 	tapadorAbajo = Sprite::createSprite(glm::ivec2(384.0f, 16.0f), glm::vec2(0.0f, 0.0f), glm::vec2(1.0f, 1.0f), &tapadorTexture, &texProgram, false);
-	glm::vec2 texCoords[2] = { glm::vec2(0.f, 0.f), glm::vec2(1.f, 1.f) };
-	glm::vec2 geomGUI[2] = { glm::vec2(0.f, 0.f), glm::vec2(float(SCREEN_WIDTH), float(SCREEN_HEIGHT)) };
-	gameOverTextureQuad = TexturedQuad::createTexturedQuad(geomGUI, texCoords, texProgram);
-	gameOver.loadFromFile("images/credits.png", TEXTURE_PIXEL_FORMAT_RGB);
+
 	setGameTextPosition(subnivel);
 
 	player = new Player();
@@ -128,7 +127,7 @@ void Scene::update(int deltaTime)
 	playerPos = player->getPosition();
 	//cout << "points = " << points << endl;
 	//cout << "money = " << money << endl << endl;
-	cout << "posBall = (" << ballPos.x << " , " << ballPos.y << endl << endl;
+	//cout << "posBall = (" << ballPos.x << " , " << ballPos.y << endl << endl;
 	// Bajar nivel?
 	if (Game::instance().bF1) {
 		Game::instance().bF1 = false;
@@ -147,6 +146,7 @@ void Scene::update(int deltaTime)
 		case 3:
 			if (Game::instance().bF4) {
 				Game::instance().bF4 = false;
+				subeNivel();
 			}
 			else if (Game::instance().bF5) {
 				Game::instance().bF5 = false;
@@ -222,6 +222,8 @@ void Scene::update(int deltaTime)
 				if (lives == 1) {
 					--lives;
 					SceneSound->play2D("audio/looseGame.wav");
+					Game::instance().sceneAnt = GAME_OVER;
+					Game::instance().setState(ANIMATION);
 				}
 				else {
 					pierdeVida();
@@ -236,6 +238,8 @@ void Scene::update(int deltaTime)
 				if (lives == 1) {
 					--lives;
 					SceneSound->play2D("audio/looseGame.wav");
+					Game::instance().sceneAnt = GAME_OVER;
+					Game::instance().setState(ANIMATION);
 				}
 				else {
 					pierdeVida();
@@ -276,7 +280,6 @@ void Scene::render()
 	texProgram.setUniformMatrix4f("modelview", modelview);
 	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
 
-	if (lives > 0) {
 		map->render();
 		for (int i = objectsInGame.size()-1; i >= 0 ; i--) {
 			if (objectsInGame.at(i).getType() != 0) {
@@ -310,28 +313,18 @@ void Scene::render()
 		tapadorArriba->render();
 		tapadorAbajo->render();
 		police->render();
-		text.render("MONEY", glm::vec2(510, 40), 25, glm::vec4(1, 1, 1, 1));
-		text.render(to_string(money), glm::vec2(510, 70), 25, glm::vec4(1, 1, 1, 1));
-		text.render("POINTS", glm::vec2(510, 105), 25, glm::vec4(1, 1, 1, 1));
-		text.render(to_string(points), glm::vec2(510, 135), 25, glm::vec4(1, 1, 1, 1));
-		text.render("LIVES", glm::vec2(510, 170), 25, glm::vec4(1, 1, 1, 1));
-		text.render(to_string(lives), glm::vec2(510, 200), 25, glm::vec4(1, 1, 1, 1));
-		text.render("BANK", glm::vec2(510, 235), 25, glm::vec4(1, 1, 1, 1));
-		text.render(to_string(level), glm::vec2(510, 260), 25, glm::vec4(1, 1, 1, 1));
-		text.render("ROOM", glm::vec2(510, 295), 25, glm::vec4(1, 1, 1, 1));
-		text.render(to_string(subnivel), glm::vec2(510, 320), 25, glm::vec4(1, 1, 1, 1));
-		/*pointsTitle->render();
+
+		pointsTitle->render();
 		moneyTitle->render();
 		livesTitle->render();
 		levelTitle->render();
-		roomTitle->render();*/
-	}
-	else {
-		reinit(1);
-		gameOverTextureQuad->render(gameOver);
-		Sleep(2000);
-		Game::instance().setState(MENU, false);
-	}
+		roomTitle->render();
+
+		text.render(to_string(money), glm::vec2(430, 80), 25, glm::vec4(1, 1, 1, 1));
+		text.render(to_string(points), glm::vec2(430, 170), 25, glm::vec4(1, 1, 1, 1));
+		text.render(to_string(lives), glm::vec2(430, 260), 25, glm::vec4(1, 1, 1, 1));
+		text.render(to_string(level), glm::vec2(430, 350), 25, glm::vec4(1, 1, 1, 1));
+		text.render(to_string(subnivel), glm::vec2(430, 440), 25, glm::vec4(1, 1, 1, 1));
 }
 
 void Scene::initShaders()
@@ -554,37 +547,31 @@ void Scene::pierdeVida() {
 	ball->setPosition(glm::vec2(player->getPosition().x + (player->getSize().x) / 2, player->getPosition().y - player->getSize().y));
 }
 
+void Scene::subeNivel() {
+	Game::instance().sceneAnt = level;
+	Game::instance().setState(ANIMATION);
+}
+
 void Scene::setGameTextPosition(int subnivel) {
-	if (subnivel == 3) {
-		pointsTitle->setPosition(glm::vec2(430.0f, 16.0f));
-		levelTitle->setPosition(glm::vec2(430.0f, 106.0f));
-		moneyTitle->setPosition(glm::vec2(430.0f, 196.0f));
-		livesTitle->setPosition(glm::vec2(430.0f, 286.0f));
-		roomTitle->setPosition(glm::vec2(430.0f, 376.0f));
-		tapadorArriba->setPosition(glm::vec2(SCREEN_X, 0.0f));
-		tapadorAbajo->setPosition(glm::vec2(SCREEN_X, 464.0f));
-		projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
+	float despl;
+	if (subnivel == 1) {
+		despl = LEVEL_HEIGHT * 2;
 	}
 	else if (subnivel == 2) {
-		pointsTitle->setPosition(glm::vec2(430.0f, 16.0f + LEVEL_HEIGHT));
-		levelTitle->setPosition(glm::vec2(430.0f, 106.0f + LEVEL_HEIGHT));
-		moneyTitle->setPosition(glm::vec2(430.0f, 196.0f + LEVEL_HEIGHT));
-		livesTitle->setPosition(glm::vec2(430.0f, 286.0f + LEVEL_HEIGHT));
-		roomTitle->setPosition(glm::vec2(430.0f, 376.0f + LEVEL_HEIGHT));
-		tapadorArriba->setPosition(glm::vec2(SCREEN_X, 448.0f));
-		tapadorAbajo->setPosition(glm::vec2(SCREEN_X, 912.0f));
-		projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(448 + SCREEN_HEIGHT - 1), 448.f);
+		despl = LEVEL_HEIGHT;
 	}
-	else if (subnivel == 1) {
-		pointsTitle->setPosition(glm::vec2(430.0f, 16.0f + LEVEL_HEIGHT * 2));
-		levelTitle->setPosition(glm::vec2(430.0f, 106.0f + LEVEL_HEIGHT * 2));
-		moneyTitle->setPosition(glm::vec2(430.0f, 196.0f + LEVEL_HEIGHT * 2));
-		livesTitle->setPosition(glm::vec2(430.0f, 286.0f + LEVEL_HEIGHT * 2));
-		roomTitle->setPosition(glm::vec2(430.0f, 376.0f + LEVEL_HEIGHT * 2));
-		tapadorArriba->setPosition(glm::vec2(SCREEN_X, 896.0f));
-		tapadorAbajo->setPosition(glm::vec2(SCREEN_X, 1376.0f));
-		projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(896 + SCREEN_HEIGHT - 1), 896.f);
+	else if (subnivel == 3) {
+		despl = 0;
 	}
+
+	moneyTitle->setPosition(glm::vec2(430.0f, 16.0f + despl));
+	pointsTitle->setPosition(glm::vec2(430.0f, 106.0f + despl));
+	livesTitle->setPosition(glm::vec2(430.0f, 196.0f + despl));
+	levelTitle->setPosition(glm::vec2(430.0f, 286.0f + despl));
+	roomTitle->setPosition(glm::vec2(430.0f, 376.0f + despl));
+	tapadorArriba->setPosition(glm::vec2(SCREEN_X, 0.0f + despl));
+	tapadorAbajo->setPosition(glm::vec2(SCREEN_X, 464.0f + despl));
+	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(despl + SCREEN_HEIGHT - 1), despl);
 }
 
 void Scene::reinit(int reinitLevel)
@@ -613,11 +600,17 @@ void Scene::reinit(int reinitLevel)
 	subnivel = 1;
 
 	setGameTextPosition(subnivel);
+
+	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize() + LEVEL_HEIGHT * 2));
 	player->setTileMap(map);
 
+	ball->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, player);
 	ball->setPosition(glm::vec2(player->getPosition().x + (player->getSize().x) / 2, player->getPosition().y - player->getSize().y));
 	ball->setTileMap(map);
+
+	police->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+	police->setTileMap(map);
 
 	currentTime = 0.0f;
 }

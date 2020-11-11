@@ -12,23 +12,38 @@ ISoundEngine *GameSound = createIrrKlangDevice();
 void Game::init()
 {
 	bPlay = true;
-	glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
-	menu.init();
-	scene.init();
-	setState(MENU, false);
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+	setState(ANIMATION);
+	sceneAnt = -1;
 }
 
-void Game::setState(int state, bool fromPassword) {
+void Game::setState(int state) {
 	sceneAct = state;
 	if (sceneAct == MENU) {
+		if (sceneAnt == -1) {
+			menu.init();
+			scene.init();
+			Game::instance().sceneAnt = ANIMATION;
+		}
+		else {
+			scene.reinit(1);
+			Game::instance().sceneAnt = ANIMATION;
+		}
 		GameSound->play2D("audio/breakout.mp3", true);
 	}
-	else if (sceneAct == GAME) {
-		if (fromPassword) {
-			fromPassword = false;
-			scene.reinit(startingLevel);
-		}
+	else if (sceneAct == LEVEL_1) {
 		GameSound->stopAllSounds();
+	}
+	else if (sceneAct == LEVEL_2) {
+		scene.reinit(2);
+		GameSound->stopAllSounds();
+	}
+	else if (sceneAct == LEVEL_3) {
+		scene.reinit(3);
+		GameSound->stopAllSounds();
+	}
+	else if (sceneAct == ANIMATION) {
+		animation.init();
 	}
 	//Inicializar puntuación, vidas, sonido, ...
 }
@@ -36,7 +51,8 @@ void Game::setState(int state, bool fromPassword) {
 bool Game::update(int deltaTime)
 {
 	if (sceneAct == MENU) menu.update();
-	else if (sceneAct == GAME) scene.update(deltaTime);
+	else if (sceneAct == LEVEL_1 || sceneAct == LEVEL_2 || sceneAct == LEVEL_3) scene.update(deltaTime);
+	else if (sceneAct == ANIMATION) animation.update(deltaTime);
 	return bPlay;
 }
 
@@ -44,7 +60,8 @@ void Game::render()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	if (sceneAct == MENU) menu.render();
-	else if (sceneAct == GAME) scene.render();
+	else if (sceneAct == LEVEL_1 || sceneAct == LEVEL_2 || sceneAct == LEVEL_3) scene.render();
+	else if (sceneAct == ANIMATION) animation.render();
 }
 
 void Game::keyPressed(int key)

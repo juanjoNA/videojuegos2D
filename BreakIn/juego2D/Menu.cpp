@@ -49,7 +49,7 @@ void Menu::init() {
 	creditsTexture.loadFromFile("images/credits.png", TEXTURE_PIXEL_FORMAT_RGB);
 
 	passwordTextureQuad = TexturedQuad::createTexturedQuad(geomGUI, texCoords, texProgram);
-	passwordTexture.loadFromFile("images/password.png", TEXTURE_PIXEL_FORMAT_RGB);
+	passwordTexture.loadFromFile("images/fondoBreakIn.png.jpg", TEXTURE_PIXEL_FORMAT_RGB);
 
 	menuTexture.loadFromFile("images/menuSpritesheet.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	menuTexture.setMinFilter(GL_NEAREST);
@@ -127,16 +127,15 @@ void Menu::update() {
 		if (bControls) bControls = false;
 		else if (bCredits) bCredits = false;
 		else if (bPassword) {
-			Game::instance().b1 = false;
+			/*Game::instance().b1 = false;
 			Game::instance().b2 = false;
-			Game::instance().b3 = false;
+			Game::instance().b3 = false;*/
 			bPassword = false;
 		}
 		else { //Menu screen, check if options are selected
 			switch (index) {
 			case 0:
-				Game::instance().startingLevel = 1;
-				Game::instance().setState(GAME, false);
+				Game::instance().setState(LEVEL_1);
 				break;
 			case 1:
 				bControls = true;
@@ -152,29 +151,23 @@ void Menu::update() {
 	}
 	else if (!Game::instance().getKey(13)) bEnterPressed = false;
 
-	if (bPassword) {
+	/*if (bPassword) {
 		if (Game::instance().b1) {
 			Game::instance().b1 = false;
-			bPassword = false;
-			index = 0;
-			Game::instance().startingLevel = 1;
-			Game::instance().setState(GAME, true);
+			Game::instance().sceneAnt = PASSWORD_1;
 		}
 		else if (Game::instance().b2) {
 			Game::instance().b2 = false;
-			bPassword = false;
-			index = 0;
-			Game::instance().startingLevel = 2;
-			Game::instance().setState(GAME, true);
+			Game::instance().sceneAnt = PASSWORD_2;
 		}
 		else if (Game::instance().b3) {
 			Game::instance().b3 = false;
-			bPassword = false;
-			index = 0;
-			Game::instance().startingLevel = 3;
-			Game::instance().setState(GAME, true);
+			Game::instance().sceneAnt = PASSWORD_3;
 		}
-	}
+		bPassword = false;
+		index = 0;
+		Game::instance().setState(ANIMATION);
+	}*/
 }
 
 void Menu::render() {
@@ -189,6 +182,7 @@ void Menu::render() {
 
 	if (bControls) controlsTextureQuad->render(controlsTexture);
 	else if (bPassword) {
+		cout << "renderizaa" << endl;
 		passwordTextureQuad->render(passwordTexture);
 		password1 = "Introduce password";
 		text.render(password1, glm::vec2(GLUT_SCREEN_WIDTH / 2, GLUT_SCREEN_HEIGHT / 2), 25, glm::vec4(1, 1, 1, 1));

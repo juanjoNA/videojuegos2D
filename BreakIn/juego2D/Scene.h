@@ -45,15 +45,15 @@ private:
 	void createDoor();
 	void setGameTextPosition(int subnivel);
 	void pierdeVida();
+	void subeNivel();
 
 private:
 	TileMap *map, *map1, *map2, *map3;
-	TexturedQuad* gameOverTextureQuad;
-	Texture gameOver;
 	Player *player;
 	Ball *ball;
 	Texture tapadorTexture;
 	Texture titlesTexture;
+	Texture gameOverTexture;
 	Sprite *tapadorArriba;
 	Sprite *tapadorAbajo;
 	Sprite *moneyTitle;
@@ -74,6 +74,7 @@ private:
 	float currentTime;
 	float yAnterior = 0;
 	int money, lives, points;
+	int timeRef;
 };
 
 

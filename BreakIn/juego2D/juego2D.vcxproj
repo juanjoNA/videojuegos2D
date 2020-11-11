@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Animation.h" />
     <ClInclude Include="AnimKeyframes.h" />
     <ClInclude Include="Ball.h" />
     <ClInclude Include="CollisionManager.h" />
@@ -22,6 +23,7 @@
     <ClInclude Include="Misil.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Police.h" />
+    <ClInclude Include="Quad.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="ShaderProgram.h" />
@@ -32,6 +34,7 @@
     <ClInclude Include="TileMap.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Animation.cpp" />
     <ClCompile Include="Ball.cpp" />
     <ClCompile Include="CollisionManager.cpp" />
     <ClCompile Include="Game.cpp" />
@@ -41,6 +44,7 @@
     <ClCompile Include="Misil.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Police.cpp" />
+    <ClCompile Include="Quad.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="ShaderProgram.cpp" />

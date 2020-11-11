@@ -1,10 +1,17 @@
 #pragma once
 
 #define MENU 0
-#define GAME 1
-#define CONTROLS 2
-#define CREDITS 3
-#define PASSWORD 4
+#define LEVEL_1 1
+#define LEVEL_2 2
+#define LEVEL_3 3
+#define CONTROLS 4
+#define CREDITS 5
+#define PASSWORD 6
+#define ANIMATION 7
+#define GAME_OVER 8
+#define PASSWORD_1 9
+#define PASSWORD_2 10
+#define PASSWORD_3 11
 
 #define BUTTON_X 128
 #define BUTTON_Y 64

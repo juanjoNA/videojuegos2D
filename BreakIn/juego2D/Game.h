@@ -3,6 +3,7 @@
 
 #include "Menu.h"
 #include "Scene.h"
+#include "Animation.h"
 
 
 #define SCREEN_WIDTH 640
@@ -30,7 +31,7 @@ public:
 	bool update(int deltaTime);
 	void render();
 
-	void setState(int state, bool fromPassword);
+	void setState(int state);
 
 	// Input callback methods
 	void keyPressed(int key);
@@ -44,7 +45,7 @@ public:
 	bool getKey(int key) const;
 	bool getSpecialKey(int key) const;
 
-	int startingLevel;
+	int sceneAnt;
 	bool bF1 = false;
 	bool bF2 = false;
 	bool bF3 = false;
@@ -53,12 +54,17 @@ public:
 	bool b1 = false;
 	bool b2 = false;
 	bool b3 = false;
+	bool gameOver = false;
 
 private:
 	bool bPlay;                       // Continue to play game?
+	TexturedQuad* creditsTextureQuad;
+	Texture creditsTexture;
 	int sceneAct;
 	Scene scene;                      // Scene to render
 	Menu menu;
+	Animation animation;
+	ShaderProgram texProgram;
 	bool keys[256], specialKeys[256]; // Store key states so that 
 									  // we can have access at any time
 	int xPlay;
