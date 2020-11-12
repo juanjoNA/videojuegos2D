@@ -150,19 +150,80 @@ bool CollisionManager::collisionBallPlayer(glm::ivec2 &pos, glm::ivec2 &oldPos, 
 	return false;
 }
 
+bool CollisionManager::collisionBallPlayerVersus(glm::ivec2 &pos, const glm::ivec2 &size, Player *player, glm::vec2 &velocitat) const
+{
+	int xmin = pos.x;
+	int xmax = pos.x + size.x;
+	int ymin = pos.y;
+	int ymax = pos.y + size.y;
+	glm::vec2 center = glm::vec2((xmax + xmin) / 2, (ymax + ymin) / 2);
+
+	if (
+		((player->getPosition().x + player->getSize().x) >= xmin) &&
+		(xmax >= player->getPosition().x) &&
+		((player->getPosition().y + player->getSize().y) >= ymin) &&
+		(ymax >= player->getPosition().y)
+		)
+	{
+
+		velocitat.x = -velocitat.x;
+		float percentatgeCollision = ((player->getPosition().y + player->getSize().y) - center.y) / player->getSize().y;
+
+		if (percentatgeCollision <= 0.2f) {
+			velocitat.y = 7.f;
+		}
+		else if (percentatgeCollision > 0.2f && percentatgeCollision <= 0.35f) {
+			velocitat.y = 5.f;
+		}
+		else if (percentatgeCollision > 0.35f && percentatgeCollision < 0.5f) {
+			velocitat.y = 3.f;
+		}
+		else if (percentatgeCollision == 0.5f) {
+			velocitat.y = 0;
+		}
+		else if (percentatgeCollision > 0.5f && percentatgeCollision <= 0.65f) {
+			velocitat.y = -3.f;
+		}
+		else if (percentatgeCollision > 0.65f && percentatgeCollision <= 0.8f) {
+			velocitat.y = -5.f;
+		}
+		else {
+			velocitat.y = -7.f;
+		}
+		CollisionSound->play2D("audio/bounce.wav");
+		return true;
+	}
+	return false;
+}
+
 bool CollisionManager::collisionPlayerMap(glm::ivec2 &pos, int subnivel, const glm::ivec2 & size, TileMap *tileMap, glm::ivec2 direction) const
 {
-	cout << (pos.x + size.x + direction.x) << endl;
-	cout << (pos.y + direction.y) << endl;
+	int ymin, ymax;
+	if (subnivel >= 0) {
+		ymin = 16 + (432 * (3 - subnivel) + ((3 - subnivel) * 16));
+		ymax = 432 + (ymin - 16);
 
+		if ((pos.x + direction.x < 16) || (pos.x + size.x + direction.x > 368) ||
+			(pos.y + direction.y < ymin) || (pos.y + size.y + direction.y > ymax)) return true;
 
-	int ymin = 16 + (432 * (3 - subnivel) + ((3 - subnivel) * 16));
-	int ymax = 432 + (ymin - 16);
-
-	if ((pos.x + direction.x < 16) || (pos.x + size.x + direction.x > 368) ||
-		(pos.y + direction.y < ymin) || (pos.y + size.y + direction.y > ymax)) return true;
-
-	return false;
+		return false;
+	}
+	else {
+		ymin = tileMap->getTileSize();
+		ymax = tileMap->getMapSize().y * tileMap->getTileSize() - tileMap->getTileSize();
+		switch (subnivel) 
+		{
+			case -1: //player1 del 1v1
+				if ((pos.x + direction.x < tileMap->getTileSize()) || (pos.x + size.x + direction.x > (tileMap->getMapSize().x*tileMap->getTileSize() /2)-tileMap->getTileSize()) ||
+					(pos.y + direction.y < ymin) || (pos.y + size.y + direction.y > ymax)) return true;
+				break;
+			case -2: //player2 del 1v1
+				if ((pos.x + direction.x < (tileMap->getMapSize().x*tileMap->getTileSize() / 2) + tileMap->getTileSize()) || (pos.x + size.x + direction.x > tileMap->getMapSize().x*tileMap->getTileSize() -tileMap->getTileSize()) ||
+					(pos.y + direction.y < ymin) || (pos.y + size.y + direction.y > ymax)) return true;
+				break;
+		}
+		return false;
+	}
 
 }
 

@@ -17,8 +17,8 @@ class Ball
 {
 
 public:
-	void init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, Player *p);
-	void update(int deltaTime, vector<class Element>& objInGame, int level);
+	void init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram);
+	void update(int deltaTime, vector<class Element>& objInGame, Player *p);
 	void render();
 
 	void setTileMap(TileMap *tileMap);
@@ -26,6 +26,7 @@ public:
 	glm::ivec2 position();
 	void begin();
 	void finish();
+	void setVelocity(glm::vec2 velocity);
 
 private:
 	glm::ivec2 tileMapDispl, posBall, oldPosBall;
@@ -34,7 +35,6 @@ private:
 	Texture spritesheet;
 	Sprite *sprite;
 	TileMap *map;
-	Player *player;
 
 };
 

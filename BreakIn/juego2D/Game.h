@@ -3,6 +3,7 @@
 
 #include "Menu.h"
 #include "Scene.h"
+#include "Versus.h"
 
 
 #define SCREEN_WIDTH 640
@@ -58,6 +59,7 @@ private:
 	bool bPlay;                       // Continue to play game?
 	int sceneAct;
 	Scene scene;                      // Scene to render
+	Versus sceneVersus;
 	Menu menu;
 	bool keys[256], specialKeys[256]; // Store key states so that 
 									  // we can have access at any time

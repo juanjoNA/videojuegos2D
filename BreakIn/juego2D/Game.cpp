@@ -30,21 +30,44 @@ void Game::setState(int state, bool fromPassword) {
 		}
 		GameSound->stopAllSounds();
 	}
+	else if (sceneAct == VERSUS) {
+		sceneVersus.init();
+		GameSound->stopAllSounds();
+	}
 	//Inicializar puntuación, vidas, sonido, ...
 }
 
 bool Game::update(int deltaTime)
 {
-	if (sceneAct == MENU) menu.update();
-	else if (sceneAct == GAME) scene.update(deltaTime);
+	switch (sceneAct)
+	{
+	case MENU:
+		menu.update();
+		break;
+	case GAME: 
+		scene.update(deltaTime);
+		break;
+	case VERSUS:
+		sceneVersus.update(deltaTime);
+		break;
+	};
 	return bPlay;
 }
 
 void Game::render()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	if (sceneAct == MENU) menu.render();
-	else if (sceneAct == GAME) scene.render();
+	switch (sceneAct) {
+	case MENU:
+		menu.render();
+		break;
+	case GAME:
+		scene.render();
+		break;
+	case VERSUS:
+		sceneVersus.render();
+		break;
+	}
 }
 
 void Game::keyPressed(int key)

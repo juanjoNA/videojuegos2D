@@ -79,12 +79,12 @@ void Scene::init()
 	setGameTextPosition(subnivel);
 
 	player = new Player();
-	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::ivec2(64, 16));
 	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize() + LEVEL_HEIGHT * 2));
 	player->setTileMap(map);
 
 	ball = new Ball();
-	ball->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, player);
+	ball->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 	ball->setPosition(glm::vec2(player->getPosition().x + (player->getSize().x)/2, player->getPosition().y-player->getSize().y));
 	ball->setTileMap(map);
 
@@ -104,8 +104,8 @@ void Scene::init()
 void Scene::update(int deltaTime)
 {
 	currentTime += deltaTime;
-	player->update(deltaTime, subnivel);
-	ball->update(deltaTime, objectsInGame, subnivel);
+	player->update(deltaTime, subnivel, 0);
+	ball->update(deltaTime, objectsInGame, player);
 	police->update(deltaTime, player, subnivel);
 	if (police->catchPlayer()) {
 		pierdeVida();
@@ -157,7 +157,7 @@ void Scene::update(int deltaTime)
 			}
 			else if (Game::instance().bF5) {
 				Game::instance().bF5 = false;
-				player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+				player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::ivec2(64,16));
 				player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize() + LEVEL_HEIGHT));
 
 				subnivel = 2;

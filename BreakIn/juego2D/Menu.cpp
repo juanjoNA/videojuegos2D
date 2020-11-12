@@ -104,6 +104,9 @@ void Menu::update() {
 	if (Game::instance().bF5) {
 		Game::instance().bF5 = false;
 	}
+	if (Game::instance().getSpecialKey(GLUT_KEY_F10)) {
+		Game::instance().setState(VERSUS, false);
+	}
 	//Change option
 	if (Game::instance().getSpecialKey(GLUT_KEY_UP) && !bUpPressed && !bPassword && !bControls && !bCredits) {
 		--index;
