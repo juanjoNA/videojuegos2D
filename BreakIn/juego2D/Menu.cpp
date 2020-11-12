@@ -27,7 +27,7 @@ void Menu::init() {
 	initShaders();
 
 	index = 0; //Option by default
-	numOptions = 4;
+	numOptions = 5;
 	bUpPressed = false;
 	bDownPressed = false;
 	bEnterPressed = false;
@@ -63,23 +63,29 @@ void Menu::init() {
 	play2Button = Sprite::createSprite(glm::ivec2(BUTTON_X, BUTTON_Y), glm::vec2(0.25f, 0.0f), glm::vec2(0.25f, 0.25f), &menuTexture, &texProgram, false);
 	play2Button->setPosition(glm::vec2(float(SCREEN_WIDTH / 2 - BUTTON_X / 2), float(firstButtonY)));
 
+	multiplayer1Button = Sprite::createSprite(glm::ivec2(BUTTON_X, BUTTON_Y), glm::vec2(0.0f, 0.0f), glm::vec2(0.25f, 0.25f), &menuTexture, &texProgram, false);
+	multiplayer1Button->setPosition(glm::vec2(float(SCREEN_WIDTH / 2 - BUTTON_X / 2), float(firstButtonY + BUTTON_Y)));
+
+	multiplayer2Button = Sprite::createSprite(glm::ivec2(BUTTON_X, BUTTON_Y), glm::vec2(0.25f, 0.0f), glm::vec2(0.25f, 0.25f), &menuTexture, &texProgram, false);
+	multiplayer2Button->setPosition(glm::vec2(float(SCREEN_WIDTH / 2 - BUTTON_X / 2), float(firstButtonY + BUTTON_Y)));
+
 	controls1Button = Sprite::createSprite(glm::ivec2(BUTTON_X, BUTTON_Y), glm::vec2(0.5f, 0.0f), glm::vec2(0.25f, 0.25f), &menuTexture, &texProgram, false);
-	controls1Button->setPosition(glm::vec2(float(SCREEN_WIDTH / 2 - BUTTON_X / 2), float(firstButtonY + BUTTON_Y)));
+	controls1Button->setPosition(glm::vec2(float(SCREEN_WIDTH / 2 - BUTTON_X / 2), float(firstButtonY + BUTTON_Y * 2)));
 
 	controls2Button = Sprite::createSprite(glm::ivec2(BUTTON_X, BUTTON_Y), glm::vec2(0.75f, 0.0f), glm::vec2(0.25f, 0.25f), &menuTexture, &texProgram, false);
-	controls2Button->setPosition(glm::vec2(float(SCREEN_WIDTH / 2 - BUTTON_X / 2), float(firstButtonY + BUTTON_Y)));
+	controls2Button->setPosition(glm::vec2(float(SCREEN_WIDTH / 2 - BUTTON_X / 2), float(firstButtonY + BUTTON_Y * 2)));
 
 	credits1Button = Sprite::createSprite(glm::ivec2(BUTTON_X, BUTTON_Y), glm::vec2(0.0f, 0.25f), glm::vec2(0.25f, 0.25f), &menuTexture, &texProgram, false);
-	credits1Button->setPosition(glm::vec2(float(SCREEN_WIDTH / 2 - BUTTON_X / 2), float(firstButtonY + BUTTON_Y * 2)));
+	credits1Button->setPosition(glm::vec2(float(SCREEN_WIDTH / 2 - BUTTON_X / 2), float(firstButtonY + BUTTON_Y * 3)));
 
 	credits2Button = Sprite::createSprite(glm::ivec2(BUTTON_X, BUTTON_Y), glm::vec2(0.25f, 0.25f), glm::vec2(0.25f, 0.25f), &menuTexture, &texProgram, false);
-	credits2Button->setPosition(glm::vec2(float(SCREEN_WIDTH / 2 - BUTTON_X / 2), float(firstButtonY + BUTTON_Y * 2)));
+	credits2Button->setPosition(glm::vec2(float(SCREEN_WIDTH / 2 - BUTTON_X / 2), float(firstButtonY + BUTTON_Y * 3)));
 
 	password1Button = Sprite::createSprite(glm::ivec2(BUTTON_X, BUTTON_Y), glm::vec2(0.5f, 0.25f), glm::vec2(0.25f, 0.25f), &menuTexture, &texProgram, false);
-	password1Button->setPosition(glm::vec2(float(SCREEN_WIDTH / 2 - BUTTON_X / 2), float(firstButtonY + BUTTON_Y * 3)));
+	password1Button->setPosition(glm::vec2(float(SCREEN_WIDTH / 2 - BUTTON_X / 2), float(firstButtonY + BUTTON_Y * 4)));
 
 	password2Button = Sprite::createSprite(glm::ivec2(BUTTON_X, BUTTON_Y), glm::vec2(0.75f, 0.25f), glm::vec2(0.25f, 0.25f), &menuTexture, &texProgram, false);
-	password2Button->setPosition(glm::vec2(float(SCREEN_WIDTH / 2 - BUTTON_X / 2), float(firstButtonY + BUTTON_Y * 3)));
+	password2Button->setPosition(glm::vec2(float(SCREEN_WIDTH / 2 - BUTTON_X / 2), float(firstButtonY + BUTTON_Y * 4)));
 
 	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
 
@@ -88,10 +94,21 @@ void Menu::init() {
 		//if(!text.init("fonts/OpenSans-Bold.ttf"))
 		//if(!text.init("fonts/DroidSerif.ttf"))
 		cout << "Could not load font!!!" << endl;
-	else cout << "Font loaded succesfully" << endl;
+	// Select which font you want to use
+
+	if (!info.init("fonts/OpenSans-Regular.ttf"))
+		//if(!text.init("fonts/OpenSans-Bold.ttf"))
+		//if(!text.init("fonts/DroidSerif.ttf"))
+		cout << "Could not load font!!!" << endl;
 }
 
 void Menu::update() {
+
+	if (wrongPassword) {
+		Sleep(2000);
+		wrongPassword = false;
+	}
+
 	if (Game::instance().bF1) {
 		Game::instance().bF1 = false;
 	}
@@ -130,9 +147,7 @@ void Menu::update() {
 		if (bControls) bControls = false;
 		else if (bCredits) bCredits = false;
 		else if (bPassword) {
-			/*Game::instance().b1 = false;
-			Game::instance().b2 = false;
-			Game::instance().b3 = false;*/
+			passwordAtempt = "";
 			bPassword = false;
 		}
 		else { //Menu screen, check if options are selected
@@ -141,13 +156,17 @@ void Menu::update() {
 				Game::instance().sceneAnt = MENU;
 				Game::instance().setState(LEVEL_1);
 				break;
-			case 1:
-				bControls = true;
+			case 1: 
+				Game::instance().sceneAnt = MENU;
+				Game::instance().setState(VERSUS);
 				break;
 			case 2:
-				bCredits = true;
+				bControls = true;
 				break;
 			case 3:
+				bCredits = true;
+				break;
+			case 4:
 				Game::instance().nuevaLetra = false;
 				Game::instance().borra = false;
 				Game::instance().spacePressed = false;
@@ -198,24 +217,6 @@ void Menu::update() {
 			}
 		}
 	}
-
-	/*if (bPassword) {
-		if (Game::instance().b1) {
-			Game::instance().b1 = false;
-			Game::instance().sceneAnt = PASSWORD_1;
-		}
-		else if (Game::instance().b2) {
-			Game::instance().b2 = false;
-			Game::instance().sceneAnt = PASSWORD_2;
-		}
-		else if (Game::instance().b3) {
-			Game::instance().b3 = false;
-			Game::instance().sceneAnt = PASSWORD_3;
-		}
-		bPassword = false;
-		index = 0;
-		Game::instance().setState(ANIMATION);
-	}*/
 }
 
 void Menu::render() {
@@ -232,13 +233,10 @@ void Menu::render() {
 	else if (bPassword) {
 		passwordTextureQuad->render(passwordTexture);
 		text.render("Introduce a password", glm::vec2(150, SCREEN_HEIGHT / 4), 30, glm::vec4(1.0f, 0.5f, 0.31f, 1));
-		if (wrongPassword) {
-			text.render("WRONG PASSWORD", glm::vec2(150, SCREEN_HEIGHT / 3), 20, glm::vec4(1.0f, 0.0f, 0.0f, 1));
-			wrongPassword = false;
-		}
-		else {
-			text.render(passwordAtempt, glm::vec2(150, SCREEN_HEIGHT / 3), 20, glm::vec4(1.0f, 1.0f, 1.0f, 1));
-		}
+		if (wrongPassword) text.render("WRONG PASSWORD", glm::vec2(150, SCREEN_HEIGHT / 3), 20, glm::vec4(1.0f, 0.0f, 0.0f, 1));
+		else text.render(passwordAtempt, glm::vec2(150, SCREEN_HEIGHT / 3), 20, glm::vec4(1.0f, 1.0f, 1.0f, 1));
+		info.render("Press START to submit password", glm::vec2(150, 420), 10, glm::vec4(1.0f, 1.0f, 1.0f, 1));
+		info.render("Press ENTER to return to Menu", glm::vec2(150, 440), 10, glm::vec4(1.0f, 1.0f, 1.0f, 1));
 	}
 	else if (bCredits) creditsTextureQuad->render(creditsTexture);
 	else {
@@ -246,24 +244,35 @@ void Menu::render() {
 		switch (index) {
 		case 0:
 			play2Button->render();
+			multiplayer1Button->render();
 			controls1Button->render();
 			credits1Button->render();
 			password1Button->render();
 			break;
 		case 1:
 			play1Button->render();
-			controls2Button->render();
+			multiplayer2Button->render();
+			controls1Button->render();
 			credits1Button->render();
 			password1Button->render();
 			break;
 		case 2:
 			play1Button->render();
-			controls1Button->render();
-			credits2Button->render();
+			multiplayer1Button->render();
+			controls2Button->render();
+			credits1Button->render();
 			password1Button->render();
 			break;
 		case 3:
 			play1Button->render();
+			multiplayer1Button->render();
+			controls1Button->render();
+			credits2Button->render();
+			password1Button->render();
+			break;
+		case 4:
+			play1Button->render();
+			multiplayer1Button->render();
 			controls1Button->render();
 			credits1Button->render();
 			password2Button->render();

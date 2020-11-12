@@ -32,11 +32,18 @@ void Game::setState(int state) {
 			scene.init();
 			Game::instance().sceneAnt = ANIMATION;
 		}
+		else if (sceneAnt == VERSUS) {
+
+		}
 		else {
 			scene.reinit(1);
 			Game::instance().sceneAnt = ANIMATION;
 		}
 		GameSound->play2D("audio/breakout.mp3", true);
+	}
+	else if (sceneAct == VERSUS) {
+		sceneVersus.init();
+		GameSound->stopAllSounds();
 	}
 	else if (sceneAct == LEVEL_1) {
 		if (sceneAnt != MENU) {
@@ -61,6 +68,7 @@ void Game::setState(int state) {
 bool Game::update(int deltaTime)
 {
 	if (sceneAct == MENU) menu.update();
+	else if (sceneAct == VERSUS) sceneVersus.update(deltaTime);
 	else if (sceneAct == LEVEL_1 || sceneAct == LEVEL_2 || sceneAct == LEVEL_3) scene.update(deltaTime);
 	else if (sceneAct == ANIMATION) animation.update(deltaTime);
 	return bPlay;
@@ -70,13 +78,13 @@ void Game::render()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	if (sceneAct == MENU) menu.render();
+	else if (sceneAct == VERSUS) sceneVersus.render();
 	else if (sceneAct == LEVEL_1 || sceneAct == LEVEL_2 || sceneAct == LEVEL_3) scene.render();
 	else if (sceneAct == ANIMATION) animation.render();
 }
 
 void Game::keyPressed(int key)
 {
-	;
 	if (key == 27) {
 		bPlay = false;
 	}
@@ -88,6 +96,9 @@ void Game::keyReleased(int key)
 	keys[key] = false;
 	if (key == 8) {
 		borra = true;
+	}
+	else if (key == 13) {
+		enterPressed = true;
 	}
 	else if (key == 32) {
 		spacePressed = true;

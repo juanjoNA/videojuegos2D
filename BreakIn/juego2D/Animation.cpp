@@ -46,7 +46,7 @@ void Animation::init()
 	currentTime = 0.0f;
 
 	// Select which font you want to use
-	if (!text.init("fonts/OpenSans-Regular.ttf"))
+	if (!text.init("fonts/LemonMilk.ttf"))
 		//if(!text.init("fonts/OpenSans-Bold.ttf"))
 		//if(!text.init("fonts/DroidSerif.ttf"))
 		cout << "Could not load font!!!" << endl;
@@ -102,15 +102,15 @@ void Animation::render()
 	}
 	else if (Game::instance().sceneAnt == TELE_1) {
 		controlsTextureQuad->render(controlsTexture);
-		text.render("Teletransporting to Level 1", glm::vec2(230, 80), 25, glm::vec4(1, 1, 1, 1));
+		text.render("Teletransporting to Level 1", glm::vec2(65, SCREEN_HEIGHT / 2 + 35 / 2), 35, glm::vec4(1.0f, 1.0f, 0.0f, 1.0f));
 	}
 	else if (Game::instance().sceneAnt == TELE_2) {
 		controlsTextureQuad->render(controlsTexture);
-		text.render("Teletransporting to Level 2", glm::vec2(230, 80), 25, glm::vec4(1, 1, 1, 1));
+		text.render("Teletransporting to Level 2", glm::vec2(65, SCREEN_HEIGHT / 2 + 35 / 2), 35, glm::vec4(1.0f, 1.0f, 0.0f, 1.0f));
 	}
 	else if (Game::instance().sceneAnt == TELE_3) {
 		controlsTextureQuad->render(controlsTexture);
-		text.render("Teletransporting to Level 3", glm::vec2(230, 80), 25, glm::vec4(1, 1, 1, 1));
+		text.render("Teletransporting to Level 3", glm::vec2(65, SCREEN_HEIGHT / 2 + 35 / 2), 35, glm::vec4(1.0f, 1.0f, 0.0f, 1.0f));
 	}
 }
 

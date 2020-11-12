@@ -16,15 +16,15 @@ void Police::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	sprite = Sprite::createSprite(glm::ivec2(SIZE_X, SIZE_Y), glm::vec2(0.6f, 0.f), glm::vec2(0.05, 0.1), &spritesheet, &shaderProgram, true);
 	sprite->setNumberAnimations(2);
 
-		sprite->setAnimationSpeed(0, 10);
-		sprite->addKeyframe(0, glm::vec2(0.f, 0.f));
-		sprite->addKeyframe(0, glm::vec2(0.05f, 0.f));
-		sprite->addKeyframe(0, glm::vec2(0.1f, 0.f));
+	sprite->setAnimationSpeed(0, 10);
+	sprite->addKeyframe(0, glm::vec2(0.f, 0.f));
+	sprite->addKeyframe(0, glm::vec2(0.05f, 0.f));
+	sprite->addKeyframe(0, glm::vec2(0.1f, 0.f));
 
-		sprite->setAnimationSpeed(1, 10);
-		sprite->addKeyframe(1, glm::vec2(0.f, 0.1f));
-		sprite->addKeyframe(1, glm::vec2(0.05f, 0.1f));
-		sprite->addKeyframe(1, glm::vec2(0.1f, 0.1f));
+	sprite->setAnimationSpeed(1, 10);
+	sprite->addKeyframe(1, glm::vec2(0.f, 0.1f));
+	sprite->addKeyframe(1, glm::vec2(0.05f, 0.1f));
+	sprite->addKeyframe(1, glm::vec2(0.1f, 0.1f));
 
 	tileMapDispl = tileMapPos;
 	speed = 1;
@@ -35,13 +35,13 @@ void Police::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 
 void Police::update(int deltaTime, Player *player, int sublevel)
 {
-	if (start && sublevel==3)
+	if (start && sublevel == 3)
 	{
 		sprite->update(deltaTime);
-		
+
 		direction = moveToPlayer(player);
 		posPolice += direction*speed;
-		
+
 		if (CollisionManager::instance().collisionPolice(posPolice, player, getSize())) colPlayer = true;
 
 		sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPolice.x), float(tileMapDispl.y + posPolice.y)));
@@ -50,7 +50,7 @@ void Police::update(int deltaTime, Player *player, int sublevel)
 
 void Police::render()
 {
-	if(start) sprite->render();
+	if (start) sprite->render();
 }
 
 void Police::setTileMap(TileMap *tileMap)
@@ -67,13 +67,13 @@ void Police::setPosition(const glm::vec2 &pos)
 
 glm::ivec2 Police::moveToPlayer(Player *player)
 {
-	glm::ivec2 move = glm::ivec2(0,0);
+	glm::ivec2 move = glm::ivec2(0, 0);
 	glm::vec2 posPlayer = player->getPosition();
 	if (posPlayer.x < posPolice.x) {
 		move.x = -1;
-		if(sprite->getCurrentAnimation() != 1) sprite->changeAnimation(1);
+		if (sprite->getCurrentAnimation() != 1) sprite->changeAnimation(1);
 	}
-	else if(posPlayer.x > posPolice.x){
+	else if (posPlayer.x > posPolice.x) {
 		move.x = 1;
 		if (sprite->getCurrentAnimation() != 0) sprite->changeAnimation(0);
 	}
@@ -97,4 +97,9 @@ void Police::restart() {
 
 void Police::setStart(bool s) {
 	start = s;
+}
+
+void Police::setColision(bool colisionPlayer)
+{
+	colPlayer = colisionPlayer;
 }

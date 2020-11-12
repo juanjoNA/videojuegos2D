@@ -12,7 +12,7 @@ enum elementType {
 void Element::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, glm::ivec2 &s, glm::vec2 &posInSpritesheet, glm::vec2 &sizeInSpritesheet, int resistencia, vector<glm::vec2> &animations, char letter)
 {
 	spritesheet.loadFromFile("images/spriteSheet.png", TEXTURE_PIXEL_FORMAT_RGBA);
-	if(letter != 'A') sprite = Sprite(s, posInSpritesheet, sizeInSpritesheet, &spritesheet, &shaderProgram, false);
+	if (letter != 'A') sprite = Sprite(s, posInSpritesheet, sizeInSpritesheet, &spritesheet, &shaderProgram, false);
 	else sprite = Sprite(s, posInSpritesheet, sizeInSpritesheet, &spritesheet, &shaderProgram, true);
 	sprite.setNumberAnimations(resistencia);
 
@@ -26,8 +26,8 @@ void Element::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, g
 	}
 	else {
 		if (!animations.empty()) {
-			if(animations.size() > 4) sprite.setAnimationSpeed(0, 25);
-			else if(letter != 'A') sprite.setAnimationSpeed(0, 8);
+			if (animations.size() > 4) sprite.setAnimationSpeed(0, 25);
+			else if (letter != 'A') sprite.setAnimationSpeed(0, 8);
 			else sprite.setAnimationSpeed(0, 10);
 			for (int i = 1; i < animations.size(); i++) {
 				sprite.addKeyframe(0, animations[i]);
@@ -35,28 +35,28 @@ void Element::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, g
 		}
 	}
 
-	
+
 	activateConsequence = false;
 	resistance = resistencia;
 	tileMapDispl = tileMapPos;
 	size = s;
 
 	switch (letter) {
-		case 'B':
-			type = BRICK;
-			break;
-		case 'M':
-			type = MONEY;
-			break;
-		case 'A':
-			type = ALARM;
-			break;
-		case 'K':
-			type = KEY;
-			break;
-		case 'D':
-			type = DOOR;
-			break;
+	case 'B':
+		type = BRICK;
+		break;
+	case 'M':
+		type = MONEY;
+		break;
+	case 'A':
+		type = ALARM;
+		break;
+	case 'K':
+		type = KEY;
+		break;
+	case 'D':
+		type = DOOR;
+		break;
 
 	}
 }
@@ -138,3 +138,6 @@ void Element::executedConsequence()
 {
 	activateConsequence = false;
 }
+
+
+

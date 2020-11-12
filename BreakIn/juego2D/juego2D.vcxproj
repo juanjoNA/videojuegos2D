@@ -32,6 +32,7 @@
     <ClInclude Include="Texture.h" />
     <ClInclude Include="TexturedQuad.h" />
     <ClInclude Include="TileMap.h" />
+    <ClInclude Include="Versus.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Animation.cpp" />
@@ -53,6 +54,7 @@
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="TexturedQuad.cpp" />
     <ClCompile Include="TileMap.cpp" />
+    <ClCompile Include="Versus.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Media Include="audio\alarm.mp3" />
@@ -64,8 +66,12 @@
     <Media Include="audio\coin.wav" />
     <Media Include="audio\coinBag.mp3" />
     <Media Include="audio\gameOver.mp3" />
+    <Media Include="audio\goal.mp3" />
     <Media Include="audio\key.mp3" />
     <Media Include="audio\level1.mp3" />
+    <Media Include="audio\levelUp.mp3" />
+    <Media Include="audio\looseGame.wav" />
+    <Media Include="audio\point.mp3" />
     <Media Include="audio\selection.mp3" />
   </ItemGroup>
   <ItemGroup>

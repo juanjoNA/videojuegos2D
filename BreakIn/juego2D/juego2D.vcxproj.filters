@@ -78,6 +78,9 @@
     <ClInclude Include="Quad.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
+    <ClInclude Include="Versus.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game.cpp">
@@ -137,6 +140,9 @@
     <ClCompile Include="Quad.cpp">
       <Filter>Archivos de código fuente</Filter>
     </ClCompile>
+    <ClCompile Include="Versus.cpp">
+      <Filter>Archivos de código fuente</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Media Include="audio\alarm.mp3" />
@@ -157,6 +163,12 @@
     <Media Include="audio\key.mp3" />
     <Media Include="audio\level1.mp3" />
     <Media Include="audio\selection.mp3" />
+    <Media Include="audio\looseGame.wav">
+      <Filter>Archivos de recursos</Filter>
+    </Media>
+    <Media Include="audio\goal.mp3" />
+    <Media Include="audio\levelUp.mp3" />
+    <Media Include="audio\point.mp3" />
   </ItemGroup>
   <ItemGroup>
     <Font Include="fonts\OpenSans-SemiboldItalic.ttf" />

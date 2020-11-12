@@ -47,15 +47,18 @@ private:
 	Texture passwordTexture;
 	Texture menuTexture;
 	Text text;
+	Text info;
 	string password1 = "TETRIS";
 	string password2 = "PACMAN";
 	string password3 = "TEKKEN";
 	bool wrongPassword = false;
 	Sprite *play1Button;
+	Sprite *multiplayer1Button;
 	Sprite *controls1Button;
 	Sprite *credits1Button;
 	Sprite *password1Button;
 	Sprite *play2Button;
+	Sprite *multiplayer2Button;
 	Sprite *controls2Button;
 	Sprite *credits2Button;
 	Sprite *password2Button;

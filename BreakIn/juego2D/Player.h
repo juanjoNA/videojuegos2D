@@ -14,8 +14,8 @@ class Player
 {
 
 public:
-	void init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram);
-	void update(int deltaTime, int subnivel);
+	void init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, glm::ivec2 &size);
+	void update(int deltaTime, int subnivel, int controls);
 	void render();
 
 	void setTileMap(TileMap *tileMap);
@@ -24,15 +24,14 @@ public:
 	glm::vec2 getPosition() { return posPlayer; }
 	glm::vec2 getSize();
 	int getSpeed() { return speed; }
+	void setSpeed(int speed);
 	//metodes de colisió
 	bool collision(glm::ivec2 &pos, const glm::ivec2 &size) const;
-	/*bool collisionLeft(const glm::ivec2 &pos, const glm::ivec2 &size) const;
-	bool collisionMiddle(const glm::ivec2 &pos, const glm::ivec2 &size) const;
-	*/
 	bool isStarted() { return start; };
+	void restart();
 
 private:
-	glm::ivec2 tileMapDispl, posPlayer, oldPosPlayer, direction;
+	glm::ivec2 tileMapDispl, posPlayer, oldPosPlayer, direction, size;
 	int speed;
 	bool start;
 	Texture spritesheet;

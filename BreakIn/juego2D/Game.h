@@ -4,6 +4,7 @@
 #include "Menu.h"
 #include "Scene.h"
 #include "Animation.h"
+#include "Versus.h"
 
 
 #define SCREEN_WIDTH 640
@@ -61,6 +62,7 @@ public:
 	bool nuevaLetra = false;
 	bool borra = false;
 	bool spacePressed = false;
+	bool enterPressed = false;
 
 	void initGamePropierties();
 
@@ -72,6 +74,7 @@ private:
 	Scene scene;                      // Scene to render
 	Menu menu;
 	Animation animation;
+	Versus sceneVersus;
 	ShaderProgram texProgram;
 	bool keys[256], specialKeys[256]; // Store key states so that 
 									  // we can have access at any time

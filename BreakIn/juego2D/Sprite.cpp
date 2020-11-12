@@ -13,27 +13,27 @@ Sprite *Sprite::createSprite(const glm::vec2 &quadSize, const glm::vec2 &posInSp
 
 Sprite::Sprite(const glm::vec2 &quadSize, const glm::vec2 &posInSpritesheet, const glm::vec2 &sizeInSpritesheet, Texture *spritesheet, ShaderProgram *program, bool isRepeatable)
 {
-	/*float vertices[24] = {						0.f, 0.f, 0.f, 0.f, 
-												quadSize.x, 0.f, sizeInSpritesheet.x, 0.f, 
-												quadSize.x, quadSize.y, sizeInSpritesheet.x, sizeInSpritesheet.y, 
-												0.f, 0.f, 0.f, 0.f, 
-												quadSize.x, quadSize.y, sizeInSpritesheet.x, sizeInSpritesheet.y, 
-												0.f, quadSize.y, 0.f, sizeInSpritesheet.y};*/
+	/*float vertices[24] = {						0.f, 0.f, 0.f, 0.f,
+	quadSize.x, 0.f, sizeInSpritesheet.x, 0.f,
+	quadSize.x, quadSize.y, sizeInSpritesheet.x, sizeInSpritesheet.y,
+	0.f, 0.f, 0.f, 0.f,
+	quadSize.x, quadSize.y, sizeInSpritesheet.x, sizeInSpritesheet.y,
+	0.f, quadSize.y, 0.f, sizeInSpritesheet.y};*/
 
-	float vertices[24] = {	0.f, 0.f, posInSpritesheet.x, posInSpritesheet.y,
-							quadSize.x, 0.f, (posInSpritesheet.x+sizeInSpritesheet.x), posInSpritesheet.y,
-							quadSize.x, quadSize.y, (posInSpritesheet.x + sizeInSpritesheet.x), (posInSpritesheet.y + sizeInSpritesheet.y),
-							0.f, 0.f, posInSpritesheet.x, posInSpritesheet.y,
-							quadSize.x, quadSize.y, (posInSpritesheet.x + sizeInSpritesheet.x), (posInSpritesheet.y + sizeInSpritesheet.y),
-							0.f, quadSize.y, posInSpritesheet.x, (posInSpritesheet.y + sizeInSpritesheet.y), };
+	float vertices[24] = { 0.f, 0.f, posInSpritesheet.x, posInSpritesheet.y,
+		quadSize.x, 0.f, (posInSpritesheet.x + sizeInSpritesheet.x), posInSpritesheet.y,
+		quadSize.x, quadSize.y, (posInSpritesheet.x + sizeInSpritesheet.x), (posInSpritesheet.y + sizeInSpritesheet.y),
+		0.f, 0.f, posInSpritesheet.x, posInSpritesheet.y,
+		quadSize.x, quadSize.y, (posInSpritesheet.x + sizeInSpritesheet.x), (posInSpritesheet.y + sizeInSpritesheet.y),
+		0.f, quadSize.y, posInSpritesheet.x, (posInSpritesheet.y + sizeInSpritesheet.y), };
 
 	glGenVertexArrays(1, &vao);
 	glBindVertexArray(vao);
 	glGenBuffers(1, &vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
 	glBufferData(GL_ARRAY_BUFFER, 24 * sizeof(float), vertices, GL_STATIC_DRAW);
-	posLocation = program->bindVertexAttribute("position", 2, 4*sizeof(float), 0);
-	texCoordLocation = program->bindVertexAttribute("texCoord", 2, 4*sizeof(float), (void *)(2*sizeof(float)));
+	posLocation = program->bindVertexAttribute("position", 2, 4 * sizeof(float), 0);
+	texCoordLocation = program->bindVertexAttribute("texCoord", 2, 4 * sizeof(float), (void *)(2 * sizeof(float)));
 	texture = spritesheet;
 	shaderProgram = program;
 	currentAnimation = -1;
@@ -44,17 +44,17 @@ Sprite::Sprite(const glm::vec2 &quadSize, const glm::vec2 &posInSpritesheet, con
 
 void Sprite::update(int deltaTime)
 {
-	if(currentAnimation >= 0 && animate && !finish)
+	if (currentAnimation >= 0 && animate && !finish)
 	{
 		timeAnimation += deltaTime;
-		while(timeAnimation > animations[currentAnimation].millisecsPerKeyframe)
+		while (timeAnimation > animations[currentAnimation].millisecsPerKeyframe)
 		{
 			timeAnimation -= animations[currentAnimation].millisecsPerKeyframe;
 			lastKeyframe = currentKeyframe;
 			currentKeyframe = (currentKeyframe + 1) % animations[currentAnimation].keyframeDispl.size();
 		}
 		texCoordDispl = animations[currentAnimation].keyframeDispl[currentKeyframe];
-		if (!repeat && (currentKeyframe == 0 && lastKeyframe == animations[currentAnimation].keyframeDispl.size()-1)) {
+		if (!repeat && (currentKeyframe == 0 && lastKeyframe == animations[currentAnimation].keyframeDispl.size() - 1)) {
 			finish = true;
 		}
 	}
@@ -90,19 +90,19 @@ void Sprite::setNumberAnimations(int nAnimations)
 
 void Sprite::setAnimationSpeed(int animId, int keyframesPerSec)
 {
-	if(animId < int(animations.size()))
+	if (animId < int(animations.size()))
 		animations[animId].millisecsPerKeyframe = 1000.f / keyframesPerSec;
 }
 
 void Sprite::addKeyframe(int animId, const glm::vec2 &displacement)
 {
-	if(animId < int(animations.size()))
+	if (animId < int(animations.size()))
 		animations[animId].keyframeDispl.push_back(displacement);
 }
 
 void Sprite::changeAnimation(int animId)
 {
-	if(animId < int(animations.size()))
+	if (animId < int(animations.size()))
 	{
 		animate = true;
 		currentAnimation = animId;
