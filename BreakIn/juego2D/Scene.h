@@ -62,6 +62,7 @@ private:
 	Sprite *roomTitle;
 	Sprite *livesTitle;
 	Text text;
+	Text godModeText;
 	glm::ivec2 ballPos;
 	glm::ivec2 playerPos;
 	ShaderProgram simpleProgram, texProgram;

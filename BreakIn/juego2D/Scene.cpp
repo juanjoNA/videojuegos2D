@@ -44,6 +44,8 @@ void Scene::init()
 	subnivel = 1;
 
 	Game::instance().godMode = false;
+	Game::instance().destroyBlocks = false;
+	Game::instance().pickMoney = false;
 
 	map1 = TileMap::createTileMap("levels/level01.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 	map2 = TileMap::createTileMap("levels/level02.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
@@ -102,6 +104,11 @@ void Scene::init()
 		//if(!text.init("fonts/OpenSans-Bold.ttf"))
 		//if(!text.init("fonts/DroidSerif.ttf"))
 		cout << "Could not load font!!!" << endl;
+
+	 if (!godModeText.init("fonts/LemonMilk.ttf"))
+		 //if(!text.init("fonts/OpenSans-Bold.ttf"))
+		 //if(!text.init("fonts/DroidSerif.ttf"))
+		 cout << "Could not load font!!!" << endl;
 }
 
 void Scene::update(int deltaTime)
@@ -143,12 +150,28 @@ void Scene::update(int deltaTime)
 	ballPos = ball->position();
 	playerPos = player->getPosition();
 
+	if (Game::instance().destroyBlocks) {
+		for (int i = objectsInGame.size() - 1; i >= 0; i--) {
+			if (objectsInGame.at(i).getType() == 0) objectsInGame.erase(objectsInGame.begin() + i);
+		}
+		Game::instance().destroyBlocks = false;
+	}
+	else if (Game::instance().pickMoney) {
+		for (int i = objectsInGame.size() - 1; i >= 0; i--) {
+			if (objectsInGame.at(i).getType() == 1) {
+				money += objectsInGame.at(i).getValue();
+				objectsInGame.erase(objectsInGame.begin() + i);
+			}
+		}
+		Game::instance().pickMoney = false;
+	}
+
 	if (Game::instance().bF1) {
 		Game::instance().bF1 = false;
 		if (level != 1) {
-			Game::instance().money += money;
+			Game::instance().money = money;
 			Game::instance().lives = lives;
-			Game::instance().points += points;
+			Game::instance().points = points;
 			Game::instance().sceneAnt = TELE_1;
 			Game::instance().setState(ANIMATION);
 		}
@@ -156,9 +179,9 @@ void Scene::update(int deltaTime)
 	else if (Game::instance().bF2) {
 		Game::instance().bF2 = false;
 		if (level != 2) {
-			Game::instance().money += money;
+			Game::instance().money = money;
 			Game::instance().lives = lives;
-			Game::instance().points += points;
+			Game::instance().points = points;
 			Game::instance().sceneAnt = TELE_2;
 			Game::instance().setState(ANIMATION);
 		}
@@ -166,9 +189,9 @@ void Scene::update(int deltaTime)
 	else if (Game::instance().bF3) {
 		Game::instance().bF3 = false;
 		if (level != 3) {
-			Game::instance().money += money;
+			Game::instance().money = money;
 			Game::instance().lives = lives;
-			Game::instance().points += points;
+			Game::instance().points = points;
 			Game::instance().sceneAnt = TELE_3;
 			Game::instance().setState(ANIMATION);
 		}
@@ -196,6 +219,15 @@ void Scene::update(int deltaTime)
 				player->setPosition(glm::vec2(playerPos.x, playerPos.y + 448));
 				subnivel = 2;
 				setGameTextPosition(subnivel);
+			}
+			else {
+				int sube = true;
+				int i = objectsInGame.size() - 1;
+				while (i >= 0 && sube) {
+					if (objectsInGame.at(i).getType() == 1) sube = false;
+					--i;
+				}
+				if (sube) subeNivel();
 			}
 			break;
 
@@ -342,6 +374,7 @@ void Scene::render()
 	text.render(to_string(lives), glm::vec2(430, 275), 25, glm::vec4(1, 1, 1, 1));
 	text.render(to_string(level), glm::vec2(430, 370), 25, glm::vec4(1, 1, 1, 1));
 	text.render(to_string(subnivel), glm::vec2(430, 465), 25, glm::vec4(1, 1, 1, 1));
+	if(Game::instance().godMode) godModeText.render("God mode activated", glm::vec2(490, 480), 12, glm::vec4(1, 1, 1, 1));
 }
 
 void Scene::initShaders()
@@ -620,6 +653,8 @@ void Scene::reinit(int reinitLevel)
 	subnivel = 1;
 
 	Game::instance().godMode = false;
+	Game::instance().destroyBlocks = false;
+	Game::instance().pickMoney = false;
 
 	setGameTextPosition(subnivel);
 

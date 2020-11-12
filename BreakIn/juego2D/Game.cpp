@@ -113,8 +113,14 @@ void Game::keyReleased(int key)
 	}
 	
 	if (key == 103) {
-		if (godMode == false) godMode = true;
+		if (!godMode) godMode = true;
 		else godMode = false;
+	}
+	else if (key == 98) {
+		if (!destroyBlocks) destroyBlocks = true;
+	}
+	else if (key == 99) {
+		if (!pickMoney) pickMoney = true;
 	}
 }
 
