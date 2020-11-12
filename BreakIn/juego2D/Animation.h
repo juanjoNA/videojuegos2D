@@ -29,12 +29,10 @@ private:
 	Player *player;
 	ShaderProgram texProgram;
 	Texture controlsTexture;
-	Texture gameOverTexture, loadingTexture, thiefTexture;
-	Texture initialTexture;
+	Texture gameOverTexture, transition1Texture, transition2Texture, winTexture, initialTexture;
 	Sprite *gameOver, *thief;
 	Scene *scene;
-	TexturedQuad* controlsTextureQuad;
-	TexturedQuad* initialTextureQuad;
+	TexturedQuad *TextureQuad;
 	Text text;
 	float currentTime;
 	glm::mat4 projection;

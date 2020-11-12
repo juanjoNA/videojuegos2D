@@ -31,63 +31,19 @@ void Animation::init()
 	glm::vec2 texCoords[2] = { glm::vec2(0.f, 0.f), glm::vec2(1.f, 1.f) };
 	glm::vec2 geomGUI[2] = { glm::vec2(0.f, 0.f), glm::vec2(float(SCREEN_WIDTH), float(SCREEN_HEIGHT)) };
 
-	controlsTextureQuad = TexturedQuad::createTexturedQuad(geomGUI, texCoords, texProgram);
+	TextureQuad = TexturedQuad::createTexturedQuad(geomGUI, texCoords, texProgram);
+
 	controlsTexture.loadFromFile("images/gameOverBackground.jpeg", TEXTURE_PIXEL_FORMAT_RGB);
 
-	initialTextureQuad = TexturedQuad::createTexturedQuad(geomGUI, texCoords, texProgram);
 	initialTexture.loadFromFile("images/loadingPage.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	transition1Texture.loadFromFile("images/transicion_level1.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	transition2Texture.loadFromFile("images/transicion_level2.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	winTexture.loadFromFile("images/transicion_win.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	controlsTexture.loadFromFile("images/gameOverBackground.jpeg", TEXTURE_PIXEL_FORMAT_RGB);
 
 	gameOverTexture.loadFromFile("images/gameOver.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	gameOver = Sprite::createSprite(glm::ivec2(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2), glm::vec2(0.0f, 0.0f), glm::vec2(1.0f, 1.0f), &gameOverTexture, &texProgram, false);
 	gameOver->setPosition(glm::vec2(SCREEN_WIDTH / 4, SCREEN_HEIGHT / 4));
-
-	thiefTexture.loadFromFile("images/thiefSprite.png", TEXTURE_PIXEL_FORMAT_RGBA);
-	thief = Sprite::createSprite(glm::ivec2(320, 64), glm::vec2(0.f, 0.6f), glm::vec2(0.2f, 0.25f), &thiefTexture, &texProgram, false);
-	thief->setPosition(glm::vec2(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2));
-	thief->setNumberAnimations(3);
-	//Animacion 0
-	thief->setAnimationSpeed(0, 20);
-	thief->addKeyframe(0, glm::vec2(0.f, 0.f));
-	thief->addKeyframe(0, glm::vec2(0.25f, 0.f));
-	thief->addKeyframe(0, glm::vec2(0.50f, 0.f));
-	thief->addKeyframe(0, glm::vec2(0.75f, 0.f));
-	thief->addKeyframe(0, glm::vec2(-0.75f, 0.f));
-	thief->addKeyframe(0, glm::vec2(0.f, 0.2f));
-	thief->addKeyframe(0, glm::vec2(0.25f, 0.f));
-	thief->addKeyframe(0, glm::vec2(0.50f, 0.f));
-	thief->addKeyframe(0, glm::vec2(0.75f, 0.f));
-	thief->addKeyframe(0, glm::vec2(-0.75f, 0.f));
-	thief->addKeyframe(0, glm::vec2(0.f, -0.8f));
-	thief->addKeyframe(0, glm::vec2(0.f, 0.f));
-	thief->addKeyframe(0, glm::vec2(0.f, 0.f));
-	thief->addKeyframe(0, glm::vec2(0.25f, 0.f));
-	thief->addKeyframe(0, glm::vec2(0.5f, 0.f));
-	thief->addKeyframe(0, glm::vec2(0.75f, 0.f));
-
-	//Animacion 1
-	thief->setAnimationSpeed(1, 20);
-	//miro izquierda
-	thief->addKeyframe(1, glm::vec2(0.f, 0.2f));
-	thief->addKeyframe(1, glm::vec2(0.25f, 0.f));
-	thief->addKeyframe(1, glm::vec2(0.50f, 0.f));
-	thief->addKeyframe(1, glm::vec2(0.75f, 0.f));
-	thief->addKeyframe(1, glm::vec2(-0.75f, 0.f));
-	//miro derecha
-	thief->addKeyframe(1, glm::vec2(0.f, -0.2f));
-	thief->addKeyframe(1, glm::vec2(0.25f, 0.f));
-	thief->addKeyframe(1, glm::vec2(0.50f, 0.f));
-	thief->addKeyframe(1, glm::vec2(0.75f, 0.f));
-	thief->addKeyframe(1, glm::vec2(-0.75f, 0.f));
-	//Troto
-	thief->addKeyframe(1, glm::vec2(0.f, -0.2f));
-	thief->addKeyframe(1, glm::vec2(0.25f, 0.f));
-	thief->addKeyframe(1, glm::vec2(0.5f, 0.f));
-	thief->addKeyframe(1, glm::vec2(0.75f, 0.f));
-
-	//Animacion 2
-	thief->addKeyframe(2, glm::vec2(0.f, -0.4f));
-	thief->addKeyframe(2, glm::vec2(0.25f, 0.f));
-	thief->changeAnimation(0);
 
 	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
 
@@ -107,7 +63,6 @@ void Animation::update(int deltaTime)
 		Game::instance().setState(MENU);
 	}
 	else if (Game::instance().sceneAnt == TELE_1) {
-		thief->update(deltaTime);
 		Game::instance().setState(LEVEL_1);
 	}
 	else if (Game::instance().sceneAnt == LEVEL_1 || Game::instance().sceneAnt == TELE_2) {
@@ -129,37 +84,43 @@ void Animation::render()
 	modelview = glm::mat4(1.0f);
 	texProgram.setUniformMatrix4f("modelview", modelview);
 	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
+	int m = Game::instance().money;
 
 	if (Game::instance().sceneAnt == -1) {
-		initialTextureQuad->render(initialTexture);
+		TextureQuad->render(initialTexture);
 	}
 	else if (Game::instance().sceneAnt == GAME_OVER) {
-		controlsTextureQuad->render(controlsTexture);
+		TextureQuad->render(controlsTexture);
 		gameOver->render();
 	}
 	else if (Game::instance().sceneAnt == LEVEL_1) {
-		thief->render();
-		controlsTextureQuad->render(controlsTexture);
-		text.render("Transicion del level1 al level2", glm::vec2(230, 80), 25, glm::vec4(1, 1, 1, 1));
+		TextureQuad->render(transition1Texture);
+		text.render("Road to level 2", glm::vec2((SCREEN_WIDTH / 2) - 150, 50), 34, glm::vec4(1, 1, 1, 1));
+		string dinero = to_string(m) + " EUR";
+		text.render(dinero, glm::vec2((SCREEN_WIDTH / 2) - 50, SCREEN_HEIGHT - 15), 40, glm::vec4(1, 1, 0, 1));
 	}
 	else if (Game::instance().sceneAnt == LEVEL_2) {
-		controlsTextureQuad->render(controlsTexture);
-		text.render("Transicion del level2 al level3", glm::vec2(230, 80), 25, glm::vec4(1, 1, 1, 1));
+		TextureQuad->render(transition2Texture);
+		text.render("Road to level 3", glm::vec2((SCREEN_WIDTH / 2) - 150, 50), 34, glm::vec4(1, 1, 1, 1));
+		string dinero = to_string(m) + " EUR";
+		text.render(dinero, glm::vec2((SCREEN_WIDTH / 2) - 50, SCREEN_HEIGHT - 15), 40, glm::vec4(1, 1, 0, 1));
 	}
 	else if (Game::instance().sceneAnt == LEVEL_3) {
-		controlsTextureQuad->render(controlsTexture);
-		text.render("Animación victoria", glm::vec2(230, 80), 25, glm::vec4(1, 1, 1, 1));
+		TextureQuad->render(winTexture);
+		text.render("YOU WIN", glm::vec2((SCREEN_WIDTH / 2) - 125, 50), 34, glm::vec4(1, 1, 0, 1));
+		string dinero = to_string(m) + " EUR";
+		text.render(dinero, glm::vec2((SCREEN_WIDTH / 2) - 150, 50), 40, glm::vec4(1, 1, 0, 1));
 	}
 	else if (Game::instance().sceneAnt == TELE_1) {
-		controlsTextureQuad->render(controlsTexture);
+		TextureQuad->render(controlsTexture);
 		text.render("Teleporting to Level 1", glm::vec2(65, SCREEN_HEIGHT / 2 + 35 / 2), 35, glm::vec4(1.0f, 1.0f, 0.0f, 1.0f));
 	}
 	else if (Game::instance().sceneAnt == TELE_2) {
-		controlsTextureQuad->render(controlsTexture);
+		TextureQuad->render(controlsTexture);
 		text.render("Teleporting to Level 2", glm::vec2(65, SCREEN_HEIGHT / 2 + 35 / 2), 35, glm::vec4(1.0f, 1.0f, 0.0f, 1.0f));
 	}
 	else if (Game::instance().sceneAnt == TELE_3) {
-		controlsTextureQuad->render(controlsTexture);
+		TextureQuad->render(controlsTexture);
 		text.render("Teleporting to Level 3", glm::vec2(65, SCREEN_HEIGHT / 2 + 35 / 2), 35, glm::vec4(1.0f, 1.0f, 0.0f, 1.0f));
 	}
 }
