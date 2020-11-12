@@ -107,12 +107,16 @@ void Animation::render()
 		text.render(dinero, glm::vec2((SCREEN_WIDTH / 2)-50, SCREEN_HEIGHT-15), 40, glm::vec4(1, 1, 0, 1));
 	}
 	else if (Game::instance().sceneAnt == LEVEL_2) {
-		TextureQuad->render(controlsTexture);
-		text.render("Transicion del level2 al level3", glm::vec2(230, 80), 25, glm::vec4(1, 1, 1, 1));
+		TextureQuad->render(transition2Texture);
+		text.render("Road to level 3", glm::vec2((SCREEN_WIDTH / 2) - 150, 50), 34, glm::vec4(1, 1, 1, 1));
+		string dinero = to_string(m) + " EUR";
+		text.render(dinero, glm::vec2((SCREEN_WIDTH / 2) - 50, SCREEN_HEIGHT - 15), 40, glm::vec4(1, 1, 0, 1));
 	}
 	else if (Game::instance().sceneAnt == LEVEL_3) {
-		TextureQuad->render(controlsTexture);
-		text.render("Animación victoria", glm::vec2(230, 80), 25, glm::vec4(1, 1, 1, 1));
+		TextureQuad->render(winTexture);
+		text.render("YOU WIN", glm::vec2((SCREEN_WIDTH / 2) - 125, 50), 34, glm::vec4(1, 1, 0, 1));
+		string dinero = to_string(m) + " EUR";
+		text.render(dinero, glm::vec2((SCREEN_WIDTH / 2) - 150, 50), 40, glm::vec4(1, 1, 0, 1));
 	}
 	else if (Game::instance().sceneAnt == TELE_1) {
 		TextureQuad->render(controlsTexture);
