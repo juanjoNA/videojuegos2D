@@ -1,3 +1,4 @@
+
 #include <glm/glm.hpp>
 #include "ShaderProgram.h"
 #include "TileMap.h"
@@ -31,10 +32,9 @@ private:
 	Texture gameOverTexture, transition1Texture, transition2Texture, winTexture, initialTexture;
 	Sprite *gameOver;
 	Scene *scene;
-	TexturedQuad *TextureQuad, *initialTextureQuad, *transition1TextureQuad, *transition2TextureQuad, *winTextureQuad;
+	TexturedQuad *TextureQuad;
 	Text text;
 	float currentTime;
 	glm::mat4 projection;
 
 };
-

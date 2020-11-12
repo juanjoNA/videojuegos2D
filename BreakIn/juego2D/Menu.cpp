@@ -31,6 +31,7 @@ void Menu::init() {
 	bUpPressed = false;
 	bDownPressed = false;
 	bEnterPressed = false;
+	bSpacePressed = false;
 
 	bCredits = false;
 	bPassword = false;
@@ -44,14 +45,8 @@ void Menu::init() {
 	mainTextureQuad = TexturedQuad::createTexturedQuad(geomGUI, texCoords, texProgram);
 	mainTexture.loadFromFile("images/fondoBreakIn.png", TEXTURE_PIXEL_FORMAT_RGB);
 
-	controlsTextureQuad = TexturedQuad::createTexturedQuad(geomGUI, texCoords, texProgram);
-	controlsTexture.loadFromFile("images/controls.png", TEXTURE_PIXEL_FORMAT_RGB);
-
-	creditsTextureQuad = TexturedQuad::createTexturedQuad(geomGUI, texCoords, texProgram);
-	creditsTexture.loadFromFile("images/credits.png", TEXTURE_PIXEL_FORMAT_RGB);
-
-	passwordTextureQuad = TexturedQuad::createTexturedQuad(geomGUI, texCoords, texProgram);
-	passwordTexture.loadFromFile("images/password.png", TEXTURE_PIXEL_FORMAT_RGB);
+	arcadeTextureQuad = TexturedQuad::createTexturedQuad(geomGUI, texCoords, texProgram);
+	arcadeTexture.loadFromFile("images/password.png", TEXTURE_PIXEL_FORMAT_RGB);
 
 	menuTexture.loadFromFile("images/menuSpritesheet.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	menuTexture.setMinFilter(GL_NEAREST);
@@ -63,10 +58,10 @@ void Menu::init() {
 	play2Button = Sprite::createSprite(glm::ivec2(BUTTON_X, BUTTON_Y), glm::vec2(0.25f, 0.0f), glm::vec2(0.25f, 0.25f), &menuTexture, &texProgram, false);
 	play2Button->setPosition(glm::vec2(float(SCREEN_WIDTH / 2 - BUTTON_X / 2), float(firstButtonY)));
 
-	multiplayer1Button = Sprite::createSprite(glm::ivec2(BUTTON_X, BUTTON_Y), glm::vec2(0.0f, 0.0f), glm::vec2(0.25f, 0.25f), &menuTexture, &texProgram, false);
+	multiplayer1Button = Sprite::createSprite(glm::ivec2(BUTTON_X, BUTTON_Y), glm::vec2(0.25f, 0.75f), glm::vec2(0.25f, 0.25f), &menuTexture, &texProgram, false);
 	multiplayer1Button->setPosition(glm::vec2(float(SCREEN_WIDTH / 2 - BUTTON_X / 2), float(firstButtonY + BUTTON_Y)));
 
-	multiplayer2Button = Sprite::createSprite(glm::ivec2(BUTTON_X, BUTTON_Y), glm::vec2(0.25f, 0.0f), glm::vec2(0.25f, 0.25f), &menuTexture, &texProgram, false);
+	multiplayer2Button = Sprite::createSprite(glm::ivec2(BUTTON_X, BUTTON_Y), glm::vec2(0.5f, 0.75f), glm::vec2(0.25f, 0.25f), &menuTexture, &texProgram, false);
 	multiplayer2Button->setPosition(glm::vec2(float(SCREEN_WIDTH / 2 - BUTTON_X / 2), float(firstButtonY + BUTTON_Y)));
 
 	controls1Button = Sprite::createSprite(glm::ivec2(BUTTON_X, BUTTON_Y), glm::vec2(0.5f, 0.0f), glm::vec2(0.25f, 0.25f), &menuTexture, &texProgram, false);
@@ -139,18 +134,27 @@ void Menu::update() {
 
 	if (index == -1) index = numOptions - 1;
 	index = index % numOptions;
+	
+	if (Game::instance().getKey(32) && !bSpacePressed) {
+		if (bControls || bCredits || bPassword) {
+			MenuSound->play2D("audio/selection.mp3");
+			Sleep(350);
+			bSpacePressed = true;
+			if (bControls) bControls = false;
+			else if (bCredits) bCredits = false;
+			else if (bPassword) {
+				passwordAtempt = "";
+				bPassword = false;
+			}
+		}
+	}
+	else if(!Game::instance().getKey(32)) bSpacePressed = false;
 
 	if (Game::instance().getKey(13) && !bEnterPressed) { //enter key
-		MenuSound->play2D("audio/selection.mp3");
-		Sleep(350);
-		bEnterPressed = true;
-		if (bControls) bControls = false;
-		else if (bCredits) bCredits = false;
-		else if (bPassword) {
-			passwordAtempt = "";
-			bPassword = false;
-		}
-		else { //Menu screen, check if options are selected
+		if (!bControls && !bCredits && !bPassword) {
+			MenuSound->play2D("audio/selection.mp3");
+			Sleep(350);
+			bEnterPressed = true;
 			switch (index) {
 			case 0:
 				Game::instance().sceneAnt = MENU;
@@ -170,6 +174,7 @@ void Menu::update() {
 				Game::instance().nuevaLetra = false;
 				Game::instance().borra = false;
 				Game::instance().spacePressed = false;
+				Game::instance().enterPressed = false;
 				bPassword = true;
 				break;
 			}
@@ -178,7 +183,6 @@ void Menu::update() {
 	else if (!Game::instance().getKey(13)) bEnterPressed = false;
 
 	if (bPassword) {
-
 		if (Game::instance().nuevaLetra && passwordAtempt.size() <= 20) {
 			passwordAtempt += Game::instance().letra;
 			Game::instance().nuevaLetra = false;
@@ -188,8 +192,8 @@ void Menu::update() {
 			Game::instance().borra = false;
 		}
 
-		if (Game::instance().spacePressed) {
-			Game::instance().spacePressed = false;
+		if (Game::instance().enterPressed) {
+			Game::instance().enterPressed = false;
 			if (passwordAtempt == password1) {
 				Game::instance().sceneAnt = TELE_1;
 				Game::instance().setState(ANIMATION);
@@ -211,7 +215,7 @@ void Menu::update() {
 				index = 0;
 				passwordAtempt = "";
 			}
-			else {
+			else if (!passwordAtempt.empty()) {
 				wrongPassword = true;
 				passwordAtempt = "";
 			}
@@ -229,16 +233,46 @@ void Menu::render() {
 	texProgram.setUniformMatrix4f("modelview", modelview);
 	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
 
-	if (bControls) controlsTextureQuad->render(controlsTexture);
+	if (bControls) {
+		arcadeTextureQuad->render(arcadeTexture);
+
+		text.render("IN GAME controls", glm::vec2(150, 80), 25, glm::vec4(1.0f, 0.5f, 0.31f, 1));
+		info.render("[^] Move up", glm::vec2(150, 110), 15, glm::vec4(1.0f, 1.0f, 1.0f, 1));
+		info.render("[down key] Move down", glm::vec2(270, 110), 15, glm::vec4(1.0f, 1.0f, 1.0f, 1));
+		info.render("[<] Move left", glm::vec2(150, 130), 15, glm::vec4(1.0f, 1.0f, 1.0f, 1));
+		info.render("[>] Move right", glm::vec2(270, 130), 15, glm::vec4(1.0f, 1.0f, 1.0f, 1));
+
+		text.render("MENU controls", glm::vec2(150, 190), 25, glm::vec4(1.0f, 0.5f, 0.31f, 1));
+		info.render("[enter] Select", glm::vec2(150, 220), 15, glm::vec4(1.0f, 1.0f, 1.0f, 1));
+		info.render("[space] Back", glm::vec2(270, 220), 15, glm::vec4(1.0f, 1.0f, 1.0f, 1));
+
+		text.render("GOD MODE controls", glm::vec2(150, 280), 25, glm::vec4(1.0f, 0.5f, 0.31f, 1));
+		info.render("[F1] Jump to level 2", glm::vec2(150, 310), 15, glm::vec4(1.0f, 1.0f, 1.0f, 1));
+		info.render("[F4] Room up", glm::vec2(320, 310), 15, glm::vec4(1.0f, 1.0f, 1.0f, 1));
+		info.render("[F2] Jump to level 3", glm::vec2(150, 330), 15, glm::vec4(1.0f, 1.0f, 1.0f, 1));
+		info.render("[F5] Room down", glm::vec2(320, 330), 15, glm::vec4(1.0f, 1.0f, 1.0f, 1));
+		info.render("[F3] Jump to level 3", glm::vec2(150, 350), 15, glm::vec4(1.0f, 1.0f, 1.0f, 1));
+		info.render("[g] Vertical bouncing", glm::vec2(320, 350), 15, glm::vec4(1.0f, 1.0f, 1.0f, 1));
+		info.render("[b] Distrey level blocks", glm::vec2(150, 370), 15, glm::vec4(1.0f, 1.0f, 1.0f, 1));
+		info.render("[g] Pick level coins", glm::vec2(320, 370), 15, glm::vec4(1.0f, 1.0f, 1.0f, 1));
+
+		info.render("Press SPACE to return to Menu", glm::vec2(250, 440), 10, glm::vec4(1.0f, 1.0f, 1.0f, 1));
+	}
 	else if (bPassword) {
-		passwordTextureQuad->render(passwordTexture);
+		arcadeTextureQuad->render(arcadeTexture);
 		text.render("Introduce a password", glm::vec2(150, SCREEN_HEIGHT / 4), 30, glm::vec4(1.0f, 0.5f, 0.31f, 1));
 		if (wrongPassword) text.render("WRONG PASSWORD", glm::vec2(150, SCREEN_HEIGHT / 3), 20, glm::vec4(1.0f, 0.0f, 0.0f, 1));
 		else text.render(passwordAtempt, glm::vec2(150, SCREEN_HEIGHT / 3), 20, glm::vec4(1.0f, 1.0f, 1.0f, 1));
-		info.render("Press START to submit password", glm::vec2(150, 420), 10, glm::vec4(1.0f, 1.0f, 1.0f, 1));
-		info.render("Press ENTER to return to Menu", glm::vec2(150, 440), 10, glm::vec4(1.0f, 1.0f, 1.0f, 1));
+		info.render("Press ENTER to submit password", glm::vec2(150, 420), 10, glm::vec4(1.0f, 1.0f, 1.0f, 1));
+		info.render("Press SPACE to return to Menu", glm::vec2(150, 440), 10, glm::vec4(1.0f, 1.0f, 1.0f, 1));
 	}
-	else if (bCredits) creditsTextureQuad->render(creditsTexture);
+	else if (bCredits) {
+		arcadeTextureQuad->render(arcadeTexture);
+		text.render("Created by:", glm::vec2(240, 180), 30, glm::vec4(1.0f, 0.5f, 0.31f, 1));
+		text.render("Juanjo Navarro Albarracin", glm::vec2(140, 250), 25, glm::vec4(1.0f, 1.0f, 1.0f, 1));
+		text.render("Isaac Munoz Busto", glm::vec2(200, 300), 25, glm::vec4(1.0f, 1.0f, 1.0f, 1));
+		info.render("Press SPACE to return to Menu", glm::vec2(250, 440), 10, glm::vec4(1.0f, 1.0f, 1.0f, 1));
+	}
 	else {
 		mainTextureQuad->render(mainTexture);
 		switch (index) {

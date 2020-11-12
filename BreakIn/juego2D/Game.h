@@ -57,6 +57,8 @@ public:
 	bool b2 = false;
 	bool b3 = false;
 	bool godMode = false;
+	bool destroyBlocks = false;
+	bool pickMoney = false;
 	bool gameOver = false;
 	char letra;
 	bool nuevaLetra = false;

@@ -20,7 +20,6 @@
     <ClInclude Include="main.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="Element.h" />
-    <ClInclude Include="Misil.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Police.h" />
     <ClInclude Include="Quad.h" />
@@ -42,7 +41,6 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Element.cpp" />
     <ClCompile Include="Menu.cpp" />
-    <ClCompile Include="Misil.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Police.cpp" />
     <ClCompile Include="Quad.cpp" />

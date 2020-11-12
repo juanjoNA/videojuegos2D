@@ -29,7 +29,7 @@ private:
 private:
 	int index;
 	int numOptions;
-	bool bUpPressed, bDownPressed, bEnterPressed;
+	bool bUpPressed, bDownPressed, bSpacePressed, bEnterPressed;
 	bool bCredits;
 	bool bControls;
 	bool bPassword;
@@ -38,13 +38,9 @@ private:
 	glm::mat4 projection;
 	Texture titlesTexture;
 	TexturedQuad* mainTextureQuad;
-	TexturedQuad* controlsTextureQuad;
-	TexturedQuad* creditsTextureQuad;
-	TexturedQuad* passwordTextureQuad;
+	TexturedQuad* arcadeTextureQuad;
 	Texture mainTexture;
-	Texture controlsTexture;
-	Texture creditsTexture;
-	Texture passwordTexture;
+	Texture arcadeTexture;
 	Texture menuTexture;
 	Text text;
 	Text info;

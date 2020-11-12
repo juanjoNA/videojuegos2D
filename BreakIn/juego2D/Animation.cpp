@@ -35,18 +35,10 @@ void Animation::init()
 
 	controlsTexture.loadFromFile("images/gameOverBackground.jpeg", TEXTURE_PIXEL_FORMAT_RGB);
 
-	//initialTextureQuad = TexturedQuad::createTexturedQuad(geomGUI, texCoords, texProgram);
 	initialTexture.loadFromFile("images/loadingPage.png", TEXTURE_PIXEL_FORMAT_RGBA);
-
-	//transition1TextureQuad = TexturedQuad::createTexturedQuad(geomGUI, texCoords, texProgram);
-	transition1Texture.loadFromFile("images/transicion_level1.png", TEXTURE_PIXEL_FORMAT_RGBA);
-
-	//transition1TextureQuad = TexturedQuad::createTexturedQuad(geomGUI, texCoords, texProgram);
+  transition1Texture.loadFromFile("images/transicion_level1.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	transition2Texture.loadFromFile("images/transicion_level2.png", TEXTURE_PIXEL_FORMAT_RGBA);
-
 	winTexture.loadFromFile("images/transicion_win.png", TEXTURE_PIXEL_FORMAT_RGBA);
-
-	//controlsTextureQuad = TexturedQuad::createTexturedQuad(geomGUI, texCoords, texProgram);
 	controlsTexture.loadFromFile("images/gameOverBackground.jpeg", TEXTURE_PIXEL_FORMAT_RGB);
 
 	gameOverTexture.loadFromFile("images/gameOver.png", TEXTURE_PIXEL_FORMAT_RGBA);
@@ -71,6 +63,7 @@ void Animation::update(int deltaTime)
 		Game::instance().setState(MENU);
 	}
 	else if (Game::instance().sceneAnt == TELE_1) {
+		thief->update(deltaTime);
 		Game::instance().setState(LEVEL_1);
 	}
 	else if (Game::instance().sceneAnt == LEVEL_1 || Game::instance().sceneAnt == TELE_2) {
@@ -93,6 +86,7 @@ void Animation::render()
 	texProgram.setUniformMatrix4f("modelview", modelview);
 	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
 	int m = Game::instance().money;
+
 	if (Game::instance().sceneAnt == -1) {
 		TextureQuad->render(initialTexture);
 	}
@@ -119,16 +113,16 @@ void Animation::render()
 		text.render(dinero, glm::vec2((SCREEN_WIDTH / 2) - 150, 50), 40, glm::vec4(1, 1, 0, 1));
 	}
 	else if (Game::instance().sceneAnt == TELE_1) {
-		TextureQuad->render(controlsTexture);
-		text.render("Teletransporting to Level 1", glm::vec2(65, SCREEN_HEIGHT / 2 + 35 / 2), 35, glm::vec4(1.0f, 1.0f, 0.0f, 1.0f));
+		controlsTextureQuad->render(controlsTexture);
+		text.render("Teleporting to Level 1", glm::vec2(65, SCREEN_HEIGHT / 2 + 35 / 2), 35, glm::vec4(1.0f, 1.0f, 0.0f, 1.0f));
 	}
 	else if (Game::instance().sceneAnt == TELE_2) {
-		TextureQuad->render(controlsTexture);
-		text.render("Teletransporting to Level 2", glm::vec2(65, SCREEN_HEIGHT / 2 + 35 / 2), 35, glm::vec4(1.0f, 1.0f, 0.0f, 1.0f));
+		controlsTextureQuad->render(controlsTexture);
+		text.render("Teleporting to Level 2", glm::vec2(65, SCREEN_HEIGHT / 2 + 35 / 2), 35, glm::vec4(1.0f, 1.0f, 0.0f, 1.0f));
 	}
 	else if (Game::instance().sceneAnt == TELE_3) {
-		TextureQuad->render(controlsTexture);
-		text.render("Teletransporting to Level 3", glm::vec2(65, SCREEN_HEIGHT / 2 + 35 / 2), 35, glm::vec4(1.0f, 1.0f, 0.0f, 1.0f));
+		controlsTextureQuad->render(controlsTexture);
+		text.render("Teleporting to Level 3", glm::vec2(65, SCREEN_HEIGHT / 2 + 35 / 2), 35, glm::vec4(1.0f, 1.0f, 0.0f, 1.0f));
 	}
 }
 
