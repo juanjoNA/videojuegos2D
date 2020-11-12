@@ -28,9 +28,9 @@ private:
 	Player *player;
 	ShaderProgram texProgram;
 	Texture controlsTexture;
-	Texture gameOverTexture;
+	Texture gameOverTexture, loadingTexture, thiefTexture;
 	Texture initialTexture;
-	Sprite *gameOver;
+	Sprite *gameOver, *thief;
 	Scene *scene;
 	TexturedQuad* controlsTextureQuad;
 	TexturedQuad* initialTextureQuad;
