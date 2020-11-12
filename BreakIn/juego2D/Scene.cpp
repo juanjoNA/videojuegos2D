@@ -115,7 +115,7 @@ void Scene::update(int deltaTime)
 {
 	currentTime += deltaTime;
 	player->update(deltaTime, subnivel,0);
-	ball->update(deltaTime, objectsInGame, player);
+	ball->update(deltaTime, objectsInGame, player, 0);
 	police->update(deltaTime, player, subnivel);
 
 	if (police->catchPlayer()) {

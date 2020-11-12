@@ -28,6 +28,31 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, gl
 
 }
 
+void Player::initVersus(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, glm::ivec2 &s, int player)
+{
+	spritesheet.loadFromFile("images/1v1Sprite.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	
+	if(player == 2) sprite = Sprite::createSprite(s, glm::vec2(0.0f, 0.0f), glm::vec2(0.25, 0.5), &spritesheet, &shaderProgram, true);
+	else sprite = Sprite::createSprite(s, glm::vec2(0.0f, 0.5f), glm::vec2(0.25, 0.5), &spritesheet, &shaderProgram, true);
+
+	sprite->setNumberAnimations(1);
+
+	sprite->setAnimationSpeed(0, 10);
+	sprite->addKeyframe(0, glm::vec2(0.f, 0.f));
+	sprite->addKeyframe(0, glm::vec2(0.25, 0.f));
+	sprite->addKeyframe(0, glm::vec2(0.5f, 0.f));
+
+
+	sprite->changeAnimation(0);
+	size = s;
+	tileMapDispl = tileMapPos;
+	speed = 4;
+	start = false;
+	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
+
+
+}
+
 void Player::update(int deltaTime, int subnivel, int controls)
 {
 	sprite->update(deltaTime);

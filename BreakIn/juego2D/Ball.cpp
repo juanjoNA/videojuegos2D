@@ -23,7 +23,7 @@ void Ball::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	velocitat = glm::vec2(4, -4);
 }
 
-void Ball::update(int deltaTime, vector<class Element>& objInGame, Player *player)
+void Ball::update(int deltaTime, vector<class Element>& objInGame, Player *player, int numPlayer)
 {
 	if (start) {
 		bool rebote = false;
@@ -34,7 +34,7 @@ void Ball::update(int deltaTime, vector<class Element>& objInGame, Player *playe
 		if (!rebote) rebote = CollisionManager::instance().collisionBallMap(glm::ivec2(posBall.x, posBall.y), glm::ivec2(oldPosBall.x, oldPosBall.y), glm::ivec2(SIZE_X, SIZE_Y), map, velocitat);
 		if (!rebote) {
 			if (objInGame.size() > 0) rebote = CollisionManager::instance().collisionBallPlayer(posBall, oldPosBall, glm::ivec2(SIZE_X, SIZE_Y), player, velocitat);
-			else CollisionManager::instance().collisionBallPlayerVersus(posBall, glm::ivec2(SIZE_X, SIZE_Y), player, velocitat);
+			else CollisionManager::instance().collisionBallPlayerVersus(posBall, oldPosBall, glm::ivec2(SIZE_X, SIZE_Y), player, velocitat, numPlayer);
 		}
 		oldPosBall = posBall;
 		posBall += velocitat;

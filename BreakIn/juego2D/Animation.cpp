@@ -95,33 +95,33 @@ void Animation::render()
 	}
 	else if (Game::instance().sceneAnt == LEVEL_1) {
 		TextureQuad->render(transition1Texture);
-		text.render("Road to level 2", glm::vec2((SCREEN_WIDTH / 2) - 150, 50), 34, glm::vec4(1, 1, 1, 1));
+		text.render("Road to level 2", glm::vec2((SCREEN_WIDTH / 2) - 140, 50), 34, glm::vec4(1, 1, 0, 1));
 		string dinero = to_string(m) + " EUR";
 		text.render(dinero, glm::vec2((SCREEN_WIDTH / 2) - 50, SCREEN_HEIGHT - 15), 40, glm::vec4(1, 1, 0, 1));
 	}
 	else if (Game::instance().sceneAnt == LEVEL_2) {
 		TextureQuad->render(transition2Texture);
-		text.render("Road to level 3", glm::vec2((SCREEN_WIDTH / 2) - 150, 50), 34, glm::vec4(1, 1, 1, 1));
+		text.render("Road to level 3", glm::vec2((SCREEN_WIDTH / 2) - 150, 50), 34, glm::vec4(1, 1, 0, 1));
 		string dinero = to_string(m) + " EUR";
-		text.render(dinero, glm::vec2((SCREEN_WIDTH / 2) - 50, SCREEN_HEIGHT - 15), 40, glm::vec4(1, 1, 0, 1));
+		text.render(dinero, glm::vec2((SCREEN_WIDTH / 2) - 50, SCREEN_HEIGHT - 5), 40, glm::vec4(1, 1, 0, 1));
 	}
 	else if (Game::instance().sceneAnt == LEVEL_3) {
 		TextureQuad->render(winTexture);
-		text.render("YOU WIN", glm::vec2((SCREEN_WIDTH / 2) - 125, 50), 34, glm::vec4(1, 1, 0, 1));
+		text.render("YOU WIN!!", glm::vec2((SCREEN_WIDTH / 2) - 125, 100), 45, glm::vec4(1, 1, 0, 1));
 		string dinero = to_string(m) + " EUR";
-		text.render(dinero, glm::vec2((SCREEN_WIDTH / 2) - 150, 50), 40, glm::vec4(1, 1, 0, 1));
+		text.render(dinero, glm::vec2((SCREEN_WIDTH / 2) - 130, 170), 45, glm::vec4(1, 1, 0, 1));
 	}
 	else if (Game::instance().sceneAnt == TELE_1) {
 		TextureQuad->render(controlsTexture);
-		text.render("Teleporting to Level 1", glm::vec2(65, SCREEN_HEIGHT / 2 + 35 / 2), 35, glm::vec4(1.0f, 1.0f, 0.0f, 1.0f));
+		text.render("Teleporting to Level 1", glm::vec2((SCREEN_WIDTH / 2)-200, SCREEN_HEIGHT / 2 + 35 / 2), 35, glm::vec4(1.0f, 1.0f, 0.0f, 1.0f));
 	}
 	else if (Game::instance().sceneAnt == TELE_2) {
 		TextureQuad->render(controlsTexture);
-		text.render("Teleporting to Level 2", glm::vec2(65, SCREEN_HEIGHT / 2 + 35 / 2), 35, glm::vec4(1.0f, 1.0f, 0.0f, 1.0f));
+		text.render("Teleporting to Level 2", glm::vec2((SCREEN_WIDTH / 2) - 200, SCREEN_HEIGHT / 2 + 35 / 2), 35, glm::vec4(1.0f, 1.0f, 0.0f, 1.0f));
 	}
 	else if (Game::instance().sceneAnt == TELE_3) {
 		TextureQuad->render(controlsTexture);
-		text.render("Teleporting to Level 3", glm::vec2(65, SCREEN_HEIGHT / 2 + 35 / 2), 35, glm::vec4(1.0f, 1.0f, 0.0f, 1.0f));
+		text.render("Teleporting to Level 3", glm::vec2((SCREEN_WIDTH / 2) - 200, SCREEN_HEIGHT / 2 + 35 / 2), 35, glm::vec4(1.0f, 1.0f, 0.0f, 1.0f));
 	}
 }
 

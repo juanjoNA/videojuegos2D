@@ -25,14 +25,14 @@ bool CollisionManager::collisionBallMap(glm::ivec2 &pos, glm::ivec2 &oldPos, con
 
 	if ((topLeft <= 3 && topRight <= 3) || (bottomLeft <= 3 && bottomRight <= 3))
 	{
-		velocitat.y = -velocitat.y;
+		if (((topLeft <= 3 && topRight <= 3) && velocitat.y < 0) || ((bottomLeft <= 3 && bottomRight <= 3) && velocitat.y > 0))velocitat.y = -velocitat.y;
 		if ((topLeft <= 3 && bottomLeft <= 3) || (topRight <= 3 && bottomRight <= 3)) velocitat.x = -velocitat.x;
 		CollisionSound->play2D("audio/bounce.wav");
 		return true;
 	}
 	else if ((topLeft <= 3 && bottomLeft <= 3) || (topRight <= 3 && bottomRight <= 3))
 	{
-		velocitat.x = -velocitat.x;
+		if(((topLeft <= 3 && bottomLeft <= 3) && velocitat.x < 0) || ((topRight <= 3 && bottomRight <= 3) && velocitat.x > 0)) velocitat.x = -velocitat.x;
 		if ((topLeft <= 3 && topRight <= 3) || (bottomLeft <= 3 && bottomRight <= 3)) velocitat.y = -velocitat.y;
 		CollisionSound->play2D("audio/bounce.wav");
 		return true;
@@ -156,7 +156,7 @@ bool CollisionManager::collisionBallPlayer(glm::ivec2 &pos, glm::ivec2 &oldPos, 
 	return false;
 }
 
-bool CollisionManager::collisionBallPlayerVersus(glm::ivec2 &pos, const glm::ivec2 &size, Player *player, glm::vec2 &velocitat) const
+bool CollisionManager::collisionBallPlayerVersus(glm::ivec2 &pos, glm::ivec2 &oldPos, const glm::ivec2 &size, Player *player, glm::vec2 &velocitat, int numPlayer) const
 {
 	int xmin = pos.x;
 	int xmax = pos.x + size.x;
@@ -172,7 +172,16 @@ bool CollisionManager::collisionBallPlayerVersus(glm::ivec2 &pos, const glm::ive
 		)
 	{
 
-		velocitat.x = -velocitat.x;
+		if (numPlayer == 1) {
+			if (velocitat.x < 0) {
+				velocitat.x = -velocitat.x;
+			}
+		}
+		else {
+			if (velocitat.x > 0) {
+				velocitat.x = -velocitat.x;
+			}
+		}
 		float percentatgeCollision = ((player->getPosition().y + player->getSize().y) - center.y) / player->getSize().y;
 
 		if (percentatgeCollision <= 0.2f) {

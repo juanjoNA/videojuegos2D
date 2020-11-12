@@ -56,22 +56,22 @@ void Versus::init()
 	glm::vec2 geomGUI[2] = { glm::vec2(0.f, 0.f), glm::vec2(float(SCREEN_WIDTH), float(SCREEN_HEIGHT)) };
 
 	player1 = new Player();
-	player1->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::ivec2(16, 64));
+	player1->initVersus(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::ivec2(16, 64), 1);
 	player1->setPosition(glm::vec2(INIT_PLAYER1_X_TILES * map->getTileSize(), INIT_PLAYER1_Y_TILES * map->getTileSize()));
 	player1->setTileMap(map);
-	player1->setSpeed(8);
+	player1->setSpeed(5);
 
 	player2 = new Player();
-	player2->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::ivec2(16, 64));
+	player2->initVersus(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::ivec2(16, 64),2);
 	player2->setPosition(glm::vec2(INIT_PLAYER2_X_TILES * map->getTileSize(), INIT_PLAYER2_Y_TILES * map->getTileSize()));
 	player2->setTileMap(map);
-	player2->setSpeed(8);
+	player2->setSpeed(5);
 
 	ball = new Ball();
 	ball->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 	ball->setPosition(glm::vec2((map->getMapSize().x*map->getTileSize() / 2) - 8, (map->getMapSize().y*map->getTileSize() / 2) + 24));
 	ball->setTileMap(map);
-	ball->setVelocity(glm::vec2(8, 5));
+	ball->setVelocity(glm::vec2(5, 5));
 
 	projection = glm::ortho(0.f, float(800 - 1), float(560 - 1), 0.f);
 	currentTime = 0.0f;
@@ -108,11 +108,11 @@ void Versus::update(int deltaTime)
 	vector<class Element> e;
 	glm::vec2 posBall = ball->position();
 	if (posBall.x < map->getMapSize().x*map->getTileSize() / 2) {
-		ball->update(deltaTime, e, player1);
+		ball->update(deltaTime, e, player1, 1);
 		if (posBall.x <= 0) goal(2);
 	}
 	else {
-		ball->update(deltaTime, e, player2);
+		ball->update(deltaTime, e, player2, 2);
 		if (posBall.x >= 752) goal(1);
 	}
 
@@ -215,12 +215,12 @@ void Versus::reinit(int playerPos)
 	player2->restart();
 
 	if (playerPos == 1) {
-		ball->setPosition(glm::vec2(player1->getPosition().x + player1->getSize().x, player1->getPosition().y + (player1->getSize().y / 2)));
-		//ball->setVelocity(glm::vec2(5, 5));
+		ball->setPosition(glm::vec2(player1->getPosition().x + player1->getSize().x + 10, player1->getPosition().y + (player1->getSize().y / 2)));
+		ball->setVelocity(glm::vec2(5, 5));
 	}
 	else {
-		ball->setPosition(glm::vec2(player2->getPosition().x - player2->getSize().x, player2->getPosition().y + (player2->getSize().y / 2)));
-		//ball->setVelocity(glm::vec2(-5, 5));
+		ball->setPosition(glm::vec2(player2->getPosition().x - player2->getSize().x - 10, player2->getPosition().y + (player2->getSize().y / 2)));
+		ball->setVelocity(glm::vec2(-5, 5));
 	}
 	ball->finish();
 }

@@ -15,6 +15,7 @@ class Player
 
 public:
 	void init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, glm::ivec2 &size);
+	void initVersus(const glm::ivec2 & tileMapPos, ShaderProgram & shaderProgram, glm::ivec2 & s, int player);
 	void update(int deltaTime, int subnivel, int controls);
 	void render();
 
