@@ -1,22 +1,3 @@
 ﻿  Animation.cpp
-  Generando código...
-  Compilando...
-  main.cpp
-  Versus.cpp
-  Scene.cpp
-c:\users\juanjo\desktop\carpetas\universidad\4o\videojuegos\proyecto2d\videojuegos2d\breakin\breakin\juego2d\scene.cpp(450): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
-c:\users\juanjo\desktop\carpetas\universidad\4o\videojuegos\proyecto2d\videojuegos2d\breakin\breakin\juego2d\scene.cpp(451): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
-  Police.cpp
-  Player.cpp
-  Misil.cpp
-  Menu.cpp
-  Game.cpp
-  Element.cpp
-c:\users\juanjo\desktop\carpetas\universidad\4o\videojuegos\proyecto2d\videojuegos2d\breakin\breakin\juego2d\element.cpp(32): warning C4018: '<': no coinciden signed/unsigned
-  CollisionManager.cpp
-c:\users\juanjo\desktop\carpetas\universidad\4o\videojuegos\proyecto2d\videojuegos2d\breakin\breakin\juego2d\collisionmanager.cpp(242): warning C4018: '<': no coinciden signed/unsigned
-c:\users\juanjo\desktop\carpetas\universidad\4o\videojuegos\proyecto2d\videojuegos2d\breakin\breakin\juego2d\collisionmanager.cpp(257): warning C4018: '<': no coinciden signed/unsigned
-  Ball.cpp
-  Generando código...
   juego2D.vcxproj -> C:\Users\Juanjo\Desktop\Carpetas\universidad\4o\Videojuegos\proyecto2D\videojuegos2D\BreakIn\BreakIn\Debug\juego2D.exe
   juego2D.vcxproj -> C:\Users\Juanjo\Desktop\Carpetas\universidad\4o\Videojuegos\proyecto2D\videojuegos2D\BreakIn\BreakIn\Debug\juego2D.pdb (Full PDB)
